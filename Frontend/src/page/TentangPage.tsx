@@ -39,7 +39,7 @@ const TentangPage = () => {
         <nav className="nav">
           <Link to="/" className="nav-link">Beranda</Link>
           <Link to="/tentang" className="nav-link active">Tentang</Link>
-          <a href="#materi" className="nav-link">Materi</a>
+          <Link to="/materi" className="nav-link">Materi</Link>
           <button className="cta-button">Daftar/Masuk</button>
         </nav>
       </header>
