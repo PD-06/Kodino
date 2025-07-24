@@ -48,36 +48,39 @@ const LoginPage = () => {
     return true;
   };
 
-  const handleSubmit = async (e: React.FormEvent) => {
-    e.preventDefault();
-    
-    if (!validateForm()) return;
-    
-    setIsLoading(true);
-    setError('');
-    setSuccess('');
-    
-    try {
-      const response = await apiService.login(formData);
-      
-      // Store user data in localStorage (you might want to use a more secure method)
-      if (response.user) {
-        localStorage.setItem('kodino_user', JSON.stringify(response.user));
-      }
-      
-      setSuccess(response.message);
-      
-      // Redirect to dashboard or home page
-      setTimeout(() => {
-        navigate('/', { replace: true });
-      }, 1500);
-      
-    } catch (err: any) {
-      setError(err.message || 'Terjadi kesalahan saat login');
-    } finally {
-      setIsLoading(false);
-    }
-  };
+  
+  // Update your login function in LoginPage.tsx
+    const handleSubmit = async (e: React.FormEvent) => {
+        e.preventDefault();
+        
+        if (!validateForm()) return;
+        
+        setIsLoading(true);
+        setError('');
+        setSuccess('');
+        
+        try {
+        const response = await apiService.login(formData);
+        
+        // Store user data in localStorage
+        if (response.user) {
+            localStorage.setItem('kodino_user', JSON.stringify(response.user));
+            // Trigger custom storage event for same-page updates
+        }
+        
+        setSuccess(response.message);
+        
+        // Redirect to dashboard or home page
+        setTimeout(() => {
+            navigate('/', { replace: true });
+        }, 1500);
+        
+        } catch (err: any) {
+        setError(err.message || 'Terjadi kesalahan saat login');
+        } finally {
+        setIsLoading(false);
+        }
+    };
 
   return (
     <div className="login-page">

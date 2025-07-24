@@ -67,12 +67,168 @@
   cursor: pointer;
   transition: all 0.3s ease;
   font-size: 1rem;
+  text-decoration: none;
+  display: inline-block;
 }
 
 .cta-button:hover {
   background-color: #e05d2e;
   transform: translateY(-2px);
   box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+/* User Section Styles */
+.user-section {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+}
+
+/* Dikoin Display */
+.dikoin-display {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: linear-gradient(135deg, #FFD700, #FFA500);
+  padding: 0.5rem 1rem;
+  border-radius: 20px;
+  border: 2px solid #FF8C00;
+  box-shadow: 0 2px 8px rgba(255, 140, 0, 0.3);
+}
+
+.coin-icon {
+  width: 20px;
+  height: 20px;
+  filter: drop-shadow(0 1px 2px rgba(0, 0, 0, 0.2));
+}
+
+.dikoin-amount {
+  font-family: 'Alibaba Sans', Arial, sans-serif;
+  font-weight: 700;
+  font-size: 0.9rem;
+  color: #8B4513;
+  text-shadow: 0 1px 2px rgba(255, 255, 255, 0.5);
+}
+
+/* Profile Section */
+.profile-section {
+  position: relative;
+}
+
+.profile-button {
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  background: #f8f9fa;
+  border: 2px solid #e9ecef;
+  padding: 0.5rem 1rem;
+  border-radius: 25px;
+  cursor: pointer;
+  transition: all 0.3s ease;
+  font-family: 'Alibaba Sans', Arial, sans-serif;
+}
+
+.profile-button:hover {
+  background: #e9ecef;
+  border-color: #FF6B35;
+  transform: translateY(-1px);
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+}
+
+.profile-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, #FF6B35, #e05d2e);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+  font-weight: 700;
+  font-size: 0.9rem;
+  text-transform: uppercase;
+  box-shadow: 0 2px 4px rgba(255, 107, 53, 0.3);
+}
+
+.profile-name {
+  font-weight: 600;
+  color: #2d2d2d;
+  font-size: 0.9rem;
+}
+
+.dropdown-arrow {
+  transition: transform 0.3s ease;
+  color: #666;
+}
+
+.dropdown-arrow.open {
+  transform: rotate(180deg);
+}
+
+/* Dropdown Menu */
+.dropdown-menu {
+  position: absolute;
+  top: calc(100% + 0.5rem);
+  right: 0;
+  background: white;
+  border: 1px solid #e9ecef;
+  border-radius: 12px;
+  box-shadow: 0 8px 32px rgba(0, 0, 0, 0.12);
+  min-width: 180px;
+  overflow: hidden;
+  z-index: 1000;
+  animation: dropdownFadeIn 0.2s ease-out;
+}
+
+@keyframes dropdownFadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(-10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.dropdown-item {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  padding: 0.75rem 1rem;
+  color: #2d2d2d;
+  text-decoration: none;
+  font-family: 'Alibaba Sans', Arial, sans-serif;
+  font-size: 0.9rem;
+  font-weight: 500;
+  border: none;
+  background: none;
+  width: 100%;
+  text-align: left;
+  cursor: pointer;
+  transition: background-color 0.2s ease;
+}
+
+.dropdown-item:hover {
+  background-color: #f8f9fa;
+}
+
+.dropdown-item svg {
+  color: #666;
+  flex-shrink: 0;
+}
+
+.logout-item {
+  border-top: 1px solid #e9ecef;
+  color: #dc3545;
+}
+
+.logout-item:hover {
+  background-color: #fff5f5;
+}
+
+.logout-item svg {
+  color: #dc3545;
 }
 
 /* Responsive Design */
@@ -85,8 +241,73 @@
     gap: 1rem;
   }
 
+  .user-section {
+    gap: 0.5rem;
+  }
+
+  .dikoin-display {
+    padding: 0.4rem 0.8rem;
+  }
+
+  .dikoin-amount {
+    font-size: 0.8rem;
+  }
+
+  .coin-icon {
+    width: 16px;
+    height: 16px;
+  }
+
+  .profile-button {
+    padding: 0.4rem 0.8rem;
+  }
+
+  .profile-avatar {
+    width: 28px;
+    height: 28px;
+    font-size: 0.8rem;
+  }
+
+  .profile-name {
+    display: none; /* Hide username on mobile */
+  }
+
   .cta-button {
     padding: 0.4rem 1rem;
     font-size: 0.9rem;
   }
+}
+
+@media (max-width: 480px) {
+  .dikoin-display {
+    padding: 0.3rem 0.6rem;
+  }
+
+  .dropdown-menu {
+    min-width: 160px;
+    right: -1rem;
+  }
+}
+
+/* If you don't have a coin icon image, use this CSS-only version */
+.coin-icon {
+  width: 20px;
+  height: 20px;
+  background: radial-gradient(circle at 30% 30%, #FFD700, #FFA500);
+  border-radius: 50%;
+  border: 2px solid #FF8C00;
+  position: relative;
+  flex-shrink: 0;
+}
+
+.coin-icon::before {
+  content: 'D';
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  font-weight: bold;
+  font-size: 10px;
+  color: #8B4513;
+  text-shadow: 0 1px 1px rgba(255, 255, 255, 0.5);
 }
