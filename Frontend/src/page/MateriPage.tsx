@@ -1,23 +1,11 @@
 // import React from 'react';
-import { Link } from 'react-router-dom';
+import Header from '../components/Header';
 import './MateriPage.css';
 
 const MateriPage = () => {
   return (
     <div className="materi-page">
-      {/* Header Section */}
-      <header className="header">
-        <div className="logo-section">
-          <img src="/images/kodino-mascot.webp" alt="Kodino Mascot" className="mascot" />
-          <span className="logo-text">Kodino</span>
-        </div>
-        <nav className="nav">
-          <Link to="/" className="nav-link">Beranda</Link>
-          <Link to="/tentang" className="nav-link">Tentang</Link>
-          <Link to="/materi" className="nav-link active">Materi</Link>
-          <button className="cta-button">Daftar/Masuk</button>
-        </nav>
-      </header>
+      <Header />
 
       {/* Main Content */}
       <main className="materi-container">

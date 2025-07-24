@@ -165,40 +165,18 @@ html, body {
     }
 }
 
-/* Header Styles */
+/* Header animation */
 .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem 2rem;
-    background: white;
     animation: slideInDown 0.8s ease-out;
-    position: relative;
-    z-index: 10;
-    width: 100%;
-    box-sizing: border-box;
 }
 
 .logo-section {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
     animation: fadeInLeft 1s ease-out;
 }
 
 .mascot {
-    width: 40px;
-    height: 40px;
     animation: wiggle 2s ease-in-out infinite;
     animation-delay: 2s;
-}
-
-.logo-text {
-    font-family: 'Alibaba Sans', Arial, sans-serif;
-    font-size: 1.5rem;
-    font-weight: 700;
-    color: #2d2d2d;
-    transition: color 0.3s ease;
 }
 
 .logo-section:hover .logo-text {

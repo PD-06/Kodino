@@ -164,24 +164,12 @@ html, body {
     }
 }
 
-/* Header Styles (same as LandingPage) */
+/* Header animation */
 .header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding: 1rem 2rem;
-    background: white;
-    position: relative;
-    z-index: 10;
-    width: 100%;
-    box-sizing: border-box;
     animation: slideInDown 0.8s ease-out;
 }
 
 .logo-section {
-    display: flex;
-    align-items: center;
-    gap: 0.5rem;
     animation: fadeInLeft 1s ease-out;
 }
 
@@ -193,8 +181,6 @@ html, body {
 }
 
 .mascot {
-    width: 40px;
-    height: 40px;
     animation: wiggle 2s ease-in-out infinite;
     animation-delay: 2s;
 }

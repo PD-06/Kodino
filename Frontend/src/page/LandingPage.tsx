@@ -1,5 +1,5 @@
 import { useEffect } from 'react';
-import { Link } from 'react-router-dom';
+import Header from '../components/Header';
 import './LandingPage.css';
 
 const LandingPage = () => {
@@ -26,19 +26,7 @@ const LandingPage = () => {
 
   return (
     <div className="landing">
-      {/* Header */}
-      <header className="header">
-        <div className="logo-section">
-          <img src="/images/kodino-mascot.webp" alt="Kodino Mascot" className="mascot" />
-          <span className="logo-text">Kodino</span>
-        </div>
-        <nav className="nav">
-          <Link to="/" className="nav-link active">Beranda</Link>
-          <Link to="/tentang" className="nav-link">Tentang</Link>
-          <Link to="/materi" className="nav-link">Materi</Link>
-          <button className="cta-button">Daftar/Masuk</button>
-        </nav>
-      </header>
+      <Header />
 
       {/* Hero Section */}
       <section className="hero">
