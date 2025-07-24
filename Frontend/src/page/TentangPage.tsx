@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react';
+import { useEffect } from 'react';
 import { Link } from 'react-router-dom';
 import './TentangPage.css';
 
@@ -32,7 +32,7 @@ const TentangPage = () => {
       <header className="header">
         <div className="logo-section">
           <Link to="/">
-            <img src="/images/kodino-mascot.png" alt="Kodino Mascot" className="mascot" />
+            <img src="../assets/images/kodino-mascot.webp" alt="Kodino Mascot" className="mascot" />
             <span className="logo-text">Kodino</span>
           </Link>
         </div>
@@ -49,19 +49,19 @@ const TentangPage = () => {
         {/* Hero Section with Kodi Character */}
         <section className="hero-section">
           <div className="hero-character">
-            <img src="/images/kodi-character.png" alt="Kodi Character" className="kodi-img" />
+            <img src="../assets/images/kodi-character.webp" alt="Kodi Character" className="kodi-img" />
           </div>
           <div className="hero-text">
             <h1 className="hero-title">Halo! Aku Kodi! 🦖</h1>
             <div className="hero-description">
               <p>Perkenalkan, aku Kodi! Dino dari masa depan yang hobi ngoding dan suka banget menjelajahi budaya Indonesia!</p>
-              
+
               <p>Aku akan menemani kamu belajar pemrograman dengan cara yang seru dan menyenangkan, lewat petualangan interaktif, permainan seru, dan dunia yang penuh warna. Tapi bukan cuma soal coding, loh! Di setiap langkah, kamu juga akan menjelajahi nilai-nilai budaya Indonesia, dari batik, angklung, hingga cerita rakyat dari berbagai daerah.</p>
-              
+
               <p>Di Kodino, aku percaya bahwa setiap anak Indonesia bisa jadi kreator hebat, dan lewat bahasa pemrograman, kita bisa membangun masa depan yang keren, berbudaya, dan penuh imaijnasi.</p>
-              
+
               <p>Yuk, belajar bareng aku! Mulai dari dasar, bikin game sederhana, sampai jadi programmer andal dengan kearifan lokal! 🇮🇩💻📱</p>
-              
+
               <p className="greeting">Salam hangat dari aku, Kodi!</p>
             </div>
           </div>
@@ -70,7 +70,7 @@ const TentangPage = () => {
         {/* About Section */}
         <section className="about-section">
           <h2 className="section-title">Tentang kami</h2>
-          
+
           <div className="mission-vision">
             <div className="mission">
               <div className="icon-wrapper">
@@ -99,7 +99,7 @@ const TentangPage = () => {
             </div>
             <h3>Cerita Kami</h3>
             <p>Kodino berawal dari mimpi sederhana: gimana caranya ngajarin ngoding yang nggak bikin bosan? Di saat kebanyakan platform belajar coding pakai bahasa dan pendekatan internasional, kami mikir.. kenapa nggak pakai cara Indonesia aja?</p>
-            
+
             <p>Akhirnya, lahirlah Kodino: dino imut dari desa Dinonesia yang siap nemenin kamu belajar ngoding sambil eksplor budaya Nusantara. Mulai dari tantangan seru, cerita rakyat digital, sampai badge budaya yang bisa kamu kumpulin, semua ada di sini!</p>
           </div>
         </section>
@@ -107,7 +107,7 @@ const TentangPage = () => {
         {/* Team Section */}
         <section className="team-section">
           <h2 className="section-title">Tim kami</h2>
-          
+
           <div className="team-intro">
             <div className="icon-wrapper">
               <span className="icon">👥</span>

@@ -29,7 +29,7 @@ const LandingPage = () => {
       {/* Header */}
       <header className="header">
         <div className="logo-section">
-          <img src="/images/kodino-mascot.png" alt="Kodino Mascot" className="mascot" />
+          <img src="../assets/images/kodino-mascot.webp" alt="Kodino Mascot" className="mascot" />
           <span className="logo-text">Kodino</span>
         </div>
         <nav className="nav">
@@ -54,7 +54,7 @@ const LandingPage = () => {
           <button className="start-button">Yuk, mulai!</button>
         </div>
         <div className="hero-image">
-          <img src="/images/hero-illustration.png" alt="Kodino Hero" />
+          <img src="../assets/images/hero-illustration.webp" alt="Kodino Hero" />
         </div>
       </section>
 
@@ -62,7 +62,7 @@ const LandingPage = () => {
       <section className="features">
         <div className="feature-item">
           <div className="feature-icon">
-            <img src="/images/programming-icon.png" alt="Programming" />
+            <img src="../assets/images/programming-icon.webp" alt="Programming" />
           </div>
           <h3 className="feature-title">Dasar Pemrograman</h3>
           <p className="feature-description">
@@ -71,7 +71,7 @@ const LandingPage = () => {
         </div>
         <div className="feature-item">
           <div className="feature-icon">
-            <img src="/images/achievement-icon.png" alt="Achievement" />
+            <img src="../assets/images/achievement-icon.webp" alt="Achievement" />
           </div>
           <h3 className="feature-title">Raih Penghargaan</h3>
           <p className="feature-description">
@@ -80,7 +80,7 @@ const LandingPage = () => {
         </div>
         <div className="feature-item">
           <div className="feature-icon">
-            <img src="/images/culture-icon.png" alt="Culture" />
+            <img src="../assets/images/culture-icon.webp" alt="Culture" />
           </div>
           <h3 className="feature-title">Jelajahi Budaya Nusantara</h3>
           <p className="feature-description">
@@ -95,7 +95,7 @@ const LandingPage = () => {
         <div className="benefits-grid">
           <div className="benefit-card">
             <div className="benefit-icon">
-              <img src="/images/lightbulb-icon.png" alt="Learn from 0" />
+              <img src="../assets/images/lightbulb-icon.webp" alt="Learn from 0" />
             </div>
             <h3 className="benefit-title">Belajar dari 0</h3>
             <p className="benefit-description">
@@ -104,7 +104,7 @@ const LandingPage = () => {
           </div>
           <div className="benefit-card">
             <div className="benefit-icon">
-              <img src="/images/game-icon.png" alt="Game Based" />
+              <img src="../assets/images/game-icon.webp" alt="Game Based" />
             </div>
             <h3 className="benefit-title">Berbasis Game</h3>
             <p className="benefit-description">
@@ -113,7 +113,7 @@ const LandingPage = () => {
           </div>
           <div className="benefit-card">
             <div className="benefit-icon">
-              <img src="/images/coding-icon.png" alt="Interactive Coding" />
+              <img src="../assets/images/coding-icon.webp" alt="Interactive Coding" />
             </div>
             <h3 className="benefit-title">Coding Interaktif</h3>
             <p className="benefit-description">
@@ -122,7 +122,7 @@ const LandingPage = () => {
           </div>
           <div className="benefit-card">
             <div className="benefit-icon">
-              <img src="/images/indonesia-flag-icon.png" alt="Indonesian Language" />
+              <img src="../assets/images/indonesia-flag-icon.webp" alt="Indonesian Language" />
             </div>
             <h3 className="benefit-title">Berbahasa Indonesia</h3>
             <p className="benefit-description">
