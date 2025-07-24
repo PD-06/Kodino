@@ -3,7 +3,9 @@ from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from config import ApplicationConfig
-from models import db, User, Lencana, UserLencana, Progress
+from models import db, User, Lencana, UserLencana, Progress, Artefak, UserArtefak
+import hashlib
+import uuid
 
 app = Flask(__name__)
 app.config.from_object(ApplicationConfig)
@@ -11,224 +13,479 @@ CORS(app)
 
 db.init_app(app)
 migrate = Migrate(app, db)
+
 @app.before_request
 def create_tables():
     """Create database tables before the first request."""
-    with app.app_context():
-        db.create_all()
+    if not hasattr(app, '_database_initialized'):
+        with app.app_context():
+            db.create_all()
+        app._database_initialized = True
+
+def hash_password(password):
+    """Hash a password using SHA-256."""
+    return hashlib.sha256(password.encode()).hexdigest()
+
+def verify_password(password, hashed_password):
+    """Verify a password against its hash."""
+    return hash_password(password) == hashed_password
 
 @app.route('/')
 def index():
     """Index route."""
     return jsonify({"message": "Welcome to Kodino Backend!"})
+
+# Authentication endpoints
+@app.route('/auth/register', methods=['POST'])
+def register():
+    """Register a new user."""
+    try:
+        data = request.get_json()
+        
+        # Validate required fields
+        if not data.get('fullName') or not data.get('username') or not data.get('password'):
+            return jsonify({"error": "Nama lengkap, username, dan password wajib diisi"}), 400
+        
+        # Check if username already exists
+        if User.query.filter_by(username=data['username']).first():
+            return jsonify({"error": "Username sudah digunakan"}), 400
+        
+        # Check if email already exists (if provided)
+        if data.get('email') and User.query.filter_by(email=data['email']).first():
+            return jsonify({"error": "Email sudah digunakan"}), 400
+        
+        # Validate password confirmation
+        if data.get('password') != data.get('confirmPassword'):
+            return jsonify({"error": "Konfirmasi password tidak cocok"}), 400
+        
+        # Create new user
+        new_user = User(
+            id=str(uuid.uuid4()),
+            nama_panjang=data['fullName'],
+            username=data['username'],
+            email=data.get('email') if data.get('hasEmail') else None,
+            password=hash_password(data['password']),
+            dikoin=0
+        )
+        
+        db.session.add(new_user)
+        db.session.flush()  # Get the user ID
+        
+        # Create initial progress
+        new_progress = Progress(
+            id=str(uuid.uuid4()),
+            user_id=new_user.id,
+            section=1,
+            level=1
+        )
+        
+        db.session.add(new_progress)
+        db.session.commit()
+        
+        return jsonify({
+            "message": "Registrasi berhasil!",
+            "user": {
+                "id": new_user.id,
+                "nama_panjang": new_user.nama_panjang,
+                "username": new_user.username,
+                "email": new_user.email,
+                "dikoin": new_user.dikoin
+            }
+        }), 201
+        
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": f"Terjadi kesalahan: {str(e)}"}), 500
+
+@app.route('/auth/login', methods=['POST'])
+def login():
+    """Login a user."""
+    try:
+        data = request.get_json()
+        
+        # Validate required fields
+        if not data.get('username') or not data.get('password'):
+            return jsonify({"error": "Username dan password wajib diisi"}), 400
+        
+        # Find user by username
+        user = User.query.filter_by(username=data['username']).first()
+        
+        if not user or not verify_password(data['password'], user.password):
+            return jsonify({"error": "Username atau password salah"}), 401
+        
+        # Get user progress
+        progress = Progress.query.filter_by(user_id=user.id).first()
+        
+        return jsonify({
+            "message": "Login berhasil!",
+            "user": {
+                "id": user.id,
+                "nama_panjang": user.nama_panjang,
+                "username": user.username,
+                "email": user.email,
+                "dikoin": user.dikoin,
+                "progress": {
+                    "section": progress.section if progress else 1,
+                    "level": progress.level if progress else 1
+                } if progress else None
+            }
+        }), 200
+        
+    except Exception as e:
+        return jsonify({"error": f"Terjadi kesalahan: {str(e)}"}), 500
+
+# User management endpoints
 @app.route('/users', methods=['GET'])
 def get_users():
     """Get all users."""
-    users = User.query.all()
-    return jsonify([user.serialize() for user in users])
+    try:
+        users = User.query.all()
+        return jsonify([user.serialize() for user in users])
+    except Exception as e:
+        return jsonify({"error": f"Terjadi kesalahan: {str(e)}"}), 500
+
 @app.route('/users/<string:user_id>', methods=['GET'])
 def get_user(user_id):
     """Get a user by ID."""
-    user = User.query.get_or_404(user_id)
-    return jsonify(user.serialize())
+    try:
+        user = User.query.get_or_404(user_id)
+        progress = Progress.query.filter_by(user_id=user.id).first()
+        
+        user_data = user.serialize()
+        if progress:
+            user_data['progress'] = progress.serialize()
+        
+        return jsonify(user_data)
+    except Exception as e:
+        return jsonify({"error": f"Terjadi kesalahan: {str(e)}"}), 500
+
 @app.route('/users', methods=['POST'])
 def create_user():
     """Create a new user."""
-    data = request.get_json()
-    new_user = User(
-        nama_panjang=data['nama_panjang'],
-        username=data['username'],
-        email=data.get('email'),
-        password=data['password']
-    )
-    new_progress = Progress(
-        user_id=new_user.id,
-        level=1,
-        pengalaman=0,
-        total_koin=0
-    )
-    # Ensure the user ID is set before adding to the session
-    new_user.progress = new_progress
-    # Add the new user and progress to the session
-    db.session.add(new_user)
-    db.session.add(new_progress)
-    db.session.commit()
-    db.session.refresh(new_user)  # Refresh to get the ID
-    db.session.refresh(new_progress)  # Refresh to get the progress ID
-    new_user.progress_id = new_progress.id  # Set the progress ID in the user object
-    db.session.commit()  # Commit the changes to the database
-    # Return the serialized user object
-    return jsonify(new_user.serialize()), 201
+    try:
+        data = request.get_json()
+        
+        # Validate required fields
+        if not data.get('nama_panjang') or not data.get('username') or not data.get('password'):
+            return jsonify({"error": "Nama panjang, username, dan password wajib diisi"}), 400
+        
+        # Check if username already exists
+        if User.query.filter_by(username=data['username']).first():
+            return jsonify({"error": "Username sudah digunakan"}), 400
+        
+        # Create new user
+        new_user = User(
+            id=str(uuid.uuid4()),
+            nama_panjang=data['nama_panjang'],
+            username=data['username'],
+            email=data.get('email'),
+            password=hash_password(data['password']),
+            dikoin=data.get('dikoin', 0)
+        )
+        
+        db.session.add(new_user)
+        db.session.flush()
+        
+        # Create initial progress
+        new_progress = Progress(
+            id=str(uuid.uuid4()),
+            user_id=new_user.id,
+            section=1,
+            level=1
+        )
+        
+        db.session.add(new_progress)
+        db.session.commit()
+        
+        return jsonify(new_user.serialize()), 201
+        
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": f"Terjadi kesalahan: {str(e)}"}), 500
 
 @app.route('/users/<string:user_id>', methods=['PUT'])
 def update_user(user_id):
-    """Update a user by ID."""
-    user = User.query.get_or_404(user_id)
-    data = request.get_json()
-    user.nama_panjang = data.get('nama_panjang', user.nama_panjang)
-    user.username = data.get('username', user.username)
-    user.email = data.get('email', user.email)
-    db.session.commit()
-    return jsonify(user.serialize())
+    """Update a user."""
+    try:
+        user = User.query.get_or_404(user_id)
+        data = request.get_json()
+        
+        # Update fields if provided
+        if 'nama_panjang' in data:
+            user.nama_panjang = data['nama_panjang']
+        if 'username' in data:
+            # Check if new username is already taken
+            existing_user = User.query.filter_by(username=data['username']).first()
+            if existing_user and existing_user.id != user_id:
+                return jsonify({"error": "Username sudah digunakan"}), 400
+            user.username = data['username']
+        if 'email' in data:
+            user.email = data['email']
+        if 'password' in data:
+            user.password = hash_password(data['password'])
+        if 'dikoin' in data:
+            user.dikoin = data['dikoin']
+        
+        db.session.commit()
+        
+        return jsonify(user.serialize())
+        
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": f"Terjadi kesalahan: {str(e)}"}), 500
 
 @app.route('/users/<string:user_id>', methods=['DELETE'])
 def delete_user(user_id):
-    """Delete a user by ID."""
-    user = User.query.get_or_404(user_id)
-    db.session.delete(user)
-    db.session.commit()
-    return jsonify({"message": "User deleted successfully"}), 204
-@app.route('/users/<string:user_id>/progress', methods=['GET'])
-def get_user_progress(user_id):
-    """Get progress for a specific user."""
-    user = User.query.get_or_404(user_id)
-    return jsonify(user.progress.serialize())
-@app.route('/users/<string:user_id>/progress', methods=['POST'])
-def create_user_progress(user_id):
-    """Create progress for a specific user."""
-    user = User.query.get_or_404(user_id)
-    data = request.get_json()
-    new_progress = Progress(
-        user_id=user.id,
-        section=data.get('section', 1),
-        level=data.get('level', 1)
-    )
-    db.session.add(new_progress)
-    db.session.commit()
-    return jsonify(new_progress.serialize()), 201
+    """Delete a user."""
+    try:
+        user = User.query.get_or_404(user_id)
+        
+        # Delete associated progress
+        Progress.query.filter_by(user_id=user_id).delete()
+        
+        # Delete associated user_lencana records
+        UserLencana.query.filter_by(user_id=user_id).delete()
+        
+        # Delete associated user_artefak records
+        UserArtefak.query.filter_by(user_id=user_id).delete()
+        
+        # Delete user
+        db.session.delete(user)
+        db.session.commit()
+        
+        return jsonify({"message": "User berhasil dihapus"}), 200
+        
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": f"Terjadi kesalahan: {str(e)}"}), 500
 
-@app.route('/users/<string:user_id>/progress/<string:progress_id>', methods=['PUT'])
-def update_user_progress(user_id, progress_id):
-    """Update progress for a specific user."""
-    user = User.query.get_or_404(user_id)
-    progress = Progress.query.get_or_404(progress_id)
-    data = request.get_json()
-    progress.section = data.get('section', progress.section)
-    progress.level = data.get('level', progress.level)
-    db.session.commit()
-    return jsonify(progress.serialize())
-@app.route('/users/<string:user_id>/progress/<string:progress_id>', methods=['DELETE'])
-def delete_user_progress(user_id, progress_id):
-    """Delete progress for a specific user."""
-    user = User.query.get_or_404(user_id)
-    progress = Progress.query.get_or_404(progress_id)
-    db.session.delete(progress)
-    db.session.commit()
-    return jsonify({"message": "Progress deleted successfully"}), 204
+# Progress endpoints
+@app.route('/progress/<string:user_id>', methods=['GET'])
+def get_progress(user_id):
+    """Get user progress."""
+    try:
+        progress = Progress.query.filter_by(user_id=user_id).first()
+        if not progress:
+            return jsonify({"error": "Progress tidak ditemukan"}), 404
+        
+        return jsonify(progress.serialize())
+        
+    except Exception as e:
+        return jsonify({"error": f"Terjadi kesalahan: {str(e)}"}), 500
+
+@app.route('/progress/<string:user_id>', methods=['PUT'])
+def update_progress(user_id):
+    """Update user progress."""
+    try:
+        progress = Progress.query.filter_by(user_id=user_id).first()
+        if not progress:
+            return jsonify({"error": "Progress tidak ditemukan"}), 404
+        
+        data = request.get_json()
+        
+        if 'section' in data:
+            progress.section = data['section']
+        if 'level' in data:
+            progress.level = data['level']
+        
+        db.session.commit()
+        
+        return jsonify(progress.serialize())
+        
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": f"Terjadi kesalahan: {str(e)}"}), 500
+
+# Lencana endpoints
 @app.route('/lencana', methods=['GET'])
 def get_lencana():
     """Get all lencana."""
-    lencana = Lencana.query.all()
-    return jsonify([l.serialize() for l in lencana])
-@app.route('/lencana/<string:lencana_id>', methods=['GET'])
-def get_lencana_by_id(lencana_id):
-    """Get a lencana by ID."""
-    lencana = Lencana.query.get_or_404(lencana_id)
-    return jsonify(lencana.serialize())
+    try:
+        lencana_list = Lencana.query.all()
+        return jsonify([lencana.serialize() for lencana in lencana_list])
+    except Exception as e:
+        return jsonify({"error": f"Terjadi kesalahan: {str(e)}"}), 500
+
 @app.route('/lencana', methods=['POST'])
 def create_lencana():
     """Create a new lencana."""
-    data = request.get_json()
-    new_lencana = Lencana(
-        nama_lencana=data['nama_lencana'],
-        deskripsi=data.get('deskripsi'),
-        gambar=data.get('gambar')
-    )
-    db.session.add(new_lencana)
-    db.session.commit()
-    return jsonify(new_lencana.serialize()), 201
-@app.route('/lencana/<string:lencana_id>', methods=['PUT'])
-def update_lencana(lencana_id):
-    """Update a lencana by ID."""
-    lencana = Lencana.query.get_or_404(lencana_id)
-    data = request.get_json()
-    lencana.nama_lencana = data.get('nama_lencana', lencana.nama_lencana)
-    lencana.deskripsi = data.get('deskripsi', lencana.deskripsi)
-    lencana.gambar = data.get('gambar', lencana.gambar)
-    db.session.commit()
-    return jsonify(lencana.serialize())
-@app.route('/lencana/<string:lencana_id>', methods=['DELETE'])
-def delete_lencana(lencana_id):
-    """Delete a lencana by ID."""
-    lencana = Lencana.query.get_or_404(lencana_id)
-    db.session.delete(lencana)
-    db.session.commit()
-    return jsonify({"message": "Lencana deleted successfully"}), 204
-@app.route('/users/<string:user_id>/lencana', methods=['GET'])
+    try:
+        data = request.get_json()
+        
+        if not data.get('nama_lencana') or not data.get('deskripsi'):
+            return jsonify({"error": "Nama lencana dan deskripsi wajib diisi"}), 400
+        
+        new_lencana = Lencana(
+            id=str(uuid.uuid4()),
+            nama_lencana=data['nama_lencana'],
+            deskripsi=data['deskripsi'],
+            gambar=data.get('gambar')
+        )
+        
+        db.session.add(new_lencana)
+        db.session.commit()
+        
+        return jsonify(new_lencana.serialize()), 201
+        
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": f"Terjadi kesalahan: {str(e)}"}), 500
+
+# User Lencana endpoints
+@app.route('/user-lencana/<string:user_id>', methods=['GET'])
 def get_user_lencana(user_id):
-    """Get all lencana for a specific user."""
-    user = User.query.get_or_404(user_id)
-    return jsonify([ul.serialize() for ul in user.user_lencanas])
-@app.route('/users/<string:user_id>/lencana/<string:lencana_id>', methods=['POST'])
-def add_user_lencana(user_id, lencana_id):
-    """Add a lencana to a specific user."""
-    user = User.query.get_or_404(user_id)
-    lencana = Lencana.query.get_or_404(lencana_id)
-    user_lencana = UserLencana(user=user, lencana=lencana)
-    db.session.add(user_lencana)
-    db.session.commit()
-    return jsonify(user_lencana.serialize()), 201
-@app.route('/users/<string:user_id>/lencana/<string:lencana_id>', methods=['DELETE'])
-def remove_user_lencana(user_id, lencana_id):
-    """Remove a lencana from a specific user."""
-    user = User.query.get_or_404(user_id)
-    user_lencana = UserLencana.query.filter_by(user_id=user.id, lencana_id=lencana_id).first_or_404()
-    db.session.delete(user_lencana)
-    db.session.commit()
-    return jsonify({"message": "Lencana removed successfully"}), 204
-@app.route('/users/<string:user_id>/lencana/<string:lencana_id>', methods=['GET'])
-def get_user_lencana_by_id(user_id, lencana_id):
-    """Get a specific lencana for a user."""
-    user = User.query.get_or_404(user_id)
-    user_lencana = UserLencana.query.filter_by(user_id=user.id, lencana_id=lencana_id).first_or_404()
-    return jsonify(user_lencana.serialize())
-@app.route('/users/<string:user_id>/lencana/<string:lencana_id>', methods=['PUT'])
-def update_user_lencana(user_id, lencana_id):
-    """Update a specific lencana for a user."""
-    user = User.query.get_or_404(user_id)
-    user_lencana = UserLencana.query.filter_by(user_id=user.id, lencana_id=lencana_id).first_or_404()
-    data = request.get_json()
-    user_lencana.created_at = data.get('created_at', user_lencana.created_at)
-    db.session.commit()
-    return jsonify(user_lencana.serialize())
+    """Get user's lencana."""
+    try:
+        user_lencana = db.session.query(UserLencana, Lencana).join(
+            Lencana, UserLencana.lencana_id == Lencana.id
+        ).filter(UserLencana.user_id == user_id).all()
+        
+        return jsonify([{
+            "id": ul.id,
+            "lencana": lencana.serialize(),
+            "created_at": ul.created_at.isoformat()
+        } for ul, lencana in user_lencana])
+        
+    except Exception as e:
+        return jsonify({"error": f"Terjadi kesalahan: {str(e)}"}), 500
+
+@app.route('/user-lencana', methods=['POST'])
+def award_lencana():
+    """Award a lencana to a user."""
+    try:
+        data = request.get_json()
+        
+        if not data.get('user_id') or not data.get('lencana_id'):
+            return jsonify({"error": "User ID dan Lencana ID wajib diisi"}), 400
+        
+        # Check if user already has this lencana
+        existing = UserLencana.query.filter_by(
+            user_id=data['user_id'], 
+            lencana_id=data['lencana_id']
+        ).first()
+        
+        if existing:
+            return jsonify({"error": "User sudah memiliki lencana ini"}), 400
+        
+        new_user_lencana = UserLencana(
+            id=str(uuid.uuid4()),
+            user_id=data['user_id'],
+            lencana_id=data['lencana_id']
+        )
+        
+        db.session.add(new_user_lencana)
+        db.session.commit()
+        
+        return jsonify(new_user_lencana.serialize()), 201
+        
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": f"Terjadi kesalahan: {str(e)}"}), 500
+
+# Artefak endpoints
 @app.route('/artefak', methods=['GET'])
 def get_artefak():
     """Get all artefak."""
-    artefak = Artefak.query.all()
-    return jsonify([a.serialize() for a in artefak])
-@app.route('/artefak/<string:artefak_id>', methods=['GET'])
-def get_artefak_by_id(artefak_id):
-    """Get an artefak by ID."""
-    artefak = Artefak.query.get_or_404(artefak_id)
-    return jsonify(artefak.serialize())
+    try:
+        artefak_list = Artefak.query.all()
+        return jsonify([artefak.serialize() for artefak in artefak_list])
+    except Exception as e:
+        return jsonify({"error": f"Terjadi kesalahan: {str(e)}"}), 500
+
 @app.route('/artefak', methods=['POST'])
 def create_artefak():
     """Create a new artefak."""
-    data = request.get_json()
-    new_artefak = Artefak(
-        nama_artefak=data['nama_artefak'],
-        deskripsi=data.get('deskripsi'),
-        gambar=data.get('gambar')
-    )
-    db.session.add(new_artefak)
-    db.session.commit()
-    return jsonify(new_artefak.serialize()), 201
-@app.route('/artefak/<string:artefak_id>', methods=['PUT'])
-def update_artefak(artefak_id):
-    """Update an artefak by ID."""
-    artefak = Artefak.query.get_or_404(artefak_id)
-    data = request.get_json()
-    artefak.nama_artefak = data.get('nama_artefak', artefak.nama_artefak)
-    artefak.deskripsi = data.get('deskripsi', artefak.deskripsi)
-    artefak.gambar = data.get('gambar', artefak.gambar)
-    db.session.commit()
-    return jsonify(artefak.serialize())
-@app.route('/artefak/<string:artefak_id>', methods=['DELETE'])
-def delete_artefak(artefak_id):
-    """Delete an artefak by ID."""
-    artefak = Artefak.query.get_or_404(artefak_id)
-    db.session.delete(artefak)
-    db.session.commit()
-    return jsonify({"message": "Artefak deleted successfully"}), 204
+    try:
+        data = request.get_json()
+        
+        if not data.get('nama_artefak') or not data.get('deskripsi'):
+            return jsonify({"error": "Nama artefak dan deskripsi wajib diisi"}), 400
+        
+        new_artefak = Artefak(
+            id=str(uuid.uuid4()),
+            nama_artefak=data['nama_artefak'],
+            deskripsi=data['deskripsi'],
+            gambar=data.get('gambar')
+        )
+        
+        db.session.add(new_artefak)
+        db.session.commit()
+        
+        return jsonify(new_artefak.serialize()), 201
+        
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": f"Terjadi kesalahan: {str(e)}"}), 500
+
+# User Artefak endpoints
+@app.route('/user-artefak/<string:user_id>', methods=['GET'])
+def get_user_artefak(user_id):
+    """Get user's artefak."""
+    try:
+        user_artefak = db.session.query(UserArtefak, Artefak).join(
+            Artefak, UserArtefak.artefak_id == Artefak.id
+        ).filter(UserArtefak.user_id == user_id).all()
+        
+        return jsonify([{
+            "id": ua.id,
+            "artefak": artefak.serialize(),
+            "created_at": ua.created_at.isoformat()
+        } for ua, artefak in user_artefak])
+        
+    except Exception as e:
+        return jsonify({"error": f"Terjadi kesalahan: {str(e)}"}), 500
+
+@app.route('/user-artefak', methods=['POST'])
+def award_artefak():
+    """Award an artefak to a user."""
+    try:
+        data = request.get_json()
+        
+        if not data.get('user_id') or not data.get('artefak_id'):
+            return jsonify({"error": "User ID dan Artefak ID wajib diisi"}), 400
+        
+        # Check if user already has this artefak
+        existing = UserArtefak.query.filter_by(
+            user_id=data['user_id'], 
+            artefak_id=data['artefak_id']
+        ).first()
+        
+        if existing:
+            return jsonify({"error": "User sudah memiliki artefak ini"}), 400
+        
+        new_user_artefak = UserArtefak(
+            id=str(uuid.uuid4()),
+            user_id=data['user_id'],
+            artefak_id=data['artefak_id']
+        )
+        
+        db.session.add(new_user_artefak)
+        db.session.commit()
+        
+        return jsonify(new_user_artefak.serialize()), 201
+        
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": f"Terjadi kesalahan: {str(e)}"}), 500
+
+# Health check endpoint
+@app.route('/health', methods=['GET'])
+def health_check():
+    """Health check endpoint."""
+    return jsonify({
+        "status": "healthy",
+        "message": "Kodino Backend is running"
+    }), 200
+
+# Error handlers
+@app.errorhandler(404)
+def not_found(error):
+    return jsonify({"error": "Endpoint tidak ditemukan"}), 404
+
+@app.errorhandler(500)
+def internal_error(error):
+    db.session.rollback()
+    return jsonify({"error": "Terjadi kesalahan internal server"}), 500
+
 if __name__ == '__main__':
-    app.run(debug=True, port=8000) # Set debug=True for development
+    app.run(debug=True, port=8000)

@@ -18,7 +18,7 @@ const Header = () => {
         <Link to="/" className={`nav-link ${isActive('/')}`}>Beranda</Link>
         <Link to="/tentang" className={`nav-link ${isActive('/tentang')}`}>Tentang</Link>
         <Link to="/materi" className={`nav-link ${isActive('/materi')}`}>Materi</Link>
-        <button className="cta-button">Daftar/Masuk</button>
+        <Link to="/login" className={`cta-button ${isActive('/login')}`}>Daftar/Masuk</Link>
       </nav>
     </header>
   );
