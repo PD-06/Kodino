@@ -32,7 +32,7 @@ const TentangPage = () => {
       <header className="header">
         <div className="logo-section">
           <Link to="/">
-            <img src="../assets/images/kodino-mascot.webp" alt="Kodino Mascot" className="mascot" />
+            <img src="/images/kodino-mascot.webp" alt="Kodino Mascot" className="mascot" />
             <span className="logo-text">Kodino</span>
           </Link>
         </div>
@@ -49,7 +49,7 @@ const TentangPage = () => {
         {/* Hero Section with Kodi Character */}
         <section className="hero-section">
           <div className="hero-character">
-            <img src="../assets/images/kodi-character.webp" alt="Kodi Character" className="kodi-img" />
+            <img src="/images/kodi-character.webp" alt="Kodi Character" className="kodi-img" />
           </div>
           <div className="hero-text">
             <h1 className="hero-title">Halo! Aku Kodi! 🦖</h1>
