@@ -1,286 +1,587 @@
-/* Import Google Fonts */
-@import url('https://fonts.googleapis.com/css2?family=Gabriel+Sans+Condensed:wght@400;500;600;700&display=swap');
-@import url('https://fonts.googleapis.com/css2?family=Alibaba+Sans:wght@400;500;600;700;800&display=swap');
+/* Local Font Imports */
+@font-face {
+    font-family: 'Alibaba Sans';
+    src: url('../assets/fonts/AlibabaSans-Regular.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Alibaba Sans';
+    src: url('../assets/fonts/AlibabaSans-Bold.ttf') format('truetype');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Gabriel Sans Condensed';
+    src: url('../assets/fonts/GabrielSansCdTrialMd.ttf') format('truetype');
+    font-weight: 400;
+    font-style: normal;
+    font-display: swap;
+}
+
+@font-face {
+    font-family: 'Gabriel Sans Condensed';
+    src: url('../assets/fonts/GabrielSansCdTrialBd.ttf') format('truetype');
+    font-weight: 700;
+    font-style: normal;
+    font-display: swap;
+}
 
 /* Reset and Base Styles */
+html, body {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    overflow-x: hidden;
+    font-family: 'Gabriel Sans Condensed', Arial, sans-serif;
+}
+
 * {
-  margin: 0;
-  padding: 0;
-  box-sizing: border-box;
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+#root {
+    margin: 0;
+    padding: 0;
+    width: 100%;
+    max-width: 100%;
 }
 
 .landing {
-  font-family: 'Gabriel Sans Condensed', sans-serif;
-  background-color: #ffffff;
-  min-height: 100vh;
+    font-family: 'Gabriel Sans Condensed', Arial, sans-serif;
+    background-color: #ffffff;
+    min-height: 100vh;
+    overflow-x: hidden;
+    width: 100%;
+    margin: 0;
+    padding: 0;
+}
+
+/* Keyframe Animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes fadeInLeft {
+    from {
+        opacity: 0;
+        transform: translateX(-30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes fadeInRight {
+    from {
+        opacity: 0;
+        transform: translateX(30px);
+    }
+    to {
+        opacity: 1;
+        transform: translateX(0);
+    }
+}
+
+@keyframes bounce {
+    0%, 20%, 50%, 80%, 100% {
+        transform: translateY(0);
+    }
+    40% {
+        transform: translateY(-10px);
+    }
+    60% {
+        transform: translateY(-5px);
+    }
+}
+
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+    }
+    50% {
+        transform: scale(1.05);
+    }
+    100% {
+        transform: scale(1);
+    }
+}
+
+@keyframes float {
+    0%, 100% {
+        transform: translateY(0px);
+    }
+    50% {
+        transform: translateY(-10px);
+    }
+}
+
+@keyframes wiggle {
+    0%, 7% {
+        transform: rotateZ(0);
+    }
+    15% {
+        transform: rotateZ(-15deg);
+    }
+    20% {
+        transform: rotateZ(10deg);
+    }
+    25% {
+        transform: rotateZ(-10deg);
+    }
+    30% {
+        transform: rotateZ(6deg);
+    }
+    35% {
+        transform: rotateZ(-4deg);
+    }
+    40%, 100% {
+        transform: rotateZ(0);
+    }
+}
+
+@keyframes slideInDown {
+    from {
+        opacity: 0;
+        transform: translateY(-50px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 /* Header Styles */
 .header {
-  display: flex;
-  justify-content: space-between;
-  align-items: center;
-  padding: 1rem 2rem;
-  background: white;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 1rem 2rem;
+    background: white;
+    animation: slideInDown 0.8s ease-out;
+    position: relative;
+    z-index: 10;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .logo-section {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
+    display: flex;
+    align-items: center;
+    gap: 0.5rem;
+    animation: fadeInLeft 1s ease-out;
 }
 
 .mascot {
-  width: 40px;
-  height: 40px;
+    width: 40px;
+    height: 40px;
+    animation: wiggle 2s ease-in-out infinite;
+    animation-delay: 2s;
 }
 
 .logo-text {
-  font-family: 'Alibaba Sans', sans-serif;
-  font-size: 1.5rem;
-  font-weight: 700;
-  color: #2d2d2d;
+    font-family: 'Alibaba Sans', Arial, sans-serif;
+    font-size: 1.5rem;
+    font-weight: 700;
+    color: #2d2d2d;
+    transition: color 0.3s ease;
+}
+
+.logo-section:hover .logo-text {
+    color: #FF6B35;
 }
 
 .nav {
-  display: flex;
-  align-items: center;
-  gap: 2rem;
+    display: flex;
+    align-items: center;
+    gap: 2rem;
+    animation: fadeInRight 1s ease-out;
 }
 
 .nav-link {
-  text-decoration: none;
-  color: #666;
-  font-weight: 500;
-  font-size: 1rem;
-  transition: color 0.3s ease;
+    text-decoration: none;
+    color: #666;
+    font-weight: 500;
+    font-size: 1rem;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.nav-link::after {
+    content: '';
+    position: absolute;
+    bottom: -5px;
+    left: 0;
+    width: 0;
+    height: 2px;
+    background: #FF6B35;
+    transition: width 0.3s ease;
+}
+
+.nav-link:hover::after {
+    width: 100%;
 }
 
 .nav-link.active {
-  color: #FF6B35;
+    color: #FF6B35;
+}
+
+.nav-link.active::after {
+    width: 100%;
 }
 
 .nav-link:hover {
-  color: #FF6B35;
+    color: #FF6B35;
+    transform: translateY(-2px);
 }
 
 .cta-button {
-  background: #FF6B35;
-  color: white;
-  border: none;
-  padding: 0.75rem 1.5rem;
-  border-radius: 25px;
-  font-family: 'Gabriel Sans Condensed', sans-serif;
-  font-weight: 600;
-  font-size: 1rem;
-  cursor: pointer;
-  transition: background 0.3s ease;
+    background: #FF6B35;
+    color: white;
+    border: none;
+    padding: 0.75rem 1.5rem;
+    border-radius: 25px;
+    font-family: 'Gabriel Sans Condensed', Arial, sans-serif;
+    font-weight: 600;
+    font-size: 1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    transform: scale(1);
 }
 
 .cta-button:hover {
-  background: #e55a2e;
+    background: #e55a2e;
+    transform: scale(1.05) translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 107, 53, 0.4);
 }
 
 /* Hero Section */
 .hero {
-  display: flex;
-  align-items: center;
-  padding: 4rem 2rem;
-  max-width: 1200px;
-  margin: 0 auto;
-  gap: 3rem;
+    display: flex;
+    align-items: center;
+    padding: 4rem 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
+    gap: 3rem;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .hero-content {
-  flex: 1;
+    flex: 1;
+    animation: fadeInLeft 1.2s ease-out;
 }
 
 .hero-title {
-  font-family: 'Alibaba Sans', sans-serif;
-  font-size: 3.5rem;
-  font-weight: 800;
-  color: #2d2d2d;
-  line-height: 1.1;
-  margin-bottom: 1.5rem;
+    font-family: 'Alibaba Sans', Arial, sans-serif;
+    font-size: 3.5rem;
+    font-weight: 800;
+    color: #2d2d2d;
+    line-height: 1.1;
+    margin-bottom: 1.5rem;
+    animation: fadeInUp 1s ease-out 0.3s both;
 }
 
 .hero-subtitle {
-  font-size: 1.2rem;
-  color: #666;
-  margin-bottom: 2.5rem;
-  line-height: 1.4;
+    font-size: 1.2rem;
+    color: #666;
+    margin-bottom: 2.5rem;
+    line-height: 1.4;
+    animation: fadeInUp 1s ease-out 0.6s both;
 }
 
 .start-button {
-  background: #FF6B35;
-  color: white;
-  border: none;
-  padding: 1rem 2rem;
-  border-radius: 25px;
-  font-family: 'Gabriel Sans Condensed', sans-serif;
-  font-weight: 600;
-  font-size: 1.1rem;
-  cursor: pointer;
-  transition: background 0.3s ease;
+    background: #FF6B35;
+    color: white;
+    border: none;
+    padding: 1rem 2rem;
+    border-radius: 25px;
+    font-family: 'Gabriel Sans Condensed', Arial, sans-serif;
+    font-weight: 600;
+    font-size: 1.1rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    transform: scale(1);
 }
 
 .start-button:hover {
-  background: #e55a2e;
+    background: #e55a2e;
+    transform: scale(1.1) translateY(-3px);
+    box-shadow: 0 8px 25px rgba(255, 107, 53, 0.4);
+    animation: none;
 }
 
 .hero-image {
-  flex: 1;
-  text-align: center;
+    flex: 1;
+    text-align: center;
+    animation: fadeInRight 1.2s ease-out;
 }
 
 .hero-image img {
-  max-width: 100%;
-  height: auto;
+    max-width: 100%;
+    height: auto;
+    animation: float 3s ease-in-out infinite;
 }
 
 /* Features Section */
 .features {
-  display: flex;
-  justify-content: center;
-  gap: 3rem;
-  padding: 3rem 2rem;
-  max-width: 1000px;
-  margin: 0 auto;
+    display: flex;
+    justify-content: center;
+    gap: 3rem;
+    padding: 3rem 2rem;
+    max-width: 1000px;
+    margin: 0 auto;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .feature-item {
-  text-align: center;
-  flex: 1;
-  max-width: 300px;
+    text-align: center;
+    flex: 1;
+    max-width: 300px;
+    animation: fadeInUp 1s ease-out;
+    transition: transform 0.3s ease;
+}
+
+.feature-item:nth-child(1) {
+    animation-delay: 0.2s;
+}
+
+.feature-item:nth-child(2) {
+    animation-delay: 0.4s;
+}
+
+.feature-item:nth-child(3) {
+    animation-delay: 0.6s;
+}
+
+.feature-item:hover {
+    transform: translateY(-10px);
 }
 
 .feature-icon {
-  width: 80px;
-  height: 80px;
-  margin: 0 auto 1rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 1rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease;
 }
 
 .feature-icon img {
-  width: 60px;
-  height: 60px;
+    width: 60px;
+    height: 60px;
+    transition: transform 0.3s ease;
+}
+
+.feature-item:hover .feature-icon {
+    animation: bounce 0.6s ease;
 }
 
 .feature-title {
-  font-family: 'Alibaba Sans', sans-serif;
-  font-size: 1.3rem;
-  font-weight: 600;
-  color: #2d2d2d;
-  margin-bottom: 0.5rem;
+    font-family: 'Alibaba Sans', Arial, sans-serif;
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #2d2d2d;
+    margin-bottom: 0.5rem;
+    transition: color 0.3s ease;
+}
+
+.feature-item:hover .feature-title {
+    color: #FF6B35;
 }
 
 .feature-description {
-  font-size: 0.95rem;
-  color: #666;
-  line-height: 1.4;
+    font-size: 0.95rem;
+    color: #666;
+    line-height: 1.4;
 }
 
 /* Why Kodino Section */
 .why-kodino {
-  padding: 4rem 2rem;
-  background-color: #f9f9f9;
+    padding: 4rem 2rem;
+    background-color: #f9f9f9;
+    width: 100%;
+    box-sizing: border-box;
 }
 
 .section-title {
-  font-family: 'Alibaba Sans', sans-serif;
-  font-size: 2.5rem;
-  font-weight: 700;
-  color: #2d2d2d;
-  text-align: center;
-  margin-bottom: 3rem;
+    font-family: 'Alibaba Sans', Arial, sans-serif;
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: #2d2d2d;
+    text-align: center;
+    margin-bottom: 3rem;
+    animation: fadeInUp 1s ease-out;
 }
 
 .benefits-grid {
-  display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
-  gap: 2rem;
-  max-width: 1200px;
-  margin: 0 auto;
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 2rem;
+    max-width: 1200px;
+    margin: 0 auto;
 }
 
 .benefit-card {
-  background: white;
-  padding: 2rem;
-  border-radius: 15px;
-  text-align: center;
-  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
-  transition: transform 0.3s ease, box-shadow 0.3s ease;
+    background: white;
+    padding: 2rem;
+    border-radius: 15px;
+    text-align: center;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    animation: fadeInUp 1s ease-out;
+    opacity: 0;
+    animation-fill-mode: both;
+}
+
+.benefit-card:nth-child(1) {
+    animation-delay: 0.2s;
+}
+
+.benefit-card:nth-child(2) {
+    animation-delay: 0.4s;
+}
+
+.benefit-card:nth-child(3) {
+    animation-delay: 0.6s;
+}
+
+.benefit-card:nth-child(4) {
+    animation-delay: 0.8s;
 }
 
 .benefit-card:hover {
-  transform: translateY(-5px);
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.12);
+    transform: translateY(-10px) scale(1.02);
+    box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
 }
 
 .benefit-icon {
-  width: 80px;
-  height: 80px;
-  margin: 0 auto 1.5rem;
-  display: flex;
-  align-items: center;
-  justify-content: center;
+    width: 80px;
+    height: 80px;
+    margin: 0 auto 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: transform 0.3s ease;
 }
 
 .benefit-icon img {
-  width: 60px;
-  height: 60px;
+    width: 60px;
+    height: 60px;
+    transition: all 0.3s ease;
+}
+
+.benefit-card:hover .benefit-icon {
+    transform: scale(1.1);
+    animation: wiggle 0.8s ease;
 }
 
 .benefit-title {
-  font-family: 'Alibaba Sans', sans-serif;
-  font-size: 1.3rem;
-  font-weight: 600;
-  color: #2d2d2d;
-  margin-bottom: 1rem;
+    font-family: 'Alibaba Sans', Arial, sans-serif;
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #2d2d2d;
+    margin-bottom: 1rem;
+    transition: color 0.3s ease;
+}
+
+.benefit-card:hover .benefit-title {
+    color: #FF6B35;
 }
 
 .benefit-description {
-  font-size: 0.95rem;
-  color: #666;
-  line-height: 1.5;
+    font-size: 0.95rem;
+    color: #666;
+    line-height: 1.5;
+    transition: color 0.3s ease;
+}
+
+.benefit-card:hover .benefit-description {
+    color: #555;
+}
+
+/* Scroll animations */
+@media (prefers-reduced-motion: no-preference) {
+    .feature-item,
+    .benefit-card {
+        opacity: 0;
+        transform: translateY(30px);
+        transition: opacity 0.6s ease, transform 0.6s ease;
+    }
+
+    .feature-item.animate,
+    .benefit-card.animate {
+        opacity: 1;
+        transform: translateY(0);
+    }
 }
 
 /* Responsive Design */
 @media (max-width: 768px) {
-  .header {
-    flex-direction: column;
-    gap: 1rem;
-    padding: 1rem;
-  }
+    .header {
+        flex-direction: column;
+        gap: 1rem;
+        padding: 1rem;
+    }
 
-  .nav {
-    gap: 1rem;
-  }
+    .nav {
+        gap: 1rem;
+    }
 
-  .hero {
-    flex-direction: column;
-    text-align: center;
-    padding: 2rem 1rem;
-  }
+    .hero {
+        flex-direction: column;
+        text-align: center;
+        padding: 2rem 1rem;
+    }
 
-  .hero-title {
-    font-size: 2.5rem;
-  }
+    .hero-title {
+        font-size: 2.5rem;
+    }
 
-  .features {
-    flex-direction: column;
-    align-items: center;
-    padding: 2rem 1rem;
-  }
+    .features {
+        flex-direction: column;
+        align-items: center;
+        padding: 2rem 1rem;
+    }
 
-  .benefits-grid {
-    grid-template-columns: 1fr;
-    padding: 0 1rem;
-  }
+    .benefits-grid {
+        grid-template-columns: 1fr;
+        padding: 0 1rem;
+    }
 
-  .section-title {
-    font-size: 2rem;
-  }
+    .section-title {
+        font-size: 2rem;
+    }
+
+    /* Reduce motion for mobile */
+    .hero-image img {
+        animation: float 4s ease-in-out infinite;
+    }
+}
+
+/* Reduce motion for users who prefer it */
+@media (prefers-reduced-motion: reduce) {
+    *,
+    *::before,
+    *::after {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
 }

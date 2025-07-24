@@ -1,6 +1,29 @@
+// filepath: /Users/raka/IdeaProjects/kodino/Kodino/Frontend/src/page/LandingPage.tsx
+import { useEffect } from 'react';
 import './LandingPage.css';
 
 const LandingPage = () => {
+  useEffect(() => {
+    const observerOptions = {
+      threshold: 0.1,
+      rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+      entries.forEach(entry => {
+        if (entry.isIntersecting) {
+          entry.target.classList.add('animate');
+        }
+      });
+    }, observerOptions);
+
+    // Observe all elements that should animate on scroll
+    const elementsToAnimate = document.querySelectorAll('.feature-item, .benefit-card');
+    elementsToAnimate.forEach(el => observer.observe(el));
+
+    return () => observer.disconnect();
+  }, []);
+
   return (
     <div className="landing">
       {/* Header */}
