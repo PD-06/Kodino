@@ -83,7 +83,7 @@ const LoginPage = () => {
     <div className="login-page">
       <Header />
 
-      <main className="main-content">
+      <main className="main-content1">
         <div className="login-container">
           <div className="welcome-section">
             <h2 className="welcome-title">Halo! Selamat datang Kembali</h2>

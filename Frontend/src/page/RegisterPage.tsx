@@ -110,7 +110,7 @@ const RegisterPage = () => {
     <div className="register-page">
       <Header />
 
-      <main className="main-content">
+      <main className="main-content1">
         <div className="register-container">
           <div className="welcome-section">
             <h2 className="welcome-title">Belum Punya Akun?</h2>
