@@ -4,6 +4,7 @@ import TentangPage from './page/TentangPage';
 import MateriPage from './page/MateriPage';
 import LoginPage from './page/LoginPage';
 import RegisterPage from './page/RegisterPage';
+import Pendahuluan from "./page/materi/Pendahuluan.tsx";
 
 function App() {
   return (
@@ -12,6 +13,7 @@ function App() {
         <Route path="/" element={<LandingPage />} />
         <Route path="/tentang" element={<TentangPage />} />
         <Route path="/materi" element={<MateriPage />} />
+        <Route path="/materi/pendahuluan" element={<Pendahuluan />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />}/> {/* Placeholder for RegisterPage */}
         {/* Add more routes as needed */}

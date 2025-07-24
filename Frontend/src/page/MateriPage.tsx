@@ -1,5 +1,6 @@
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Routes, Route } from 'react-router-dom';
 import Header from '../components/Header';
+import Pendahuluan from './materi/Pendahuluan';
 import './MateriPage.css';
 
 const MateriPage = () => {
@@ -66,6 +67,11 @@ const MateriPage = () => {
 
       {/* Main Content */}
       <main className="materi-container">
+        <Routes>
+          <Route path="/materi/pendahuluan" element={<Pendahuluan />} />
+          {/* Add other routes here if needed */}
+        </Routes>
+
         <h1 className="section-title">Materi</h1>
         
         <div className="materi-grid">
