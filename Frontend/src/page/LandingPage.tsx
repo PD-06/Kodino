@@ -1,5 +1,5 @@
-// filepath: /Users/raka/IdeaProjects/kodino/Kodino/Frontend/src/page/LandingPage.tsx
 import { useEffect } from 'react';
+import { Link } from 'react-router-dom';
 import './LandingPage.css';
 
 const LandingPage = () => {
@@ -33,8 +33,8 @@ const LandingPage = () => {
           <span className="logo-text">Kodino</span>
         </div>
         <nav className="nav">
-          <a href="#beranda" className="nav-link active">Beranda</a>
-          <a href="#tentang" className="nav-link">Tentang</a>
+          <Link to="/" className="nav-link active">Beranda</Link>
+          <Link to="/tentang" className="nav-link">Tentang</Link>
           <a href="#materi" className="nav-link">Materi</a>
           <button className="cta-button">Daftar/Masuk</button>
         </nav>
