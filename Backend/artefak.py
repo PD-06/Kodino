@@ -4,7 +4,7 @@ from models import db, User
 with app.app_context():
     try:
         # Update for your username
-        username = 'devinganteng'  # Replace with your actual username
+        username = 'rakaganteng'  # Replace with your actual username
         
         user = User.query.filter_by(username=username).first()
         if user:

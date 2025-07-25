@@ -9,8 +9,6 @@ import LogikaDanVariabel from "./page/materi/LogikaDanVariabel.tsx";
 import PerulanganDasarDanLanjutan from "./page/materi/PerulanganDasarDanLanjutan.tsx";
 import ApaItuNgoding from "./page/materi/ApaItuNgoding.tsx"; // Placeholder for ApaItuNgoding
 import Dashboard from "./page/Dashboard.tsx"; // Placeholder for Dashboard
-import StrukturData from "./page/materi/StrukturData.tsx";
-import Belajar from "./page/materi/belajar/Belajar.tsx";
 import CaraKerjaKomputer from './page/materi/CaraKerjaKomputer.tsx';
 import BahasaPemrograman from './page/materi/BahasaPemrograman.tsx';
 import NgodingItuGimana from './page/materi/NgodingItuGimanaSih.tsx';
@@ -29,8 +27,6 @@ function App() {
         <Route path="/materi/pendahuluan" element={<Pendahuluan />} />
         <Route path="/materi/logika-dan-variabel" element={<LogikaDanVariabel />} />
         <Route path="/materi/perulangan" element={<PerulanganDasarDanLanjutan />} />
-        <Route path="/materi/struktur-data" element={<StrukturData />} />
-        <Route path="/materi/belajar" element={<Belajar />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />}/> {/* Placeholder for RegisterPage */}
         <Route path="/dashboard" element={<Dashboard />} /> {/* Placeholder for Dashboard */}

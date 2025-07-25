@@ -98,6 +98,29 @@ const Dashboard = () => {
   const [userArtefak, setUserArtefak] = useState<UserArtefak[]>([]);
   const [allArtefak, setAllArtefak] = useState<Artefak[]>([]);
   const [isLoading, setIsLoading] = useState(true);
+  const [isEditing, setIsEditing] = useState(false);
+  const [editFormData, setEditFormData] = useState({
+    nama_panjang: '',
+    username: '',
+    email: '',
+    current_password: '',
+    new_password: '',
+    confirm_password: ''
+  });
+  const [isChangingPassword, setIsChangingPassword] = useState(false);
+
+  useEffect(() => {
+    if (user) {
+      setEditFormData({
+        nama_panjang: user.nama_panjang || '',
+        username: user.username || '',
+        email: user.email || '',
+        current_password: '',
+        new_password: '',
+        confirm_password: ''
+      });
+    }
+  }, [user]);
 
   useEffect(() => {
     // Get user data from localStorage
@@ -115,6 +138,132 @@ const Dashboard = () => {
       setIsLoading(false);
     }
   }, []);
+
+  // Handle form input changes
+  const handleInputChange = (field: string, value: string) => {
+    setEditFormData(prev => ({
+      ...prev,
+      [field]: value
+    }));
+  };
+
+  // Save profile changes
+  const saveProfileChanges = async () => {
+    if (!user) return;
+
+    try {
+      // Validate required fields
+      if (!editFormData.nama_panjang.trim() || !editFormData.username.trim()) {
+        alert('Nama dan username tidak boleh kosong!');
+        return;
+      }
+
+      // Validate username format
+      if (!/^[a-zA-Z0-9_]+$/.test(editFormData.username)) {
+        alert('Username hanya boleh mengandung huruf, angka, dan underscore!');
+        return;
+      }
+
+      // Validate email format if provided
+      if (editFormData.email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(editFormData.email)) {
+        alert('Format email tidak valid!');
+        return;
+      }
+
+      const response = await fetch(`http://localhost:8000/users/${user.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          nama_panjang: editFormData.nama_panjang.trim(),
+          username: editFormData.username.trim(),
+          email: editFormData.email.trim() || null
+        })
+      });
+
+      if (response.ok) {
+        const updatedUser = await response.json();
+        setUser(updatedUser);
+        localStorage.setItem('kodino_user', JSON.stringify(updatedUser));
+        setIsEditing(false);
+        alert('Profil berhasil diperbarui! 🎉');
+      } else {
+        const error = await response.json();
+        alert(error.error || 'Gagal memperbarui profil');
+      }
+    } catch (error) {
+      console.error('Error updating profile:', error);
+      alert('Terjadi kesalahan saat memperbarui profil');
+    }
+  };
+
+  // Change password
+  const changePassword = async () => {
+    if (!user) return;
+
+    try {
+      // Validate password fields
+      if (!editFormData.current_password || !editFormData.new_password || !editFormData.confirm_password) {
+        alert('Semua field password harus diisi!');
+        return;
+      }
+
+      if (editFormData.new_password !== editFormData.confirm_password) {
+        alert('Password baru dan konfirmasi password tidak cocok!');
+        return;
+      }
+
+      if (editFormData.new_password.length < 6) {
+        alert('Password baru minimal 6 karakter!');
+        return;
+      }
+
+      const response = await fetch(`http://localhost:8000/users/${user.id}/change-password`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          current_password: editFormData.current_password,
+          new_password: editFormData.new_password
+        })
+      });
+
+      if (response.ok) {
+        setIsChangingPassword(false);
+        setEditFormData(prev => ({
+          ...prev,
+          current_password: '',
+          new_password: '',
+          confirm_password: ''
+        }));
+        alert('Password berhasil diubah! 🎉');
+      } else {
+        const error = await response.json();
+        alert(error.error || 'Gagal mengubah password');
+      }
+    } catch (error) {
+      console.error('Error changing password:', error);
+      alert('Terjadi kesalahan saat mengubah password');
+    }
+  };
+
+  // Cancel editing
+  const cancelEditing = () => {
+    setIsEditing(false);
+    setIsChangingPassword(false);
+    if (user) {
+      setEditFormData({
+        nama_panjang: user.nama_panjang || '',
+        username: user.username || '',
+        email: user.email || '',
+        current_password: '',
+        new_password: '',
+        confirm_password: ''
+      });
+    }
+  };
 
   const fetchAllData = async (userId: string) => {
     try {
@@ -713,50 +862,221 @@ const Dashboard = () => {
           </div>
         );
 
-      case 'pengaturan-akun':
-        return (
-          <div className="settings-content">
-            <div className="settings-form">
-              <h2>Pengaturan Akun</h2>
-              <div className="form-group">
-                <label>Nama ✏️</label>
-                <p>{user?.nama_panjang}</p>
+        case 'pengaturan-akun':
+            return (
+              <div className="settings-content">
+                <div className="settings-form">
+                  <h2>Pengaturan Akun</h2>
+                  
+                  {/* Profile Information Section */}
+                  <div className="settings-section">
+                    <h3>Informasi Profil</h3>
+                    
+                    <div className="form-group">
+                      <label>Nama Lengkap</label>
+                      {isEditing ? (
+                        <input
+                          type="text"
+                          value={editFormData.nama_panjang}
+                          onChange={(e) => handleInputChange('nama_panjang', e.target.value)}
+                          className="form-input"
+                          placeholder="Masukkan nama lengkap"
+                        />
+                      ) : (
+                        <div className="form-display">
+                          <p>{user?.nama_panjang}</p>
+                          <button 
+                            className="edit-btn"
+                            onClick={() => setIsEditing(true)}
+                          >
+                            ✏️ Edit
+                          </button>
+                        </div>
+                      )}
+                    </div>
+        
+                    <div className="form-group">
+                      <label>Username</label>
+                      {isEditing ? (
+                        <input
+                          type="text"
+                          value={editFormData.username}
+                          onChange={(e) => handleInputChange('username', e.target.value)}
+                          className="form-input"
+                          placeholder="Masukkan username"
+                        />
+                      ) : (
+                        <div className="form-display">
+                          <p>@{user?.username}</p>
+                          {!isEditing && (
+                            <button 
+                              className="edit-btn"
+                              onClick={() => setIsEditing(true)}
+                            >
+                              ✏️ Edit
+                            </button>
+                          )}
+                        </div>
+                      )}
+                    </div>
+        
+                    <div className="form-group">
+                      <label>Alamat Email</label>
+                      {isEditing ? (
+                        <input
+                          type="email"
+                          value={editFormData.email}
+                          onChange={(e) => handleInputChange('email', e.target.value)}
+                          className="form-input"
+                          placeholder="Masukkan alamat email (opsional)"
+                        />
+                      ) : (
+                        <div className="form-display">
+                          <p>{user?.email || 'Belum ada email'}</p>
+                          {!isEditing && (
+                            <button 
+                              className="edit-btn"
+                              onClick={() => setIsEditing(true)}
+                            >
+                              ✏️ Edit
+                            </button>
+                          )}
+                        </div>
+                      )}
+                    </div>
+        
+                    {isEditing && (
+                      <div className="form-actions">
+                        <button 
+                          className="save-btn"
+                          onClick={saveProfileChanges}
+                        >
+                          💾 Simpan Perubahan
+                        </button>
+                        <button 
+                          className="cancel-btn"
+                          onClick={cancelEditing}
+                        >
+                          ❌ Batal
+                        </button>
+                      </div>
+                    )}
+                  </div>
+        
+                  {/* Account Statistics Section */}
+                  <div className="settings-section">
+                    <h3>Statistik Akun</h3>
+                    
+                    <div className="form-group">
+                      <label>DiKoin</label>
+                      <div className="stat-display">
+                        <span className="stat-value">💰 {user?.dikoin || 0} DC</span>
+                      </div>
+                    </div>
+        
+                    <div className="form-group">
+                      <label>Progress Belajar</label>
+                      <div className="stat-display">
+                        <span className="stat-value">🎯 Level {user?.progress?.level || 1} - Section {user?.progress?.section || 1}</span>
+                        <div className="progress-mini-bar">
+                          <div 
+                            className="progress-mini-fill" 
+                            style={{ width: `${getProgressPercentage()}%` }}
+                          ></div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+        
+                  {/* Password Section */}
+                  <div className="settings-section">
+                    <h3>Keamanan</h3>
+                    
+                    <div className="form-group">
+                      <label>Password</label>
+                      {isChangingPassword ? (
+                        <div className="password-change-form">
+                          <input
+                            type="password"
+                            value={editFormData.current_password}
+                            onChange={(e) => handleInputChange('current_password', e.target.value)}
+                            className="form-input"
+                            placeholder="Password saat ini"
+                          />
+                          <input
+                            type="password"
+                            value={editFormData.new_password}
+                            onChange={(e) => handleInputChange('new_password', e.target.value)}
+                            className="form-input"
+                            placeholder="Password baru"
+                          />
+                          <input
+                            type="password"
+                            value={editFormData.confirm_password}
+                            onChange={(e) => handleInputChange('confirm_password', e.target.value)}
+                            className="form-input"
+                            placeholder="Konfirmasi password baru"
+                          />
+                          <div className="form-actions">
+                            <button 
+                              className="save-btn"
+                              onClick={changePassword}
+                            >
+                              🔒 Ubah Password
+                            </button>
+                            <button 
+                              className="cancel-btn"
+                              onClick={cancelEditing}
+                            >
+                              ❌ Batal
+                            </button>
+                          </div>
+                        </div>
+                      ) : (
+                        <div className="form-display">
+                          <p>************************</p>
+                          <button 
+                            className="edit-btn"
+                            onClick={() => setIsChangingPassword(true)}
+                          >
+                            🔒 Ubah Password
+                          </button>
+                        </div>
+                      )}
+                    </div>
+                  </div>
+                </div>
+        
+                <div className="profile-photo">
+                  <div className="photo-placeholder">
+                    <span>👤</span>
+                  </div>
+                  <p><em>Foto Profil</em></p>
+                  <button className="upload-photo-btn">
+                    📷 Upload Foto
+                  </button>
+                  
+                  <div className="stats-summary">
+                    <h4>Koleksi</h4>
+                    <div className="stat-item">
+                      <span className="stat-icon">🏆</span>
+                      <span className="stat-label">Lencana:</span>
+                      <span className="stat-number">{userLencana.length}</span>
+                    </div>
+                    <div className="stat-item">
+                      <span className="stat-icon">🏺</span>
+                      <span className="stat-label">Artefak:</span>
+                      <span className="stat-number">{userArtefak.length}</span>
+                    </div>
+                    <div className="stat-item">
+                      <span className="stat-icon">👕</span>
+                      <span className="stat-label">Kostum:</span>
+                      <span className="stat-number">{userClothes.length}</span>
+                    </div>
+                  </div>
+                </div>
               </div>
-              <div className="form-group">
-                <label>Nama User ✏️</label>
-                <p>@{user?.username}</p>
-              </div>
-              <div className="form-group">
-                <label>Alamat Email ✏️</label>
-                <p>{user?.email || 'Tambahkan Alamat Email?'}</p>
-              </div>
-              <div className="form-group">
-                <label>DiKoin 💰</label>
-                <p>{user?.dikoin} DC</p>
-              </div>
-              <div className="form-group">
-                <label>Level Progress 🎯</label>
-                <p>Level {user?.progress?.level || 1} - Section {user?.progress?.section || 1}</p>
-              </div>
-              <div className="form-group">
-                <label>Sandi 👁 ✏️</label>
-                <p>************************</p>
-              </div>
-            </div>
-            <div className="profile-photo">
-              <div className="photo-placeholder">
-                <span>👤</span>
-              </div>
-              <p><em>Foto Profil</em></p>
-              <div className="stats-summary">
-                <h4>Statistik</h4>
-                <p>🏆 Lencana: {userLencana.length}</p>
-                <p>🏺 Artefak: {userArtefak.length}</p>
-                <p>👕 Kostum: {userClothes.length}</p>
-              </div>
-            </div>
-          </div>
-        );
+            );
 
       default:
         return null;
