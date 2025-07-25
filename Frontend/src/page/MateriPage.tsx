@@ -1,7 +1,6 @@
-import { useNavigate, Routes, Route } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import Header from '../components/Header';
-import Pendahuluan from './materi/Pendahuluan';
 import './MateriPage.css';
 
 interface User {
@@ -55,27 +54,27 @@ const MateriPage = () => {
       requiredLevel: 2
     },
     {
+      id: 'perulangan',
+      title: 'Perulangan Dasar & Lanjutan',
+      series: 'Jawa Series',
+      description: 'Menguasai konsep perulangan untuk membuat kode yang lebih efisien dan powerful.',
+      image: '/images/perulangan-banner.jpg',
+      route: '/materi/perulangan',
+      requiredLevel: 3
+    },
+    {
       id: 'struktur-data-dan-interaksi',
       title: 'Struktur Data dan Interaksi',
       series: 'Sulawesi Series',
       description: 'Bikin game pertamamu! Gerakin karakter, kasih skor, dan seru-seruan sambil belajar.',
       image: '/images/struktur-data-dan-interaksi.webp',
       route: '/materi/struktur-data-dan-interaksi',
-      requiredLevel: 3
-    },
-    {
-      id: 'struktur-program',
-      title: 'Struktur Program & Pengulangan Kompleks',
-      series: 'Papua Series',
-      description: 'Menguasai struktur program dan pengulangan yang lebih kompleks.',
-      image: '/images/struktur-program-pengulangan-kompleks.webp',
-      route: '/materi/struktur-program',
       requiredLevel: 4
     },
     {
       id: 'pengembangan-program',
       title: 'Pengembangan Program dan Kode Modular',
-      series: 'Jawa Series',
+      series: 'Papua Series',
       description: 'Belajar membangun program yang lebih besar dengan kode modular.',
       image: '/images/pengembangan-program-dan-kode-modular.webp',
       route: '/materi/pengembangan-program',

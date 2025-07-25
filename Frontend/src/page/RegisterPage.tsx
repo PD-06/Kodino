@@ -61,7 +61,7 @@ const RegisterPage = () => {
       return false;
     }
     
-    if (formData.hasEmail && !formData.email.trim()) {
+    if (formData.hasEmail && (typeof formData.email !== "undefined" && !formData.email.trim())) {
       setError('Email wajib diisi jika dipilih');
       return false;
     }
@@ -74,7 +74,8 @@ const RegisterPage = () => {
     return true;
   };
 
-  const isValidEmail = (email: string): boolean => {
+  const isValidEmail = (email: string | undefined): boolean => {
+    if (!email) return false;
     const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     return emailRegex.test(email);
   };

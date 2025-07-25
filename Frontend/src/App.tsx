@@ -5,6 +5,8 @@ import MateriPage from './page/MateriPage';
 import LoginPage from './page/LoginPage';
 import RegisterPage from './page/RegisterPage';
 import Pendahuluan from "./page/materi/Pendahuluan.tsx";
+import LogikaDanVariabel from "./page/materi/LogikaDanVariabel.tsx";
+import PerulanganDasarDanLanjutan from "./page/materi/PerulanganDasarDanLanjutan.tsx";
 
 function App() {
   return (
@@ -14,6 +16,8 @@ function App() {
         <Route path="/tentang" element={<TentangPage />} />
         <Route path="/materi" element={<MateriPage />} />
         <Route path="/materi/pendahuluan" element={<Pendahuluan />} />
+        <Route path="/materi/logika-dan-variabel" element={<LogikaDanVariabel />} />
+        <Route path="/materi/perulangan" element={<PerulanganDasarDanLanjutan />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />}/> {/* Placeholder for RegisterPage */}
         {/* Add more routes as needed */}
