@@ -249,6 +249,120 @@ const Dashboard = () => {
     return 'Kostum Default';
   };
 
+  const buyClothes = async (clothesId: string, price: number) => {
+    if (!user) return;
+
+    if (user.dikoin < price) {
+      alert('DiKoin tidak cukup untuk membeli kostum ini!');
+      return;
+    }
+
+    try {
+      // First, award the clothes to user
+      const awardResponse = await fetch(`http://localhost:8000/user-clothes-set`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          user_id: user.id,
+          clothes_set_id: clothesId
+        })
+      });
+
+      if (!awardResponse.ok) {
+        const error = await awardResponse.json();
+        alert(error.error || 'Gagal membeli kostum');
+        return;
+      }
+
+      // Then, deduct DiKoin from user
+      const updateResponse = await fetch(`http://localhost:8000/users/${user.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          dikoin: user.dikoin - price
+        })
+      });
+
+      if (updateResponse.ok) {
+        // Update user state
+        const updatedUser = { ...user, dikoin: user.dikoin - price };
+        setUser(updatedUser);
+        localStorage.setItem('kodino_user', JSON.stringify(updatedUser));
+        
+        // Refresh data
+        fetchAllData(user.id);
+        
+        alert('Kostum berhasil dibeli! 🎉');
+      } else {
+        alert('Terjadi kesalahan saat memproses pembayaran');
+      }
+    } catch (error) {
+      console.error('Error buying clothes:', error);
+      alert('Terjadi kesalahan saat membeli kostum');
+    }
+  };
+
+  const buyArtefak = async (artefakId: string, price: number) => {
+    if (!user) return;
+
+    if (user.dikoin < price) {
+      alert('DiKoin tidak cukup untuk membeli artefak ini!');
+      return;
+    }
+
+    try {
+      // First, award the artefak to user
+      const awardResponse = await fetch(`http://localhost:8000/user-artefak`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          user_id: user.id,
+          artefak_id: artefakId
+        })
+      });
+
+      if (!awardResponse.ok) {
+        const error = await awardResponse.json();
+        alert(error.error || 'Gagal membeli artefak');
+        return;
+      }
+
+      // Then, deduct DiKoin from user
+      const updateResponse = await fetch(`http://localhost:8000/users/${user.id}`, {
+        method: 'PUT',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({
+          dikoin: user.dikoin - price
+        })
+      });
+
+      if (updateResponse.ok) {
+        // Update user state
+        const updatedUser = { ...user, dikoin: user.dikoin - price };
+        setUser(updatedUser);
+        localStorage.setItem('kodino_user', JSON.stringify(updatedUser));
+        
+        // Refresh data
+        fetchAllData(user.id);
+        
+        alert('Artefak berhasil dibeli! 🎉');
+      } else {
+        alert('Terjadi kesalahan saat memproses pembayaran');
+      }
+    } catch (error) {
+      console.error('Error buying artefak:', error);
+      alert('Terjadi kesalahan saat membeli artefak');
+    }
+  };
+
   const renderMainContent = () => {
     switch (activeSection) {
       case 'dashboard':
@@ -390,6 +504,70 @@ const Dashboard = () => {
           </div>
         );
 
+        case 'toko-kostum':
+            return (
+              <div className="toko-content">
+                <h2>Toko Kostum</h2>
+                <div className="user-dikoin">
+                  <h3>💰 DiKoin Anda: {user?.dikoin || 0} DC</h3>
+                </div>
+                <div className="items-grid">
+                  {isLoading ? (
+                    Array.from({ length: 8 }, (_, i) => (
+                      <div key={i} className="item-card">
+                        <div className="item-image">⏳</div>
+                        <div className="item-info">
+                          <h4>Memuat...</h4>
+                          <div className="item-price">--- DC</div>
+                        </div>
+                      </div>
+                    ))
+                  ) : (() => {
+                    // Filter out clothes that user already owns
+                    const availableClothes = allClothes.filter(clothes => 
+                      !userClothes.some(uc => uc.clothes_set.id === clothes.id)
+                    );
+                    
+                    return availableClothes.length > 0 ? (
+                      availableClothes.map((clothes) => (
+                        <div key={clothes.id} className="item-card">
+                          <div className="item-image">
+                            {clothes.gambar ? (
+                              <img src={clothes.gambar} alt={clothes.nama_set} />
+                            ) : (
+                              <span>👕</span>
+                            )}
+                          </div>
+                          <div className="item-info">
+                            <h4>{clothes.nama_set}</h4>
+                            <p className="item-description">{clothes.deskripsi}</p>
+                            <div className="item-actions">
+                              {(user?.dikoin || 0) >= clothes.harga ? (
+                                <button 
+                                  className="item-buy-btn"
+                                  onClick={() => buyClothes(clothes.id, clothes.harga)}
+                                >
+                                  Beli {clothes.harga} DC
+                                </button>
+                              ) : (
+                                <div className="item-insufficient">
+                                  💰 DiKoin tidak cukup ({clothes.harga} DC)
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      ))
+                    ) : (
+                      <div className="no-modules">
+                        <p>Semua kostum sudah dimiliki! 🎉</p>
+                      </div>
+                    );
+                  })()}
+                </div>
+              </div>
+            );
+
       case 'lencana':
         return (
           <div className="lencana-content">
@@ -430,54 +608,70 @@ const Dashboard = () => {
           </div>
         );
 
-      case 'toko-budaya':
-        return (
-          <div className="toko-content">
-            <h2>Toko Budaya</h2>
-            <div className="items-grid">
-              {isLoading ? (
-                Array.from({ length: 8 }, (_, i) => (
-                  <div key={i} className="item-card">
-                    <div className="item-image">⏳</div>
-                    <div className="item-info">
-                      <h4>Memuat...</h4>
-                      <div className="item-price">--- DC</div>
-                    </div>
-                  </div>
-                ))
-              ) : allArtefak.length > 0 ? (
-                allArtefak.map((artefak) => {
-                  const isOwned = userArtefak.some(ua => ua.artefak.id === artefak.id);
-                  return (
-                    <div key={artefak.id} className={`item-card ${isOwned ? 'owned' : ''}`}>
-                      <div className="item-image">
-                        {artefak.gambar ? (
-                          <img src={artefak.gambar} alt={artefak.nama_artefak} />
-                        ) : (
-                          <span>🏺</span>
-                        )}
-                      </div>
-                      <div className="item-info">
-                        <h4>{artefak.nama_artefak}</h4>
-                        <p className="item-region">{artefak.region}</p>
-                        <p className="item-description">{artefak.deskripsi}</p>
-                        {isOwned ? (
-                          <div className="item-owned">✅ Dimiliki</div>
-                        ) : (
-                          <div className="item-price">{artefak.harga} DC</div>
-                        )}
-                      </div>
-                    </div>
-                  );
-                })
-              ) : (
-                <div className="no-modules">
-                  <p>Belum ada artefak tersedia</p>
+        case 'toko-budaya':
+            return (
+              <div className="toko-content">
+                <h2>Toko Budaya</h2>
+                <div className="user-dikoin">
+                  <h3>💰 DiKoin Anda: {user?.dikoin || 0} DC</h3>
                 </div>
-              )}
-            </div>
-          </div>
-        );
+                <div className="items-grid">
+                  {isLoading ? (
+                    Array.from({ length: 8 }, (_, i) => (
+                      <div key={i} className="item-card">
+                        <div className="item-image">⏳</div>
+                        <div className="item-info">
+                          <h4>Memuat...</h4>
+                          <div className="item-price">--- DC</div>
+                        </div>
+                      </div>
+                    ))
+                  ) : (() => {
+                    // Filter out artifacts that user already owns
+                    const availableArtefak = allArtefak.filter(artefak => 
+                      !userArtefak.some(ua => ua.artefak.id === artefak.id)
+                    );
+                    
+                    return availableArtefak.length > 0 ? (
+                      availableArtefak.map((artefak) => (
+                        <div key={artefak.id} className="item-card">
+                          <div className="item-image">
+                            {artefak.gambar ? (
+                              <img src={artefak.gambar} alt={artefak.nama_artefak} />
+                            ) : (
+                              <span>🏺</span>
+                            )}
+                          </div>
+                          <div className="item-info">
+                            <h4>{artefak.nama_artefak}</h4>
+                            <p className="item-region">{artefak.region}</p>
+                            <p className="item-description">{artefak.deskripsi}</p>
+                            <div className="item-actions">
+                              {(user?.dikoin || 0) >= artefak.harga ? (
+                                <button 
+                                  className="item-buy-btn"
+                                  onClick={() => buyArtefak(artefak.id, artefak.harga)}
+                                >
+                                  Beli {artefak.harga} DC
+                                </button>
+                              ) : (
+                                <div className="item-insufficient">
+                                  💰 DiKoin tidak cukup ({artefak.harga} DC)
+                                </div>
+                              )}
+                            </div>
+                          </div>
+                        </div>
+                      ))
+                    ) : (
+                      <div className="no-modules">
+                        <p>Semua artefak sudah dimiliki! 🎉</p>
+                      </div>
+                    );
+                  })()}
+                </div>
+              </div>
+            );
 
       case 'koleksi-budaya':
         return (
@@ -601,6 +795,12 @@ const Dashboard = () => {
               onClick={() => handleSectionClick('kostum-kodi')}
             >
               Kostum Kodi
+            </button>
+            <button 
+              className={`nav-item ${activeSection === 'toko-kostum' ? 'active' : ''}`}
+              onClick={() => handleSectionClick('toko-kostum')}
+            >
+              Toko Kostum
             </button>
             <button 
               className={`nav-item ${activeSection === 'lencana' ? 'active' : ''}`}

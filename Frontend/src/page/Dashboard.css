@@ -933,3 +933,257 @@ p {
       margin-top: 1rem;
     }
   }
+
+
+  /* Add these new styles to your existing Dashboard.css */
+
+/* User DiKoin Display */
+.user-dikoin {
+    text-align: center;
+    margin-bottom: 2rem;
+    padding: 1rem;
+    background: linear-gradient(135deg, #FFD700, #FFA500);
+    border-radius: 15px;
+    color: white;
+    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+  }
+  
+  .user-dikoin h3 {
+    margin: 0;
+    font-size: 1.3rem;
+    font-weight: 600;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+  }
+  
+  /* Enhanced item cards for stores */
+  .item-card {
+    background: white;
+    border-radius: 20px;
+    border: 2px solid #ddd;
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+    text-align: center;
+    min-height: 400px;
+  }
+  
+  .item-card:hover {
+    border-color: #FF6B35;
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  }
+  
+  .item-image {
+    flex: 1;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+    min-height: 150px;
+  }
+  
+  .item-image img {
+    max-width: 100%;
+    max-height: 150px;
+    object-fit: cover;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .item-image span {
+    font-size: 4rem;
+  }
+  
+  .item-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+  }
+  
+  .item-info h4 {
+    margin: 0 0 0.5rem 0;
+    color: #2d2d2d;
+    font-size: 1.1rem;
+    font-weight: 600;
+  }
+  
+  .item-description {
+    font-size: 0.85rem;
+    color: #666;
+    margin: 0.5rem 0;
+    line-height: 1.4;
+    flex: 1;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  
+  .item-region {
+    font-size: 0.8rem;
+    color: #FF6B35;
+    font-weight: 600;
+    margin: 0.3rem 0;
+  }
+  
+  .item-actions {
+    margin-top: 1rem;
+  }
+  
+  .item-buy-btn {
+    background: linear-gradient(135deg, #28a745, #20c997);
+    color: white;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 25px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+    box-shadow: 0 2px 8px rgba(40, 167, 69, 0.3);
+  }
+  
+  .item-buy-btn:hover {
+    background: linear-gradient(135deg, #20c997, #17a2b8);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(40, 167, 69, 0.4);
+  }
+  
+  .item-buy-btn:active {
+    transform: translateY(0);
+  }
+  
+  .item-insufficient {
+    background: #dc3545;
+    color: white;
+    padding: 0.8rem 1rem;
+    border-radius: 25px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-align: center;
+    opacity: 0.8;
+  }
+  
+  .item-owned {
+    background: #6c757d;
+    color: white;
+    padding: 0.8rem 1rem;
+    border-radius: 25px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-align: center;
+  }
+  
+  /* Empty store state */
+  .no-modules {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 3rem;
+    color: #999;
+    font-style: italic;
+    background: #f8f9fa;
+    border-radius: 15px;
+    border: 2px dashed #ddd;
+  }
+  
+  .no-modules p {
+    font-size: 1.2rem;
+    margin: 0;
+  }
+  
+  /* Toko Kostum specific styles */
+  .toko-content .items-grid .item-card .item-image img {
+    max-height: 120px;
+    width: auto;
+  }
+  
+  /* Enhanced responsive design */
+  @media (max-width: 1200px) {
+    .items-grid {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+  
+  @media (max-width: 900px) {
+    .items-grid {
+      grid-template-columns: repeat(2, 1fr);
+    }
+    
+    .item-card {
+      min-height: 350px;
+      padding: 1rem;
+    }
+    
+    .item-image {
+      min-height: 120px;
+    }
+    
+    .user-dikoin h3 {
+      font-size: 1.1rem;
+    }
+  }
+  
+  @media (max-width: 600px) {
+    .items-grid {
+      grid-template-columns: 1fr;
+    }
+    
+    .item-card {
+      min-height: 300px;
+    }
+    
+    .item-image {
+      min-height: 100px;
+    }
+    
+    .item-image img {
+      max-height: 100px;
+    }
+    
+    .user-dikoin {
+      margin-bottom: 1rem;
+      padding: 0.8rem;
+    }
+    
+    .user-dikoin h3 {
+      font-size: 1rem;
+    }
+  }
+  
+  /* Animation for successful purchase */
+  @keyframes purchaseSuccess {
+    0% {
+      transform: scale(1);
+    }
+    50% {
+      transform: scale(1.05);
+      background: #28a745;
+    }
+    100% {
+      transform: scale(1);
+    }
+  }
+  
+  .item-buy-btn.success {
+    animation: purchaseSuccess 0.6s ease-in-out;
+  }
+  
+  /* Loading animation for store items */
+  .item-card .item-image:has(span:contains("⏳")) {
+    animation: pulse 1.5s ease-in-out infinite;
+  }
+  
+  @keyframes pulse {
+    0% {
+      opacity: 1;
+    }
+    50% {
+      opacity: 0.5;
+    }
+    100% {
+      opacity: 1;
+    }
+  }
