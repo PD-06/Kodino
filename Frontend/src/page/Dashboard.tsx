@@ -580,7 +580,7 @@ const Dashboard = () => {
                 <h2>Kostum Kodi</h2>
                 <div className="kodi-character">
                   <img 
-                    src={user?.current_clothes?.gambar || "/images/kodi-default.webp"} 
+                    src={user?.current_clothes?.gambar || "/images/kodi-character.webp"} 
                     alt="Kodi" 
                   />
                 </div>
@@ -611,7 +611,7 @@ const Dashboard = () => {
           <div className="kostum-content">
             <div className="kodi-display">
               <img 
-                src={user?.current_clothes?.gambar || "/images/kodi-default.webp"} 
+                src={user?.current_clothes?.gambar || "/images/kodi-character.webp"} 
                 alt="Kodi" 
                 className="large-kodi" 
               />
@@ -637,7 +637,7 @@ const Dashboard = () => {
                       onClick={() => changeClothes(userCloth.clothes_set.id)}
                     >
                       <img 
-                        src={userCloth.clothes_set.gambar || "/images/kodi-default.webp"} 
+                        src={userCloth.clothes_set.gambar || "/images/kodi-character.webp"} 
                         alt={userCloth.clothes_set.nama_set} 
                       />
                       <p>{userCloth.clothes_set.nama_set}</p>

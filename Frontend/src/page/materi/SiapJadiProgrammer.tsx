@@ -37,7 +37,7 @@ const SiapJadiProgrammer = () => {
       content: (
         <div className="slide-content">
           <div className="character-section">
-            <img src="/images/kodi-excited.webp" alt="Kodi excited" className="kodi-character" />
+            <img src="/images/kodi-character.webp" alt="Kodi excited" className="kodi-character" />
             <div className="speech-bubble">
               Wah! Perjalanan kita hampir selesai! Sekarang kamu sudah siap jadi programmer sejati!
             </div>
@@ -61,7 +61,7 @@ const SiapJadiProgrammer = () => {
       content: (
         <div className="slide-content">
           <div className="character-section">
-            <img src="/images/kodi-proud.webp" alt="Kodi proud" className="kodi-character" />
+            <img src="/images/kodi-character.webp" alt="Kodi proud" className="kodi-character" />
             <div className="speech-bubble">
               Sebagai programmer Indonesia, kita punya keunggulan unik! Mari kita bahas mindset yang tepat!
             </div>
@@ -108,7 +108,7 @@ const SiapJadiProgrammer = () => {
       content: (
         <div className="slide-content">
           <div className="character-section">
-            <img src="/images/kodi-coding.webp" alt="Kodi coding" className="kodi-character" />
+            <img src="/images/kodi-character.webp" alt="Kodi coding" className="kodi-character" />
             <div className="speech-bubble">
               Yuk mulai coding pertama! Seperti belajar naik sepeda, yang penting berani memulai!
             </div>
@@ -145,7 +145,7 @@ const SiapJadiProgrammer = () => {
       content: (
         <div className="slide-content">
           <div className="character-section">
-            <img src="/images/kodi-tools.webp" alt="Kodi with tools" className="kodi-character" />
+            <img src="/images/kodi-character.webp" alt="Kodi with tools" className="kodi-character" />
             <div className="speech-bubble">
               Ini dia tools dan resources yang akan membantu perjalanan coding kamu!
             </div>
@@ -206,7 +206,7 @@ const SiapJadiProgrammer = () => {
       content: (
         <div className="slide-content">
           <div className="character-section">
-            <img src="/images/kodi-graduate.webp" alt="Kodi graduate" className="kodi-character" />
+            <img src="/images/kodi-character.webp" alt="Kodi graduate" className="kodi-character" />
             <div className="speech-bubble">
               Sekarang saatnya membangun portfolio dan merencanakan karir programming kamu!
             </div>
@@ -258,7 +258,7 @@ const SiapJadiProgrammer = () => {
       content: (
         <div className="slide-content">
           <div className="character-section">
-            <img src="/images/kodi-celebration.webp" alt="Kodi celebrating" className="kodi-character" />
+            <img src="/images/kodi-character.webp" alt="Kodi celebrating" className="kodi-character" />
             <div className="speech-bubble">
               Wohoo! Perjalanan belajar dasar programming selesai! Sekarang kamu sudah siap jadi programmer Indonesia yang keren!
             </div>

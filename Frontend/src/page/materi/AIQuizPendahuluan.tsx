@@ -330,7 +330,7 @@ if (!quizStarted) {
         <div className="quiz-container">
           <div className="quiz-intro">
             <div className="character-section">
-              <img src="/images/kodi-ai.webp" alt="Kodi with AI" className="kodi-character" />
+              <img src="/images/kodi-character.webp" alt="Kodi with AI" className="kodi-character" />
               <div className="speech-bubble">
                 Halo! Aku bersama Gemini AI siap menguji pemahaman kamu tentang Pendahuluan Programming!
               </div>

@@ -33,7 +33,7 @@ const BahasaPemrograman = () => {
       content: (
         <div className="slide-content">
           <div className="character-section">
-            <img src="/images/kodi-teacher.webp" alt="Kodi teacher" className="kodi-character" />
+            <img src="/images/kodi-character.webp" alt="Kodi teacher" className="kodi-character" />
             <div className="speech-bubble">
               Seperti manusia punya bahasa daerah, komputer juga punya bahasa pemrograman!
             </div>
@@ -56,7 +56,7 @@ const BahasaPemrograman = () => {
       content: (
         <div className="slide-content">
           <div className="character-section">
-            <img src="/images/kodi-culture.webp" alt="Kodi culture" className="kodi-character" />
+            <img src="/images/kodi-character.webp" alt="Kodi culture" className="kodi-character" />
             <div className="speech-bubble">
               Di Indonesia ada Bahasa Jawa, Batak, Sunda... Di programming juga ada Python, Java, JavaScript!
             </div>
@@ -95,7 +95,7 @@ const BahasaPemrograman = () => {
       content: (
         <div className="slide-content">
           <div className="character-section">
-            <img src="/images/kodi-books.webp" alt="Kodi with books" className="kodi-character" />
+            <img src="/images/kodi-character.webp" alt="Kodi with books" className="kodi-character" />
             <div className="speech-bubble">
               Ada ratusan bahasa pemrograman! Tapi kita fokus ke yang populer dulu ya!
             </div>
@@ -143,7 +143,7 @@ const BahasaPemrograman = () => {
       content: (
         <div className="slide-content">
           <div className="character-section">
-            <img src="/images/kodi-beginner.webp" alt="Kodi beginner" className="kodi-character" />
+            <img src="/images/kodi-character.webp" alt="Kodi beginner" className="kodi-character" />
             <div className="speech-bubble">
               Untuk pemula, aku rekomendasikan Python! Kenapa? Mari kita lihat!
             </div>

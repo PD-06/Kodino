@@ -971,6 +971,8 @@ def level_up_user(user_id):
         db.session.rollback()
         return jsonify({'error': str(e)}), 500
     
+from image_utils import get_available_images
+
 # Replace the generate_ai_quiz function:
 
 @app.route('/ai/generate-quiz', methods=['POST'])
@@ -984,6 +986,9 @@ def generate_ai_quiz():
         num_fill = data.get('num_fill_in_blank', 2)
         difficulty = data.get('difficulty', 'beginner')
         language = data.get('language', 'indonesian')
+        
+        # Get available images
+        available_images = get_available_images()
         
         # Create the prompt for Gemini
         prompt = f"""
@@ -999,6 +1004,9 @@ def generate_ai_quiz():
         - Sertakan penjelasan untuk setiap jawaban
         - Fokus pada pemahaman praktis, bukan hanya hafalan
         - Buat soal yang relevan dengan konteks Indonesia
+        - Gunakan gambar yang tersedia di daftar ini (jika relevan): {', '.join(available_images) or 'Tidak ada gambar yang tersedia'}
+        - Jika menggunakan gambar, sertakan nama file gambar yang TEPAT dari daftar di atas
+        - JANGAN gunakan gambar yang tidak ada dalam daftar di atas
         
         Area konten yang harus dicakup:
         1. Apa itu programming/coding
@@ -1010,7 +1018,7 @@ def generate_ai_quiz():
         7. Problem-solving dalam programming
         8. Tools dan resources programming
         
-        Berikan respon dalam format JSON yang TEPAT seperti ini:
+        Format JSON yang diharapkan:
         {{
             "questions": [
                 {{
@@ -1019,19 +1027,24 @@ def generate_ai_quiz():
                     "question": "Teks soal dalam bahasa Indonesia",
                     "options": ["Pilihan A", "Pilihan B", "Pilihan C", "Pilihan D"],
                     "correct_answer": "Teks pilihan yang benar",
-                    "explanation": "Penjelasan dalam bahasa Indonesia"
+                    "explanation": "Penjelasan dalam bahasa Indonesia",
+                    "image": "nama_file_gambar.jpg"  // Opsional, gunakan nama file yang ada di daftar
                 }},
                 {{
                     "id": 2,
                     "type": "fill-in-the-blank",
                     "question": "Soal dengan _____ kosong dalam bahasa Indonesia",
                     "correct_answer": "kata atau frasa yang benar",
-                    "explanation": "Penjelasan dalam bahasa Indonesia"
+                    "explanation": "Penjelasan dalam bahasa Indonesia",
+                    "image": "nama_file_gambar.jpg"  // Opsional, gunakan nama file yang ada di daftar
                 }}
             ]
         }}
         
-        PENTING: Pastikan response adalah JSON yang valid dan dapat di-parse!
+        PENTING: 
+        - Pastikan response adalah JSON yang valid dan dapat di-parse!
+        - Jika menggunakan gambar, PASTIKAN nama file gambar TEPAT sesuai dengan yang ada di daftar
+        - Jangan gunakan gambar yang tidak ada dalam daftar
         """
         
         # Initialize Gemini model

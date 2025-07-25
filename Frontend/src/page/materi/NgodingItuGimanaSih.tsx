@@ -33,7 +33,7 @@ const NgodingItuGimana = () => {
       content: (
         <div className="slide-content">
           <div className="character-section">
-            <img src="/images/kodi-curious.webp" alt="Kodi curious" className="kodi-character" />
+            <img src="/images/kodi-character.webp" alt="Kodi curious" className="kodi-character" />
             <div className="speech-bubble">
               Sekarang kita akan belajar proses ngoding dari awal sampai jadi aplikasi!
             </div>
@@ -56,7 +56,7 @@ const NgodingItuGimana = () => {
       content: (
         <div className="slide-content">
           <div className="character-section">
-            <img src="/images/kodi-architect.webp" alt="Kodi architect" className="kodi-character" />
+            <img src="/images/kodi-character.webp" alt="Kodi architect" className="kodi-character" />
             <div className="speech-bubble">
               Ngoding itu seperti membangun rumah tradisional Indonesia! Ada tahapannya!
             </div>
@@ -103,7 +103,7 @@ const NgodingItuGimana = () => {
       content: (
         <div className="slide-content">
           <div className="character-section">
-            <img src="/images/kodi-tools.webp" alt="Kodi with tools" className="kodi-character" />
+            <img src="/images/kodi-character.webp" alt="Kodi with tools" className="kodi-character" />
             <div className="speech-bubble">
               Seperti tukang kayu butuh gergaji dan palu, programmer juga butuh tools!
             </div>
@@ -146,7 +146,7 @@ const NgodingItuGimana = () => {
       content: (
         <div className="slide-content">
           <div className="character-section">
-            <img src="/images/kodi-detective.webp" alt="Kodi detective" className="kodi-character" />
+            <img src="/images/kodi-character.webp" alt="Kodi detective" className="kodi-character" />
             <div className="speech-bubble">
               Bug itu error dalam kode. Seperti mencari kerusakan di rumah!
             </div>
