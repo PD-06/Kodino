@@ -7,7 +7,13 @@ import RegisterPage from './page/RegisterPage';
 import Pendahuluan from "./page/materi/Pendahuluan.tsx";
 import LogikaDanVariabel from "./page/materi/LogikaDanVariabel.tsx";
 import PerulanganDasarDanLanjutan from "./page/materi/PerulanganDasarDanLanjutan.tsx";
+import ApaItuNgoding from "./page/materi/ApaItuNgoding.tsx"; // Placeholder for ApaItuNgoding
 import Dashboard from "./page/Dashboard.tsx"; // Placeholder for Dashboard
+import CaraKerjaKomputer from './page/materi/CaraKerjaKomputer.tsx';
+import BahasaPemrograman from './page/materi/BahasaPemrograman.tsx';
+import NgodingItuGimana from './page/materi/NgodingItuGimanaSih.tsx';
+import SiapJadiProgrammer from './page/materi/SiapJadiProgrammer.tsx';
+
 
 
 function App() {
@@ -23,6 +29,11 @@ function App() {
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />}/> {/* Placeholder for RegisterPage */}
         <Route path="/dashboard" element={<Dashboard />} /> {/* Placeholder for Dashboard */}
+        <Route path="/materi/belajar/pendahuluan1" element={<ApaItuNgoding />} /> {/* Placeholder for ApaItuNgoding */}
+        <Route path='/materi/belajar/pendahuluan2' element={<CaraKerjaKomputer />} /> {/* Placeholder for CaraKerjaKomputer */}
+        <Route path='/materi/belajar/pendahuluan3' element={<BahasaPemrograman />} /> {/* Placeholder for BahasaPemrograman */}
+        <Route path='/materi/belajar/pendahuluan4' element={<NgodingItuGimana />} /> {/* Placeholder for NgodingItuGimana */}
+        <Route path='/materi/belajar/pendahuluan5' element={<SiapJadiProgrammer />} /> {/* Placeholder for SiapJadiProgrammer */}
         {/* Add more routes as needed */}
         <Route path="*" element={<LandingPage />} /> {/* Fallback route */}
         <Route path="/404" element={<h1>Page Not Found</h1>} />

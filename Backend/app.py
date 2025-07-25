@@ -716,54 +716,9 @@ def get_user_course_completions(user_id):
     except Exception as e:
         return jsonify({"error": f"Terjadi kesalahan: {str(e)}"}), 500
 
-@app.route('/course-completion', methods=['POST'])
-def complete_course():
-    """Mark a course as completed."""
-    try:
-        data = request.get_json()
-        
-        if not data.get('user_id') or not data.get('course_id') or not data.get('module_id'):
-            return jsonify({"error": "User ID, Course ID, dan Module ID wajib diisi"}), 400
-        
-        # Check if course already completed
-        existing = CourseCompletion.query.filter_by(
-            user_id=data['user_id'],
-            course_id=data['course_id']
-        ).first()
-        
-        if existing:
-            return jsonify({"error": "Course sudah diselesaikan"}), 400
-        
-        # Create course completion record
-        completion = CourseCompletion(
-            user_id=data['user_id'],
-            course_id=data['course_id'],
-            module_id=data['module_id']
-        )
-        
-        db.session.add(completion)
-        
-        # Update user progress if completing a module
-        user = User.query.get(data['user_id'])
-        if user and user.progress:
-            # Check if all courses in current module are completed
-            module_courses = get_module_courses(data['module_id'])
-            completed_courses = CourseCompletion.query.filter_by(
-                user_id=data['user_id'],
-                module_id=data['module_id']
-            ).count()
-            
-            # If all courses in module completed, advance to next level
-            if completed_courses + 1 >= len(module_courses):  # +1 for current completion
-                user.progress.level = min(user.progress.level + 1, 6)
-        
-        db.session.commit()
-        
-        return jsonify(completion.serialize()), 201
-        
-    except Exception as e:
-        db.session.rollback()
-        return jsonify({"error": f"Terjadi kesalahan: {str(e)}"}), 500
+# Update the course completion endpoint:
+
+
 
 @app.route('/course-completion/check/<string:user_id>/<string:course_id>', methods=['GET'])
 def check_course_completion(user_id, course_id):
@@ -782,6 +737,8 @@ def check_course_completion(user_id, course_id):
     except Exception as e:
         return jsonify({"error": f"Terjadi kesalahan: {str(e)}"}), 500
 
+# Update the get_module_progress function:
+
 @app.route('/course-completion/module/<string:user_id>/<string:module_id>', methods=['GET'])
 def get_module_progress(user_id, module_id):
     """Get user's progress in a specific module."""
@@ -798,7 +755,12 @@ def get_module_progress(user_id, module_id):
         for i, course in enumerate(module_courses):
             is_completed = course['id'] in completed_course_ids
             # UPDATED LOGIC: First course is always unlocked, others require previous completion
-            is_unlocked = i == 0 or (i > 0 and module_courses[i-1]['id'] in completed_course_ids)
+            if i == 0:
+                is_unlocked = True  # First course is always unlocked
+            else:
+                # Check if previous course is completed
+                previous_course_id = module_courses[i-1]['id']
+                is_unlocked = previous_course_id in completed_course_ids
             
             progress_data.append({
                 'course_id': course['id'],
@@ -830,44 +792,176 @@ def get_module_courses(module_id):
             {'id': 'pendahuluan5', 'title': 'Siap Jadi Programmer!'}
         ],
         'logika-dan-variabel': [
-            {'id': 'logika1', 'title': 'Pengenalan Variabel'},
-            {'id': 'logika2', 'title': 'Tipe Data'},
-            {'id': 'logika3', 'title': 'Operator Matematika'},
-            {'id': 'logika4', 'title': 'Operator Logika'},
-            {'id': 'logika5', 'title': 'Kondisi dan Percabangan'}
+            {'id': 'logika1', 'title': 'Pengenalan Logika'},
+            {'id': 'logika2', 'title': 'Variabel dan Tipe Data'},
+            {'id': 'logika3', 'title': 'Operator Dasar'},
+            {'id': 'logika4', 'title': 'Kondisi If-Else'},
+            {'id': 'logika5', 'title': 'Praktik Logika'}
         ],
         'perulangan': [
-            {'id': 'perulangan1', 'title': 'Pengenalan Perulangan'},
+            {'id': 'perulangan1', 'title': 'Konsep Perulangan'},
             {'id': 'perulangan2', 'title': 'For Loop'},
             {'id': 'perulangan3', 'title': 'While Loop'},
             {'id': 'perulangan4', 'title': 'Nested Loop'},
-            {'id': 'perulangan5', 'title': 'Break dan Continue'}
-        ],
-        'struktur-data-dan-interaksi': [
-            {'id': 'struktur1', 'title': 'Array dan List'},
-            {'id': 'struktur2', 'title': 'Object dan Dictionary'},
-            {'id': 'struktur3', 'title': 'Event Handling'},
-            {'id': 'struktur4', 'title': 'Game Development Basics'},
-            {'id': 'struktur5', 'title': 'User Interaction'}
-        ],
-        'pengembangan-program': [
-            {'id': 'pengembangan1', 'title': 'Functions dan Methods'},
-            {'id': 'pengembangan2', 'title': 'Modular Programming'},
-            {'id': 'pengembangan3', 'title': 'Error Handling'},
-            {'id': 'pengembangan4', 'title': 'Code Organization'},
-            {'id': 'pengembangan5', 'title': 'Best Practices'}
-        ],
-        'pemrograman-bebas': [
-            {'id': 'bebas1', 'title': 'Project Planning'},
-            {'id': 'bebas2', 'title': 'Creative Coding'},
-            {'id': 'bebas3', 'title': 'Personal Projects'},
-            {'id': 'bebas4', 'title': 'Portfolio Building'},
-            {'id': 'bebas5', 'title': 'Final Showcase'}
+            {'id': 'perulangan5', 'title': 'Praktik Perulangan'}
         ]
     }
     
     return module_courses.get(module_id, [])
 
+# Update the complete_course function:
+
+@app.route('/course-completion', methods=['POST'])
+def complete_course():
+    """Mark a course as completed."""
+    try:
+        data = request.get_json()
+        user_id = data.get('user_id')
+        course_id = data.get('course_id')
+        module_id = data.get('module_id')
+        
+        if not all([user_id, course_id, module_id]):
+            return jsonify({'error': 'Missing required fields'}), 400
+        
+        # Check if already completed
+        existing = CourseCompletion.query.filter_by(
+            user_id=user_id,
+            course_id=course_id,
+            module_id=module_id
+        ).first()
+        
+        if existing:
+            return jsonify({'message': 'Course already completed'}), 200
+        
+        # Create completion record
+        completion = CourseCompletion(
+            user_id=user_id,
+            course_id=course_id,
+            module_id=module_id
+        )
+        db.session.add(completion)
+        
+        # Get user for DiKoin and level updates
+        user = User.query.get(user_id)
+        if not user:
+            return jsonify({'error': 'User not found'}), 404
+        
+        # Award DiKoin based on course
+        if course_id == 'pendahuluan5':  # Final course gets more DiKoin
+            user.dikoin += 200
+        else:
+            user.dikoin += 100  # Regular courses
+        
+        # Award badge for first module completion
+        if course_id == 'pendahuluan1':
+            # Award First Steps badge
+            first_steps_badge = Lencana.query.filter_by(nama_lencana='First Steps').first()
+            if first_steps_badge:
+                existing_badge = UserLencana.query.filter_by(
+                    user_id=user_id,
+                    lencana_id=first_steps_badge.id
+                ).first()
+                
+                if not existing_badge:
+                    user_badge = UserLencana(
+                        user_id=user_id,
+                        lencana_id=first_steps_badge.id
+                    )
+                    db.session.add(user_badge)
+        
+        # Check if this is the last course in the module
+        level_up_occurred = False
+        if user.progress:
+            module_courses = get_module_courses(module_id)
+            completed_courses_count = CourseCompletion.query.filter_by(
+                user_id=user_id,
+                module_id=module_id
+            ).count()
+            
+            # +1 because we're adding the current completion
+            total_completed = completed_courses_count + 1
+            
+            # If all courses in module completed, advance to next level
+            if total_completed >= len(module_courses):
+                user.progress.level = min(user.progress.level + 1, 6)
+                level_up_occurred = True
+                
+                # Award special badge for completing Pendahuluan module
+                if module_id == 'pendahuluan':
+                    nusantara_badge = Lencana.query.filter_by(nama_lencana='Nusantara Coder').first()
+                    if nusantara_badge:
+                        existing_badge = UserLencana.query.filter_by(
+                            user_id=user_id,
+                            lencana_id=nusantara_badge.id
+                        ).first()
+                        
+                        if not existing_badge:
+                            user_badge = UserLencana(
+                                user_id=user_id,
+                                lencana_id=nusantara_badge.id
+                            )
+                            db.session.add(user_badge)
+        
+        db.session.commit()
+        
+        return jsonify({
+            'message': 'Course completed successfully',
+            'completion': completion.serialize(),
+            'level_up': level_up_occurred,
+            'new_level': user.progress.level if user.progress else 1,
+            'dikoin_awarded': 200 if course_id == 'pendahuluan5' else 100
+        }), 201
+        
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': str(e)}), 500
+
+# Add this endpoint:
+
+@app.route('/users/<string:user_id>/level-up', methods=['POST'])
+def level_up_user(user_id):
+    """Level up user after completing a module."""
+    try:
+        user = User.query.get(user_id)
+        if not user:
+            return jsonify({'error': 'User not found'}), 404
+        
+        # Initialize progress if not exists
+        if not user.progress:
+            user.progress = UserProgress(
+                user_id=user_id,
+                section=1,
+                level=1
+            )
+            db.session.add(user.progress)
+        
+        # Level up
+        current_level = user.progress.level
+        new_level = min(current_level + 1, 6)  # Max level 6
+        
+        user.progress.level = new_level
+        
+        # If completed all levels in section, move to next section
+        if new_level >= 6:
+            user.progress.section = min(user.progress.section + 1, 6)  # Max 6 sections
+            user.progress.level = 1  # Reset level for new section
+        
+        # Award additional DiKoin for level up
+        user.dikoin += 50
+        
+        db.session.commit()
+        
+        return jsonify({
+            'message': f'User leveled up to level {user.progress.level}',
+            'user': user.serialize(),
+            'previous_level': current_level,
+            'new_level': user.progress.level,
+            'new_section': user.progress.section
+        }), 200
+        
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({'error': str(e)}), 500
 
 if __name__ == '__main__':
     app.run(debug=True, port=8000)

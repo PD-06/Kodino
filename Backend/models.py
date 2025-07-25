@@ -30,6 +30,7 @@ class User(db.Model):
             'email': self.email,
             'dikoin': self.dikoin,
             'clothe_sekarang': self.clothe_sekarang,
+            'progress': progress_info,
             'created_at': self.created_at.isoformat() if self.created_at else None
         }
 

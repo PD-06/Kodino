@@ -91,11 +91,11 @@ const Pendahuluan = () => {
     const courseProgress = moduleProgress?.courses.find(c => c.course_id === moduleId);
     
     if (courseProgress && courseProgress.is_unlocked) {
-      navigate(`/materi/belajar?id=${moduleId}`);
+      navigate(`/materi/belajar/${moduleId}`);
     } else {
       // Improved message for locked courses
       const courseIndex = modules.findIndex(m => m.id === moduleId);
-      if (courseIndex === 0) {
+      if (courseIndex === 0) { 
         // This should never happen since first course is always unlocked
         alert('Terjadi kesalahan. Silakan refresh halaman.');
       } else {
