@@ -87,7 +87,7 @@ const MateriPage = () => {
       description: 'Kreasikan ide kamu! Tulis kode sesukamu dan bikin proyek unikmu sendiri.',
       image: '/images/pemrograman-bebas.webp',
       route: '/materi/pemrograman-bebas',
-      requiredLevel: 6
+      requiredLevel: 1
     }
   ];
 
