@@ -81,6 +81,7 @@ class Artefak(db.Model):
     nama_artefak = db.Column(db.String(100), nullable=False)
     deskripsi = db.Column(db.Text, nullable=True)
     gambar = db.Column(db.String(200), nullable=True)  # URL or path to the artefact image
+    harga = db.Column(db.Integer, nullable=False, default=0)  # Price in dikoin
     created_at = db.Column(db.DateTime, server_default=db.func.now())
 
     def __repr__(self):
@@ -94,6 +95,7 @@ class Artefak(db.Model):
             'deskripsi': self.deskripsi,
             'gambar': self.gambar,
             'created_at': self.created_at.isoformat(),
+            'harga': self.harga
         }
         
 class UserArtefak(db.Model):
