@@ -102,13 +102,19 @@ const MateriPage = () => {
     return userLevel >= requiredLevel;
   };
 
-  const handleCardClick = (route: string, requiredLevel: number, moduleTitle: string) => {
+  const handleCardClick = (route: string, requiredLevel: number, moduleTitle: string, event?: React.MouseEvent) => {
+    // Prevent default behavior for locked modules
+    if (!isModuleUnlocked(requiredLevel)) {
+      event?.preventDefault();
+      event?.stopPropagation();
+    }
+  
     if (!user) {
       // Redirect to login if user is not logged in
       navigate('/login');
       return;
     }
-
+  
     if (isModuleUnlocked(requiredLevel)) {
       navigate(route);
     } else {
@@ -122,6 +128,7 @@ const MateriPage = () => {
       }, 3000);
     }
   };
+  
 
   const getPreviousModuleTitle = (requiredLevel: number): string => {
     const previousModule = modules.find(module => module.requiredLevel === requiredLevel - 1);
@@ -161,10 +168,15 @@ const MateriPage = () => {
               <div 
                 key={module.id} 
                 className={`materi-card ${!isUnlocked ? 'locked' : ''} ${isCurrentLevel ? 'current-level' : ''}`}
-                onClick={() => handleCardClick(module.route, module.requiredLevel, module.title)}
+                onClick={(e) => handleCardClick(module.route, module.requiredLevel, module.title, e)}
                 role="button"
                 tabIndex={0}
                 onKeyDown={(e) => e.key === 'Enter' && handleCardClick(module.route, module.requiredLevel, module.title)}
+                style={{
+                  // Disable any CSS transitions for locked cards
+                  transition: !isUnlocked ? 'none' : undefined,
+                  transform: !isUnlocked ? 'none' : undefined
+                }}
               >
                 {/* Lock overlay for locked modules */}
                 {!isUnlocked && (

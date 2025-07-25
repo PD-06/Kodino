@@ -967,3 +967,84 @@
     border-color: transparent !important;
   }
 }
+
+/* ADD THESE STYLES to disable click animations for locked cards */
+
+/* Disable active/click animations for locked cards */
+.materi-card.locked:active {
+  transform: none !important;
+  transition: none !important;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08) !important;
+}
+
+/* Disable ripple effect for locked cards */
+.materi-card.locked:active::before {
+  display: none !important;
+  animation: none !important;
+}
+
+/* Disable any pseudo-element effects on click for locked cards */
+.materi-card.locked:active::after {
+  opacity: 0 !important;
+  animation: none !important;
+}
+
+/* Make sure locked cards don't have any transform on click */
+.materi-card.locked:active,
+.materi-card.locked:active:hover,
+.materi-card.locked:active:focus {
+  transform: none !important;
+  scale: 1 !important;
+  translate: none !important;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08) !important;
+  border-color: transparent !important;
+}
+
+/* Disable pointer events on lock overlay to prevent interference */
+.lock-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+  border-radius: 20px;
+  color: white;
+  font-weight: 600;
+  pointer-events: none; /* This prevents the overlay from interfering with clicks */
+}
+
+/* Ensure locked cards have consistent cursor */
+.materi-card.locked {
+  cursor: not-allowed !important;
+}
+
+.materi-card.locked * {
+  cursor: not-allowed !important;
+}
+
+/* Responsive: disable click animations on all screen sizes */
+@media (max-width: 768px) {
+  .materi-card.locked:active {
+    transform: none !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .materi-card.locked:active {
+    transform: none !important;
+  }
+}
+
+/* For touch devices, disable all touch-based animations */
+@media (hover: none) and (pointer: coarse) {
+  .materi-card.locked:active {
+    transform: none !important;
+    transition: none !important;
+  }
+}
