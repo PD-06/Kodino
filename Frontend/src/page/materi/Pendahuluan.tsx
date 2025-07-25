@@ -8,7 +8,7 @@ const Pendahuluan = () => {
   const [expandedItem, setExpandedItem] = useState<number | null>(null);
 
   const modules = [
-    { id: 'pendahuluan1', title: 'Apa itu Ngoding?', description: 'Description for Module 1', image: '/images/modules/pendahuluan/module1.webp' },
+    { id: 'pendahuluan1', title: 'Apa itu Ngoding?', description: 'aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa', image: '/images/modules/pendahuluan/module1.webp' },
     { id: 'pendahuluan2', title: 'Cara Kerja Komputer', description: 'Description for Module 2', image: '/images/modules/pendahuluan/module2.webp' },
     { id: 'pendahuluan3', title: 'Bahasa Pemrograman', description: 'Description for Module 3', image: '/images/modules/pendahuluan/module3.webp' },
     { id: 'pendahuluan4', title: 'Ngoding itu Gimana Sih?', description: 'Description for Module 4', image: '/images/modules/pendahuluan/module4.webp' },
@@ -56,14 +56,14 @@ const Pendahuluan = () => {
             >
               <div className="expandable-header">
                 <span className="expandable-title">{index + 1}. {module.title}</span>
-                <span className="expandable-icon">{expandedItem === index ? '-' : '+'}</span>
+                <span className="expandable-icon">{expandedItem === index ? 'v' : '>'}</span>
               </div>
               {expandedItem === index && (
                 <div className="expandable-content">
                   <div className="content-image">
                     <img src={module.image} alt={module.title} />
                   </div>
-                  <div className="content-description">{module.description}</div>
+                  <div className="content-description"><p>{module.description}</p></div>
                   <button
                     className="content-button"
                     onClick={() => handleNavigate(module.id)}
