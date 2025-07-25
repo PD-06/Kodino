@@ -29,7 +29,6 @@ const ApaItuNgoding = () => {
 
   const slides = [
     {
-      id: 1,
       title: "Apa Itu Ngoding? 💻",
       content: (
         <div className="slide-content">
@@ -51,8 +50,20 @@ const ApaItuNgoding = () => {
         </div>
       )
     },
+    { title: "", content: ( <div className="slide-content lore"> <img className="full-page-image" src="/images/materi/9.png" alt="Lore Awal"/> </div> ) },
+    { title: "", content: ( <div className="slide-content lore"> <img className="full-page-image" src="/images/materi/10.png" alt="Lore Awal"/> </div> ) },
+    { title: "", content: ( <div className="slide-content lore"> <img className="full-page-image" src="/images/materi/11.png" alt="Lore Awal"/> </div> ) },
+    { title: "", content: ( <div className="slide-content lore"> <img className="full-page-image" src="/images/materi/12.png" alt="Lore Awal"/> </div> ) },
+    { title: "", content: ( <div className="slide-content lore"> <img className="full-page-image" src="/images/materi/13.png" alt="Lore Awal"/> </div> ) },
+    { title: "", content: ( <div className="slide-content lore"> <img className="full-page-image" src="/images/materi/14.png" alt="Lore Awal"/> </div> ) },
+    { title: "", content: ( <div className="slide-content lore"> <img className="full-page-image" src="/images/materi/14.png" alt="Lore Awal"/> </div> ) },
+    { title: "", content: ( <div className="slide-content lore"><img className="full-page-image" src="/images/materi/Lesson%20Page%20(2).png" alt="Lore Awal"/> </div> ) },
+    { title: "", content: ( <div className="slide-content lore"><img className="full-page-image" src="/images/materi/Lesson%20Page%20(3).png" alt="Lore Awal"/> </div> ) },
+    { title: "", content: ( <div className="slide-content lore"><img className="full-page-image" src="/images/materi/Lesson%20Page%20(4).png" alt="Lore Awal"/> </div> ) },
+    { title: "", content: ( <div className="slide-content lore"><img className="full-page-image" src="/images/materi/Lesson%20Page%20(5).png" alt="Lore Awal"/> </div> ) },
+    { title: "", content: ( <div className="slide-content lore"><img className="full-page-image" src="/images/materi/Lesson%20Page%20(6).png" alt="Lore Awal"/> </div> ) },
+    { title: "", content: ( <div className="slide-content lore"><img className="full-page-image" src="/images/materi/Lesson%20Page%20(7).png" alt="Lore Awal"/> </div> ) },
     {
-      id: 2,
       title: "Apa Itu Programming? 🤔",
       content: (
         <div className="slide-content">
@@ -83,7 +94,6 @@ const ApaItuNgoding = () => {
       )
     },
     {
-      id: 3,
       title: "Mengapa Programming Penting? 🌟",
       content: (
         <div className="slide-content">
@@ -122,7 +132,6 @@ const ApaItuNgoding = () => {
       )
     },
     {
-      id: 4,
       title: "Bahasa Pemrograman 🗣️",
       content: (
         <div className="slide-content">
@@ -165,7 +174,6 @@ const ApaItuNgoding = () => {
       )
     },
     {
-      id: 5,
       title: "Programmer Adalah... 👨‍💻",
       content: (
         <div className="slide-content">
