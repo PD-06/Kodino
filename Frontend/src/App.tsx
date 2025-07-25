@@ -8,7 +8,8 @@ import Pendahuluan from "./page/materi/Pendahuluan.tsx";
 import LogikaDanVariabel from "./page/materi/LogikaDanVariabel.tsx";
 import PerulanganDasarDanLanjutan from "./page/materi/PerulanganDasarDanLanjutan.tsx";
 import Dashboard from "./page/Dashboard.tsx"; // Placeholder for Dashboard
-
+import StrukturData from "./page/materi/StrukturData.tsx";
+import Belajar from "./page/materi/belajar/Belajar.tsx";
 
 function App() {
   return (
@@ -20,6 +21,8 @@ function App() {
         <Route path="/materi/pendahuluan" element={<Pendahuluan />} />
         <Route path="/materi/logika-dan-variabel" element={<LogikaDanVariabel />} />
         <Route path="/materi/perulangan" element={<PerulanganDasarDanLanjutan />} />
+        <Route path="/materi/struktur-data" element={<StrukturData />} />
+        <Route path="/materi/belajar" element={<Belajar />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />}/> {/* Placeholder for RegisterPage */}
         <Route path="/dashboard" element={<Dashboard />} /> {/* Placeholder for Dashboard */}
