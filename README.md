@@ -1,7 +1,7 @@
 # 🦖 Kodino - Asah Ngoding Lo Bareng Kodino!
 
 <div align="center">
-  <img src="Frontend/public/images/kodino-mascot.webp" alt="Kodino Mascot" width="200"/>
+  <img src="Kodino/Frontend/public/images/kodino-mascot.webp" alt="Kodino Mascot" width="200"/>
   
   [![Made with Love](https://img.shields.io/badge/Made%20with-❤️-ff69b4.svg)](https://github.com/PD-06/Kodino)
   [![For Kids](https://img.shields.io/badge/For-Kids%20👧👦-brightgreen.svg)](https://kodino.id)
@@ -85,9 +85,9 @@ Kodino menggunakan konsep **petualangan pulau-pulau Indonesia**:
 
 ### Prasyarat
 Pastikan sudah terinstall:
-- **Node.js** (v18.18.2 atau lebih baru)
-- **Python** (3.8+)
-- **Git**
+- **Node.js** (v18.18.2 atau lebih baru) - [Download di sini](https://nodejs.org/)
+- **Python** (3.8+) - [Download di sini](https://python.org/)
+- **Git** - [Download di sini](https://git-scm.com/)
 
 ### 1. Clone Repository
 ```bash
@@ -95,21 +95,130 @@ git clone https://github.com/PD-06/Kodino.git
 cd Kodino
 ```
 
-### 2. Setup Frontend
+### 2. Setup Frontend (React + TypeScript)
 ```bash
+# Masuk ke direktori frontend
 cd Kodino/Frontend
-npm install
-npm run dev
-```
-🎉 Frontend akan berjalan di `http://localhost:5173`
 
-### 3. Setup Backend
-```bash
-cd ../Backend
-pip install -r requirements.txt
-flask run
+# Install dependencies menggunakan npm
+npm install
+
+# Atau menggunakan yarn (alternatif)
+# yarn install
+
+# Jalankan development server
+npm run dev
+
+# Server akan berjalan di http://localhost:5173
 ```
-🚀 Backend akan berjalan di `http://localhost:5000`
+
+**📦 Frontend Dependencies yang akan terinstall:**
+- `react` & `react-dom` - Core React library
+- `react-router-dom` - Routing untuk navigasi
+- `react-i18next` & `i18next` - Internationalization
+- `typescript` - Type safety
+- `vite` - Build tool yang super cepat
+- `@vitejs/plugin-react` - React plugin untuk Vite
+- `eslint` & tools - Code linting
+
+### 3. Setup Backend (Flask + Python)
+```bash
+# Buka terminal baru, masuk ke direktori backend
+cd Kodino/Backend
+
+# (Opsional) Buat virtual environment
+python -m venv venv
+
+# Aktifkan virtual environment
+# Untuk macOS/Linux:
+source venv/bin/activate
+# Untuk Windows:
+# venv\Scripts\activate
+
+# Install dependencies Python
+pip install -r requirements.txt
+
+# Setup database (jika belum ada)
+flask db upgrade
+
+# Jalankan Flask server
+flask run
+
+# Server akan berjalan di http://localhost:5000
+```
+
+**🐍 Python Dependencies yang akan terinstall:**
+- `Flask` - Web framework
+- `Flask-SQLAlchemy` - ORM untuk database
+- `Flask-Migrate` - Database migration
+- `Flask-CORS` - Cross-origin resource sharing
+- `google-generativeai` - Google Gemini AI integration
+- `hashlib` & `uuid` - Security & unique ID generation
+
+### 4. Verifikasi Installation
+```bash
+# Test frontend
+curl http://localhost:5173
+# Atau buka browser ke http://localhost:5173
+
+# Test backend API
+curl http://localhost:5000/api/health
+# Atau buka browser ke http://localhost:5000
+```
+
+🎉 **Frontend** akan berjalan di `http://localhost:5173`  
+🚀 **Backend** akan berjalan di `http://localhost:5000`
+
+### 🔧 Troubleshooting
+
+#### ❗ Frontend Issues
+```bash
+# Error: node_modules not found
+rm -rf node_modules package-lock.json
+npm install
+
+# Error: Port 5173 already in use
+npm run dev -- --port 3000
+
+# Error: TypeScript compilation issues
+npm run build
+
+# Error: Permission denied (macOS/Linux)
+sudo npm install -g npm@latest
+```
+
+#### ❗ Backend Issues
+```bash
+# Error: Module not found
+pip install --upgrade pip
+pip install -r requirements.txt
+
+# Error: Flask command not found
+pip install Flask
+export FLASK_APP=app.py
+
+# Error: Database issues
+flask db init
+flask db migrate -m "Initial migration"
+flask db upgrade
+
+# Error: Permission denied
+sudo pip install -r requirements.txt
+```
+
+#### 🔍 Check Installation
+```bash
+# Verify Node.js & npm
+node --version
+npm --version
+
+# Verify Python & pip
+python --version
+pip --version
+
+# Verify Flask
+flask --version
+```
 
 ---
 
@@ -244,9 +353,10 @@ Project ini dibuat dengan ❤️ untuk anak-anak Indonesia.
 
 - **Anak-anak Indonesia** yang jadi inspirasi project ini 👦👧
 - **Komunitas Open Source** yang mendukung edukasi gratis 🌍
-- **Para Guru** yang berdedikasi mengajar teknologi (special thanks to Pak Yo) 👩‍🏫👨‍🏫
-- **Keluarga** yang support perjalanan ini 👨‍👩‍👧‍👦
+- **Para Guru** yang berdedikasi mengajar teknologi 👩‍🏫👨‍🏫
+- **Keluarga** yang support journey ini 👨‍👩‍👧‍👦
 - **AI** yang bantu banyak! Kami mengintegrasikan AI ke dalam proyek kami, dan semua aset visual dihasilkan menggunakan ChatGPT-4o, sementara Copilot digunakan untuk membantu iterasi kode. Tipografi, tata letak desain, ide, pemograman, solusi dan alur edukasi dikembangkan sepenuhnya oleh tim kami. 🤖
+
 ---
 
 ## 📞 Contact & Support
