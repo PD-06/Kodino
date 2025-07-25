@@ -58,7 +58,7 @@ const MateriPage = () => {
       title: 'Perulangan Dasar & Lanjutan',
       series: 'Jawa Series',
       description: 'Menguasai konsep perulangan untuk membuat kode yang lebih efisien dan powerful.',
-      image: '/images/perulangan-banner.jpg',
+      image: '/images/perulangan-banner.png',
       route: '/materi/perulangan',
       requiredLevel: 3
     },
