@@ -8,11 +8,11 @@ const Pendahuluan = () => {
   const navigate = useNavigate();
   const [expandedItem, setExpandedItem] = useState<number | null>(null);
 
-  const modules = [
-    { id: 'pendahuluan1', location: 'Pontianak', title: 'Pengenalan Python', image: '/images/modules/kalimantan/1pontianak.webp', description: 'Kodi baru saja mendapatkan kekuatan untuk menggerakkan objek dengan telekinesis melalui kode, merasa bingung tentang bagaimana cara memulai. Saat dia berkelana dalam dunia digital, Kodi dipandu oleh ular piton misterius dari Pontianak yang menunjukkan Python sebagai bahasa pemrograman pertama yang harus dipelajari. Tetapi, bedanya Python yang dibuat oleh ular piton dimodifikasi dalam bahasa Indonesia biar karena ular piton sangat nasionalis.' },
-    { id: 'pendahuluan2', location: 'Tenggarong', title: 'Variabel & Tipe Data', image: '/images/modules/kalimantan/2tenggarong.webp', description: 'Sesampainya di Tenggarong, Kodi mengamati bahwa masyarakat sering menggunakan kantung adat untuk membawa barang-barang penting. \n' + 'Di petualangan Kodi di Tenggarong, warga desa meminta bantuan untuk memasukkan barang barang mereka kedalam kantung-kantung. Tapi barang-barang ini berantakan dan nggak dinamain!\n' + 'Kodi lalu bilang,\n' + '"Tenang! Aku akan simpan satu per satu ke dalam kantung sakti dengan nama yang jelas! Tapi kamu harus membantu juga!"\n' },
-    { id: 'pendahuluan3', location: 'Banjarmasin', title: 'Operator Logika dan Percabangan', image: '/images/modules/kalimantan/3banjarmasin.webp', description: 'Setelah membantu masyarakat desa, Kodi sekarang haru melewati gerbang perbatasan Banjarmasin. Tapi, gerbang ini cuma bisa terbuka kalau beberapa syarat dipenuhi. Kata masyarakat Kalimantan, ada 2 syarat yang bisa dipakai untuk membuka gerbang, yaitu yang pertama cuaca cerah, kedua adalah ada peta. Tetapi Kodi bingung apakah kedua syarat harus ditepati atau hanya salah satu. Lalu, di depan gerbang, Kodi menemukan sebuah kamus, yaitu kamus operator logika.' },
-    { id: 'pendahuluan4', location: 'Tanah Grogot', title: 'Input Output Interaktif', image: '/images/modules/kalimantan/4tanahgrogot.webp', description: 'Kodi tiba di Tanah Grogot, sebuah wilayah dengan hamparan sawah dan tradisi pertanian yang kuat.\n' + ' Di desa itu, ada festival panen dan warga ingin mencatat nama petani dan jumlah hasil panennya secara digital untuk pertama kalinya.\n' + 'Tapi warga bingung bagaimana cara komputer tahu siapa yang mengisi data dan apa yang dimasukkan.\n' + 'Kodi berkata: “Kita perlu alat untuk mendengar (masukan), dan berbicara kembali (keluaran)!”' },
+  const lessons = [
+    { id: 'logikavariabel1', location: 'Pontianak', title: 'Pengenalan Python', image: '/images/modules/kalimantan/1pontianak.webp', description: 'Kodi baru saja mendapatkan kekuatan untuk menggerakkan objek dengan telekinesis melalui kode, merasa bingung tentang bagaimana cara memulai. Saat dia berkelana dalam dunia digital, Kodi dipandu oleh ular piton misterius dari Pontianak yang menunjukkan Python sebagai bahasa pemrograman pertama yang harus dipelajari. Tetapi, bedanya Python yang dibuat oleh ular piton dimodifikasi dalam bahasa Indonesia biar karena ular piton sangat nasionalis.' },
+    { id: 'logikavariabel2', location: 'Tenggarong', title: 'Variabel & Tipe Data', image: '/images/modules/kalimantan/2tenggarong.webp', description: 'Di petualangan Kodi di Tenggarong, warga desa meminta bantuan untuk memasukkan barang barang mereka kedalam kantung-kantung. Tapi barang-barang ini berantakan dan nggak dinamain!' },
+    { id: 'logikavariabel3', location: 'Banjarmasin', title: 'Operator Logika dan Percabangan', image: '/images/modules/kalimantan/3banjarmasin.webp', description: 'Setelah membantu masyarakat desa, Kodi sekarang haru melewati gerbang perbatasan Banjarmasin. Tapi, gerbang ini cuma bisa terbuka kalau beberapa syarat dipenuhi. Kata masyarakat Kalimantan, ada 2 syarat yang bisa dipakai untuk membuka gerbang, yaitu yang pertama cuaca cerah, kedua adalah ada peta. Tetapi Kodi bingung apakah kedua syarat harus ditepati atau hanya salah satu. Lalu, di depan gerbang, Kodi menemukan sebuah kamus, yaitu kamus operator logika.' },
+    { id: 'logikavariabel4', location: 'Tanah Grogot', title: 'Input Output Interaktif', image: '/images/modules/kalimantan/4tanahgrogot.webp', description: 'Kodi tiba di Tanah Grogot, sebuah wilayah dengan hamparan sawah dan tradisi pertanian yang kuat. Di desa itu, ada festival panen dan warga ingin mencatat nama petani dan jumlah hasil panennya secara digital untuk pertama kalinya. Tapi warga bingung bagaimana cara komputer tahu siapa yang mengisi data dan apa yang dimasukkan.' },
   ];
 
   const handleExpand = (index: number) => {
@@ -29,7 +29,7 @@ const Pendahuluan = () => {
       <div className="module-container">
         <div className="module-header">
           <div className="module-icon">
-            <img src="/images/pendahuluan.webp" alt="Pendahuluan" />
+            <img src="/images/logika-dan-variabel.webp" alt="Pendahuluan" />
           </div>
           <div className="module-titles">
             <h1 className="module-title">Logika Dan Variabel</h1>
@@ -47,7 +47,7 @@ const Pendahuluan = () => {
 
         {/* Expandable Items Section */}
         <ExpandableItems
-          modules={modules}
+          lessons={lessons}
           expandedItem={expandedItem}
           onExpand={handleExpand}
           onNavigate={handleNavigate}

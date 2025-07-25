@@ -5,11 +5,11 @@ import './Materi.css';
 import ExpandableItems from './ExpandableItems';
 
 const PerulanganDasarDanLanjutan = () => {
-  const modules = [
-    { id: 'perulangan1', title: 'Perulangan Penghitung dan Perulangan Kondisi', location: "Wamena", description: 'Kodi saat ini terdampar di Banda Aceh. Ia terbangun dan tiba tiba menyaksikan para pemuda sedang mencoba memperbaiki alat pemutar video dokumenter budaya Aceh. Tapi alat itu rusak. Mereka bilang, "Ini bukan masalah kabel… ini masalah kode!"', image: '/images/modules/papua/1wamena.webp' },
-    { id: 'perulangan2', title: 'Berhenti, lalu Lanjutkan', location: "Asmat", description: 'Kodi membantu warga dalam Festival Nasi Padang yang sedang pakai sistem antrean otomatis. Warga menjelaskan: "Komputer itu seperti memasak rendang. Ada bahan masuk (masukan), proses masak (CPU), dan hasil keluar (keluaran)."', image: '/images/modules/papua/2asmat.webp' },
-    { id: 'perulangan3', title: 'Perulangan Bertingkat', location: "Sentani", description: 'Saat perjalanannya, Kodi melewati Jembatan Ampera di Palembang, Kodi menemukan berbagai pemuda yang sedang berbincang. Mereka berdebat: "Pakai Python atau JavaScript?"\nKodi heran, ternyata komputer bisa diajak bicara… asal pakai bahasa khusus.', image: '/images/modules/papua/3sentani.webp' },
-    { id: 'perulangan4', title: 'Simulasi Perulangan', location: "Nabire", description: 'Di pinggir Danau Toba, Kodi sempat membantu anak-anak memainkan alat musik tradisional Batak, tapi pakai aplikasi musik digital. Kata anak anak itu, kalau di alat musik ada urutan kode, di dalam komputer namanya syntax.', image: '/images/modules/papua/4nabire.webp' },
+  const lessons = [
+    { id: 'perulangan1', title: 'Perulangan Penghitung dan Perulangan Kondisi', location: "Wamena", description: 'Kodi sampai di Lembah Baliem dan ikut serta dalam persiapan Festival Perang Suku Dani. Mereka membuat barisan tarian dan menyusun ikonik tombak bambu secara berulang. Lalu, Kodi diajak untuk melempar tombak-tombak tersebut secara berulang.', image: '/images/modules/papua/1wamena.webp' },
+    { id: 'perulangan2', title: 'Berhenti, lalu Lanjutkan', location: "Asmat", description: 'Di tengah kampung pengrajin kayu, Kodi melihat para seniman Asmat mengukir batu tradisional. Namun, jika ada bagian batu yang hancur di tengah, mereka akan langsung berhenti. Kalau ada kesalahan kecil saja, mereka lewatkan saja bagian itu dan lanjut ke bagian berikutnya.' + 'Seorang pengrajin berkata:\n' + '“Dalam coding dan seni, ada satu hal yang serupa, yaitu kita perlu tahu kapan harus lanjut, dan kapan harus berhenti.”\n', image: '/images/modules/papua/2asmat.webp' },
+    { id: 'perulangan3', title: 'Perulangan Bertingkat', location: "Sentani", description: 'Kodi mengunjungi para nelayan di Danau Sentani. Nelayan tersebut memiliki 10 buah kolam, dan di dalam setiap kolam terhadap 5 ikan. Kemudian, kami dipanggil nelayan untuk mengambil seluruh ikan di dalam semua kolam, tetapi Kodi harus mengambilnya satu per satu. ', image: '/images/modules/papua/3sentani.webp' },
+    { id: 'perulangan4', title: 'Simulasi Perulangan', location: "Nabire", description: 'Di Nabire, Kodi diajak ke pusat simulasi cuaca dan tsunami lokal. Anak-anak menggunakan komputer untuk memprediksi hujan berdasarkan pola yang berulang setiap hari. Ternyata, perulangan juga bisa digabungkan dengan masukan/keluaran interaktif, operasi logika, dan percabangan.', image: '/images/modules/papua/4nabire.webp' },
   ];
 
   const [expandedItem, setExpandedItem] = useState<number | null>(null);
@@ -46,7 +46,7 @@ const PerulanganDasarDanLanjutan = () => {
 
         {/* Expandable Items Section */}
         <ExpandableItems
-          modules={modules}
+          lessons={lessons}
           expandedItem={expandedItem}
           onExpand={handleExpand}
           onNavigate={handleNavigate}
