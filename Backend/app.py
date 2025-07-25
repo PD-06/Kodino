@@ -3,7 +3,7 @@ from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from config import ApplicationConfig
-from models import db, User, Lencana, UserLencana, Progress, Artefak, UserArtefak
+from models import db, User, Lencana, UserLencana, Progress, Artefak, UserArtefak, ClothesSet, UserClothesSet
 import hashlib
 import uuid
 
@@ -116,6 +116,11 @@ def login():
         # Get user progress
         progress = Progress.query.filter_by(user_id=user.id).first()
         
+        # Get current clothes set info
+        current_clothes = None
+        if user.clothe_sekarang:
+            current_clothes = ClothesSet.query.get(user.clothe_sekarang)
+        
         return jsonify({
             "message": "Login berhasil!",
             "user": {
@@ -124,6 +129,8 @@ def login():
                 "username": user.username,
                 "email": user.email,
                 "dikoin": user.dikoin,
+                'clothe_sekarang': user.clothe_sekarang,
+                "current_clothes": current_clothes.serialize() if current_clothes else None,
                 "progress": {
                     "section": progress.section if progress else 1,
                     "level": progress.level if progress else 1
@@ -487,5 +494,222 @@ def internal_error(error):
     db.session.rollback()
     return jsonify({"error": "Terjadi kesalahan internal server"}), 500
 
+
+@app.route('/clothes-set', methods=['GET'])
+def get_clothes_sets():
+    """Get all clothes sets."""
+    try:
+        clothes_sets = ClothesSet.query.all()
+        return jsonify([clothes_set.serialize() for clothes_set in clothes_sets])
+    except Exception as e:
+        return jsonify({"error": f"Terjadi kesalahan: {str(e)}"}), 500
+
+@app.route('/clothes-set/<string:clothes_set_id>', methods=['GET'])
+def get_clothes_set(clothes_set_id):
+    """Get a clothes set by ID."""
+    try:
+        clothes_set = ClothesSet.query.get_or_404(clothes_set_id)
+        return jsonify(clothes_set.serialize())
+    except Exception as e:
+        return jsonify({"error": f"Terjadi kesalahan: {str(e)}"}), 500
+
+@app.route('/clothes-set', methods=['POST'])
+def create_clothes_set():
+    """Create a new clothes set."""
+    try:
+        data = request.get_json()
+        
+        if not data.get('nama_set'):
+            return jsonify({"error": "Nama set wajib diisi"}), 400
+        
+        new_clothes_set = ClothesSet(
+            id=str(uuid.uuid4()),
+            nama_set=data['nama_set'],
+            deskripsi=data.get('deskripsi'),
+            gambar=data.get('gambar'),
+            harga=data.get('harga', 0)
+        )
+        
+        db.session.add(new_clothes_set)
+        db.session.commit()
+        
+        return jsonify(new_clothes_set.serialize()), 201
+        
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": f"Terjadi kesalahan: {str(e)}"}), 500
+
+# User ClothesSet endpoints
+@app.route('/user-clothes-set/<string:user_id>', methods=['GET'])
+def get_user_clothes_sets(user_id):
+    """Get user's owned clothes sets."""
+    try:
+        user_clothes = db.session.query(UserClothesSet, ClothesSet).join(
+            ClothesSet, UserClothesSet.clothes_set_id == ClothesSet.id
+        ).filter(UserClothesSet.user_id == user_id).all()
+        
+        return jsonify([{
+            "id": uc.id,
+            "clothes_set": clothes_set.serialize(),
+            "obtained_at": uc.obtained_at.isoformat() if uc.obtained_at else None,
+            "created_at": uc.created_at.isoformat() if uc.created_at else None
+        } for uc, clothes_set in user_clothes])
+        
+    except Exception as e:
+        return jsonify({"error": f"Terjadi kesalahan: {str(e)}"}), 500
+
+@app.route('/user-clothes-set', methods=['POST'])
+def award_clothes_set():
+    """Award a clothes set to a user."""
+    try:
+        data = request.get_json()
+        
+        if not data.get('user_id') or not data.get('clothes_set_id'):
+            return jsonify({"error": "User ID dan Clothes Set ID wajib diisi"}), 400
+        
+        # Check if user already has this clothes set
+        existing = UserClothesSet.query.filter_by(
+            user_id=data['user_id'], 
+            clothes_set_id=data['clothes_set_id']
+        ).first()
+        
+        if existing:
+            return jsonify({"error": "User sudah memiliki clothes set ini"}), 400
+        
+        new_user_clothes_set = UserClothesSet(
+            id=str(uuid.uuid4()),
+            user_id=data['user_id'],
+            clothes_set_id=data['clothes_set_id']
+        )
+        
+        db.session.add(new_user_clothes_set)
+        db.session.commit()
+        
+        return jsonify(new_user_clothes_set.serialize()), 201
+        
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": f"Terjadi kesalahan: {str(e)}"}), 500
+
+@app.route('/users/<string:user_id>/change-clothes', methods=['PUT'])
+def change_user_clothes(user_id):
+    """Change user's current clothes."""
+    try:
+        user = User.query.get_or_404(user_id)
+        data = request.get_json()
+        
+        if not data.get('clothes_set_id'):
+            return jsonify({"error": "Clothes Set ID wajib diisi"}), 400
+        
+        # Check if user owns this clothes set
+        user_clothes = UserClothesSet.query.filter_by(
+            user_id=user_id, 
+            clothes_set_id=data['clothes_set_id']
+        ).first()
+        
+        if not user_clothes:
+            return jsonify({"error": "User tidak memiliki clothes set ini"}), 400
+        
+        # Update user's current clothes
+        user.clothe_sekarang = data['clothes_set_id']
+        db.session.commit()
+        
+        return jsonify({
+            "message": "Clothes berhasil diubah",
+            "user": user.serialize()
+        })
+        
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": f"Terjadi kesalahan: {str(e)}"}), 500
+
+@app.route('/users/<string:user_id>/available-modules', methods=['GET'])
+def get_available_modules(user_id):
+    """Get user's available modules based on their progress."""
+    try:
+        progress = Progress.query.filter_by(user_id=user_id).first()
+        if not progress:
+            return jsonify({"error": "Progress tidak ditemukan"}), 404
+        
+        # Define all modules with their requirements
+        all_modules = [
+            {
+                "id": "pendahuluan",
+                "title": "Pendahuluan",
+                "subtitle": "Dasar-dasar Programming",
+                "icon": "📚",
+                "required_level": 1,
+                "series": "Sumatera Series"
+            },
+            {
+                "id": "logika-dan-variabel",
+                "title": "Logika dan Variabel",
+                "subtitle": "Operator Logika",
+                "icon": "🧠",
+                "required_level": 2,
+                "series": "Kalimantan Series"
+            },
+            {
+                "id": "struktur-data-dan-interaksi",
+                "title": "Struktur Data dan Interaksi",
+                "subtitle": "Game dan Interaksi",
+                "icon": "🎮",
+                "required_level": 3,
+                "series": "Sulawesi Series"
+            },
+            {
+                "id": "struktur-program",
+                "title": "Struktur Program & Pengulangan Kompleks",
+                "subtitle": "Pengulangan Kompleks",
+                "icon": "🔄",
+                "required_level": 4,
+                "series": "Papua Series"
+            },
+            {
+                "id": "pengembangan-program",
+                "title": "Pengembangan Program dan Kode Modular",
+                "subtitle": "Kode Modular",
+                "icon": "🏗️",
+                "required_level": 5,
+                "series": "Jawa Series"
+            },
+            {
+                "id": "pemrograman-bebas",
+                "title": "Pemrograman Bebas",
+                "subtitle": "Kreasi Bebas",
+                "icon": "🎨",
+                "required_level": 6,
+                "series": "Pulau Komodo Series"
+            }
+        ]
+        
+        # Filter modules based on user's level
+        available_modules = []
+        user_level = progress.level
+        
+        for module in all_modules:
+            if module['required_level'] <= user_level:
+                module['is_unlocked'] = True
+                module['is_current'] = module['required_level'] == user_level
+                available_modules.append(module)
+            elif module['required_level'] == user_level + 1:
+                # Show next module as locked
+                module['is_unlocked'] = False
+                module['is_current'] = False
+                module['is_next'] = True
+                available_modules.append(module)
+                break  # Only show one locked module
+        
+        return jsonify({
+            "user_level": user_level,
+            "available_modules": available_modules
+        })
+        
+    except Exception as e:
+        return jsonify({"error": f"Terjadi kesalahan: {str(e)}"}), 500
+
+
 if __name__ == '__main__':
     app.run(debug=True, port=8000)
+    
+    

@@ -5,6 +5,7 @@ import MateriPage from './page/MateriPage';
 import LoginPage from './page/LoginPage';
 import RegisterPage from './page/RegisterPage';
 import Pendahuluan from "./page/materi/Pendahuluan.tsx";
+import Dashboard from './page/Dashboard.tsx';
 
 function App() {
   return (
@@ -16,6 +17,7 @@ function App() {
         <Route path="/materi/pendahuluan" element={<Pendahuluan />} />
         <Route path="/login" element={<LoginPage />} />
         <Route path="/register" element={<RegisterPage />}/> {/* Placeholder for RegisterPage */}
+        <Route path="/dashboard" element={<Dashboard />} /> {/* Placeholder for Dashboard */}
         {/* Add more routes as needed */}
         <Route path="*" element={<LandingPage />} /> {/* Fallback route */}
         <Route path="/404" element={<h1>Page Not Found</h1>} />
