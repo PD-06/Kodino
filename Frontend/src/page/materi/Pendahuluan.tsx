@@ -2,6 +2,7 @@ import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../../components/Header';
 import './Materi.css';
+import ExpandableItems from './ExpandableItems';
 
 const Pendahuluan = () => {
   const navigate = useNavigate();
@@ -46,40 +47,12 @@ const Pendahuluan = () => {
         </div>
 
         {/* Expandable Items Section */}
-        <div className="expandable-items">
-          {modules.map((module, index) => (
-            <div
-              key={module.id}
-              className={`expandable-item ${expandedItem === index ? 'expanded' : ''}`}
-              onMouseEnter={() => {}}
-              onClick={() => handleExpand(index)}
-            >
-              <div className="expandable-header">
-                <span className="expandable-title">{index + 1}. {module.title} <span>{module.location}</span></span>
-                <span className="expandable-icon">{expandedItem === index ? 'v' : '>'}</span>
-              </div>
-              {expandedItem === index && (
-                <div className="expandable-content">
-                  <div className="content-image">
-                    <img src={module.image} alt={module.title} />
-                  </div>
-                  <div className="content-description">
-                    <p>{module.description}</p>
-                    <button
-                      className="content-button"
-                      onClick={(e) => {
-                        e.stopPropagation();
-                        handleNavigate(module.id);
-                      }}
-                    >
-                      Mulai Belajar
-                    </button>
-                  </div>
-                </div>
-              )}
-            </div>
-          ))}
-        </div>
+        <ExpandableItems
+          modules={modules}
+          expandedItem={expandedItem}
+          onExpand={handleExpand}
+          onNavigate={handleNavigate}
+        />
       </div>
     </div>
   );
