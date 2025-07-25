@@ -28,12 +28,11 @@ const CaraKerjaKomputer = () => {
 
   const slides = [
     {
-      id: 1,
       title: "Cara Kerja Komputer 🖥️",
       content: (
         <div className="slide-content">
           <div className="character-section">
-            <img src="/images/kodi-excited.webp" alt="Kodi excited" className="kodi-character" />
+            <img src="/images/kodi-character.webp" alt="Kodi excited" className="kodi-character" />
             <div className="speech-bubble">
               Hai lagi! Sekarang kita akan belajar bagaimana komputer bekerja seperti memasak rendang!
             </div>
@@ -50,13 +49,16 @@ const CaraKerjaKomputer = () => {
         </div>
       )
     },
+    { title: "", content: ( <div className="slide-content lore"><img className="full-page-image" src="/images/materi/Lesson%20Page%20(14).png" alt="Lore Awal"/> </div> ) },
+    { title: "", content: ( <div className="slide-content lore"><img className="full-page-image" src="/images/materi/Lesson%20Page%20(15).png" alt="Lore Awal"/> </div> ) },
+    { title: "", content: ( <div className="slide-content lore"><img className="full-page-image" src="/images/materi/Lesson%20Page%20(16).png" alt="Lore Awal"/> </div> ) },
+    { title: "", content: ( <div className="slide-content lore"><img className="full-page-image" src="/images/materi/Lesson%20Page%20(17).png" alt="Lore Awal"/> </div> ) },
     {
-      id: 2,
       title: "Komputer Seperti Dapur Rendang 🍛",
       content: (
         <div className="slide-content">
           <div className="character-section">
-            <img src="/images/kodi-cooking.webp" alt="Kodi cooking" className="kodi-character" />
+            <img src="/images/kodi-character.webp" alt="Kodi cooking" className="kodi-character" />
             <div className="speech-bubble">
               Di Festival Nasi Padang, aku belajar kalau komputer itu seperti dapur yang canggih!
             </div>
@@ -93,12 +95,11 @@ const CaraKerjaKomputer = () => {
       )
     },
     {
-      id: 3,
       title: "Input - Process - Output 🔄",
       content: (
         <div className="slide-content">
           <div className="character-section">
-            <img src="/images/kodi-explaining.webp" alt="Kodi explaining" className="kodi-character" />
+            <img src="/images/kodi-character.webp" alt="Kodi explaining" className="kodi-character" />
             <div className="speech-bubble">
               Setiap komputer bekerja dengan pola: INPUT → PROCESS → OUTPUT!
             </div>
@@ -136,12 +137,11 @@ const CaraKerjaKomputer = () => {
       )
     },
     {
-      id: 4,
       title: "Bagian-Bagian Komputer 🔧",
       content: (
         <div className="slide-content">
           <div className="character-section">
-            <img src="/images/kodi-mechanic.webp" alt="Kodi mechanic" className="kodi-character" />
+            <img src="/images/kodi-character.webp" alt="Kodi mechanic" className="kodi-character" />
             <div className="speech-bubble">
               Yuk kenalan dengan "organ tubuh" komputer yang penting!
             </div>

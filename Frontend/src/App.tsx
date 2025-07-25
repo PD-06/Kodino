@@ -7,13 +7,14 @@ import RegisterPage from './page/RegisterPage';
 import Pendahuluan from "./page/materi/Pendahuluan.tsx";
 import LogikaDanVariabel from "./page/materi/LogikaDanVariabel.tsx";
 import PerulanganDasarDanLanjutan from "./page/materi/PerulanganDasarDanLanjutan.tsx";
-import ApaItuNgoding from "./page/materi/ApaItuNgoding.tsx"; // Placeholder for ApaItuNgoding
-import Dashboard from "./page/Dashboard.tsx"; // Placeholder for Dashboard
+import ApaItuNgoding from "./page/materi/ApaItuNgoding.tsx";
+import Dashboard from "./page/Dashboard.tsx";
 import CaraKerjaKomputer from './page/materi/CaraKerjaKomputer.tsx';
 import BahasaPemrograman from './page/materi/BahasaPemrograman.tsx';
 import NgodingItuGimana from './page/materi/NgodingItuGimanaSih.tsx';
 import SiapJadiProgrammer from './page/materi/SiapJadiProgrammer.tsx';
 import AIQuizPendahuluan from './page/materi/AIQuizPendahuluan.tsx';
+import EditorPage from './page/Editor';
 
 function App() {
   return (
@@ -42,6 +43,7 @@ function App() {
         <Route path="/coming-soon" element={<h1>Coming Soon</h1>} />
         <Route path="/privacy-policy" element={<h1>Privacy Policy</h1>} />
         <Route path="/terms-of-service" element={<h1>Terms of Service</h1>} />
+        <Route path="/editor" element={<EditorPage />} />
       </Routes>
     </Router>
   );

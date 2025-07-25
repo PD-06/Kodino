@@ -1216,7 +1216,341 @@ def get_fallback_quiz_data(num_mc=8, num_fill=2):
     
     return {"questions": questions}
 
+@app.route('/api/execute-python', methods=['POST'])
+def execute_python():
+    """
+    Execute Python code with Indonesian keyword support and provide AI feedback only if there's an error.
+    Request body: { "code": "python code here", "language": "indonesian" (optional) }
+    Returns: { "output": "execution output", "feedback": "AI feedback (if error)", "translated_code": "english code (if indonesian)" }
+    """
+
+    # Indonesian to English keyword mapping
+    keyword_map = {
+        # Control Flow - Alur Kontrol
+        'jika': 'if',
+        'kalau': 'if',
+        'lainnya': 'else',
+        'selain': 'elif',
+        'untuk': 'for',
+        'selama': 'while',
+        'ulang': 'while',
+        'berhenti': 'break',
+        'lanjut': 'continue',
+        'lewati': 'pass',
+        'coba': 'try',
+        'kecuali': 'except',
+        'akhirnya': 'finally',
+        'angkat': 'raise',
+        'lempar': 'raise',
+
+        # Functions and Classes - Fungsi dan Kelas
+        'fungsi': 'def',
+        'definisi': 'def',
+        'kelas': 'class',
+        'kembalikan': 'return',
+        'kembali': 'return',
+        'hasil': 'yield',
+        'lambda': 'lambda',
+        'dari': 'from',
+        'impor': 'import',
+        'sebagai': 'as',
+
+        # Logical Operators - Operator Logika
+        'dan': 'and',
+        'atau': 'or',
+        'bukan': 'not',
+        'tidak': 'not',
+        'dalam': 'in',
+        'adalah': 'is',
+        'benar': 'True',
+        'salah': 'False',
+        'kosong': 'None',
+        'nihil': 'None',
+
+        # Context Managers - Manajer Konteks
+        'dengan': 'with',
+
+        # Assertions - Pernyataan
+        'pastikan': 'assert',
+        'yakin': 'assert',
+
+        # Async - Asinkron
+        'async': 'async',
+        'asinkron': 'async',
+        'menunggu': 'await',
+        'tunggu': 'await',
+
+        # Global/Nonlocal - Global/Nonlokal
+        'global': 'global',
+        'nonlokal': 'nonlocal',
+
+        # Delete - Hapus
+        'hapus': 'del',
+        'buang': 'del',
+
+        # Built-in functions - Fungsi bawaan
+        'cetak': 'print',
+        'tulis': 'print',
+        'masukan': 'input',
+        'baca': 'input',
+        'panjang': 'len',
+        'rentang': 'range',
+        'jangkauan': 'range',
+        'tipe': 'type',
+        'jenis': 'type',
+        'bantuan': 'help',
+        'tolong': 'help',
+        'buka': 'open',
+        'tutup': 'close',
+        'maks': 'max',
+        'maksimum': 'max',
+        'min': 'min',
+        'minimum': 'min',
+        'jumlah': 'sum',
+        'total': 'sum',
+        'urutkan': 'sorted',
+        'sorter': 'sorted',
+        'balik': 'reversed',
+        'terbalik': 'reversed',
+        'enumerate': 'enumerate',
+        'hitung': 'enumerate',
+        'zip': 'zip',
+        'gabung': 'zip',
+        'map': 'map',
+        'petakan': 'map',
+        'filter': 'filter',
+        'saring': 'filter',
+        'all': 'all',
+        'semua': 'all',
+        'any': 'any',
+        'ada': 'any',
+        'int': 'int',
+        'bulat': 'int',
+        'float': 'float',
+        'desimal': 'float',
+        'str': 'str',
+        'teks': 'str',
+        'string': 'str',
+        'list': 'list',
+        'daftar': 'list',
+        'dict': 'dict',
+        'kamus': 'dict',
+        'set': 'set',
+        'himpunan': 'set',
+        'tuple': 'tuple',
+        'pasangan': 'tuple',
+        'bool': 'bool',
+        'boolean': 'bool',
+    }
+
+    def translate_indonesian_to_english(code):
+        """Translate Indonesian Python keywords to English."""
+        lines = code.split('\n')
+        translated_lines = []
+
+        for line in lines:
+            # Skip comments
+            if line.strip().startswith('#'):
+                translated_lines.append(line)
+                continue
+
+            # Handle string literals carefully
+            result = ""
+            in_string = False
+            string_char = None
+            i = 0
+
+            while i < len(line):
+                char = line[i]
+
+                # Handle string boundaries
+                if char in ['"', "'"] and (i == 0 or line[i-1] != '\\'):
+                    if not in_string:
+                        in_string = True
+                        string_char = char
+                    elif char == string_char:
+                        in_string = False
+                        string_char = None
+                    result += char
+                    i += 1
+                    continue
+
+                # If we're inside a string, don't translate
+                if in_string:
+                    result += char
+                    i += 1
+                    continue
+
+                # Check if we're at the start of a potential Indonesian word
+                if char.isalpha() or char == '_':
+                    # Extract the word
+                    word_start = i
+                    while i < len(line) and (line[i].isalnum() or line[i] == '_'):
+                        i += 1
+                    word = line[word_start:i]
+
+                    # Translate if it's in our mapping
+                    if word in keyword_map:
+                        result += keyword_map[word]
+                    else:
+                        result += word
+                else:
+                    result += char
+                    i += 1
+
+            translated_lines.append(result)
+
+        return '\n'.join(translated_lines)
+
+    try:
+        data = request.get_json()
+        if not data or 'code' not in data:
+            return jsonify({"error": "No code provided"}), 400
+
+        original_code = data['code']
+        use_indonesian = data.get('language') == 'indonesian' or any(keyword in original_code for keyword in keyword_map.keys())
+
+        # Translate Indonesian keywords to English if needed
+        if use_indonesian:
+            code = translate_indonesian_to_english(original_code)
+            translated_code = code
+        else:
+            code = original_code
+            translated_code = None
+
+        # Execute the code
+        try:
+            import sys
+            from io import StringIO
+            import traceback
+
+            # Redirect stdout and stderr
+            old_stdout = sys.stdout
+            old_stderr = sys.stderr
+            redirected_output = StringIO()
+            sys.stdout = redirected_output
+            sys.stderr = redirected_output
+
+            # Try to execute the code
+            local_vars = {}
+            try:
+                exec(code, globals(), local_vars)
+                output = redirected_output.getvalue()
+
+                # If there's no output, check if there's a result to print
+                if not output and local_vars.get('__result__'):
+                    output = str(local_vars['__result__'])
+
+                response_data = {
+                    "output": output or "Code executed successfully (no output)",
+                    "feedback": "",
+                    "status": "success"
+                }
+
+                # Include translated code if Indonesian was used
+                if translated_code:
+                    response_data["translated_code"] = translated_code
+                    response_data["original_language"] = "indonesian"
+
+                return jsonify(response_data)
+
+            except Exception as e:
+                # Get the error details
+                error_traceback = traceback.format_exc()
+                error_type = type(e).__name__
+                error_msg = str(e)
+
+                # Create appropriate prompt based on language used
+                if use_indonesian:
+                    prompt = f"""
+                    The following Indonesian Python code was translated to English and resulted in an error:
+
+                    Original Indonesian code:
+                    ```python
+                    {original_code}
+                    ```
+
+                    Translated English code:
+                    ```python
+                    {code}
+                    ```
+
+                    Error: {error_type}: {error_msg}
+
+                    Please provide feedback in both Indonesian and English:
+                    1. A clear and concise explanation of what caused the error
+                    2. The exact line number where the error occurred
+                    3. A suggested fix for the error (show both Indonesian and English versions)
+                    4. Any best practices that could prevent similar errors
+                    5. No **bold** markdown formatting, and list using `-` instead of `*`
+
+                    Format your response with Indonesian first, then English.
+                    """
+                else:
+                    prompt = f"""
+                    The following Python code resulted in an error:
+
+                    ```python
+                    {code}
+                    ```
+
+                    Error: {error_type}: {error_msg}
+
+                    Please provide:
+                    1. A clear and concise explanation of what caused the error
+                    2. The exact line number where the error occurred
+                    3. A suggested fix for the error
+                    4. Any best practices that could prevent similar errors
+                    5. No **bold** markdown formatting, and list using `-` instead of `*`
+                    """
+
+                # Only call the model if there's an error
+                try:
+                    model = genai.GenerativeModel('gemini-1.5-flash')
+                    response = model.generate_content(
+                        prompt,
+                        generation_config=genai.types.GenerationConfig(
+                            temperature=0.7,
+                            max_output_tokens=2000,
+                        ),
+                    )
+                    feedback = response.text.replace(r'\*\*', '')
+
+                    # Translate Indonesian feedback to English
+                except Exception as model_error:
+                    feedback = f"Error getting AI feedback: {str(model_error)}"
+
+                response_data = {
+                    "output": error_traceback,
+                    "feedback": feedback,
+                    "status": "error"
+                }
+
+                # Include translated code if Indonesian was used
+                if translated_code:
+                    response_data["translated_code"] = translated_code
+                    response_data["original_language"] = "indonesian"
+
+                return jsonify(response_data)
+                
+            finally:
+                # Restore stdout and stderr
+                sys.stdout = old_stdout
+                sys.stderr = old_stderr
+                
+        except Exception as e:
+            return jsonify({
+                "error": f"Error setting up execution environment: {str(e)}",
+                "status": "error"
+            }), 500
+            
+    except Exception as e:
+        return jsonify({
+            "error": f"An unexpected error occurred: {str(e)}",
+            "status": "error"
+        }), 500
+
 if __name__ == '__main__':
     app.run(debug=True, port=8000)
-    
+
     
