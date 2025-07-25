@@ -388,23 +388,20 @@
 .quiz-container {
   margin: 2rem;
   padding: 2rem;
-  background: white;
-  border-radius: 20px;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
   color: black;
 }
 
 .nav-button.prev {
   background: linear-gradient(135deg, #FF6B35, #e05d2e);
   border: none;
-  padding: 1rem 2rem;
+  padding: 0.5rem 0.5rem;
   border-radius: 12px;
   font-size: 1.1rem;
   font-weight: 600;
   cursor: pointer;
   transition: all 0.3s ease;
   box-shadow: 0 4px 12px rgb(61, 45, 31);
-  min-width: 140px;
+  min-width: 10rem;
 }
 
 .warning-box {
@@ -424,12 +421,202 @@
 }
 
 /* Login Prompt */
-.login-prompt {
-  text-align: center;
-  padding: 3rem;
+/* Quiz Container */
+.quiz-container {
+  max-width: 1000px;
+  margin: 2rem auto;
+  padding: 2.5rem;
   background: white;
   border-radius: 20px;
-  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.1);
+  color: #2d3748;
+}
+
+/* Quiz Intro */
+.quiz-intro {
+  text-align: center;
+  padding: 1rem;
+}
+
+.character-section {
+  display: flex;
+  align-items: flex-start;
+  justify-content: center;
+  margin-bottom: 2rem;
+  position: relative;
+}
+
+.kodi-character {
+  width: 150px;
+  height: auto;
+  border-radius: 50%;
+  border: 4px solid #f16734;
+  box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  transition: transform 0.3s ease;
+}
+
+.kodi-character:hover {
+  transform: scale(1.05);
+}
+
+.speech-bubble {
+  background: #f0f7ff;
+  border-radius: 15px;
+  padding: 1rem 1.5rem;
+  margin-left: 1.5rem;
+  max-width: 400px;
+  text-align: left;
+  position: relative;
+  box-shadow: 0 2px 10px rgba(0, 0, 0, 0.08);
+  border: 1px solid #e2e8f0;
+}
+
+.speech-bubble:before {
+  content: '';
+  position: absolute;
+  left: -10px;
+  top: 50%;
+  transform: translateY(-50%);
+  width: 0;
+  height: 0;
+  border-top: 10px solid transparent;
+  border-bottom: 10px solid transparent;
+  border-right: 10px solid #f0f7ff;
+}
+
+.quiz-details h2 {
+  color: #2d3748;
+  margin-bottom: 1.5rem;
+  font-size: 1.8rem;
+}
+
+.quiz-navigation {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin: 2rem 0;
+  flex-direction: row;
+  gap: 1.5rem;
+}
+
+.question-indicators {
+  gap: 0.5rem;
+  align-items: center;
+}
+
+.quiz-info {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 1.5rem;
+  margin: 2rem 0;
+}
+
+.info-item {
+  display: flex;
+  align-items: center;
+  background: #f8fafc;
+  padding: 1rem;
+  border-radius: 12px;
+  border-left: 4px solid #f16734;
+}
+
+.info-item span {
+  font-size: 1.5rem;
+  margin-right: 1rem;
+  color: #f16734;
+}
+
+.info-item p {
+  margin: 0;
+  color: #4a5568;
+  font-size: 0.95rem;
+}
+
+.warning-box {
+  background: #fff8e1;
+  border-left: 4px solid #ffc107;
+  padding: 1.5rem;
+  border-radius: 12px;
+  margin: 2rem 0;
+  text-align: left;
+}
+
+.warning-box h4 {
+  color: #d97706;
+  margin-top: 0;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.warning-box ul {
+  padding-left: 1.5rem;
+  margin: 0.5rem 0 0 0;
+}
+
+.warning-box li {
+  margin-bottom: 0.5rem;
+  color: #6b7280;
+  font-size: 0.95rem;
+}
+
+.start-quiz-btn {
+  background: linear-gradient(135deg, #a15d25, #925019);
+  color: white;
+  border: none;
+  padding: 1rem 2rem;
+  font-size: 1.1rem;
+  border-radius: 30px;
+  cursor: pointer;
+  margin-top: 1rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+  box-shadow: 0 4px 15px rgb(61, 45, 31);
+}
+
+.start-quiz-btn:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 6px 20px rgb(61, 45, 31);
+}
+
+.start-quiz-btn:active {
+  transform: translateY(0);
+}
+
+/* Loading State */
+.loading-ai {
+  text-align: center;
+  padding: 3rem 1rem;
+}
+
+.loading-ai h2 {
+  color: #4a5568;
+  margin-bottom: 1.5rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.5rem;
+}
+
+.loading-spinner {
+  width: 50px;
+  height: 50px;
+  border: 5px solid #f3f3f3;
+  border-top: 5px solid #f16734;
+  border-radius: 50%;
+  margin: 2rem auto;
+  animation: spin 1s linear infinite;
+}
+
+@keyframes spin {
+  0% { transform: rotate(0deg); }
+  100% { transform: rotate(360deg); }
+}
+
+.loading-ai p {
+  color: #718096;
+  font-size: 1.1rem;
+  margin-top: 1.5rem;
 }
 
 .login-prompt h2 {

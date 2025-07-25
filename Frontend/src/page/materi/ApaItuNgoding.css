@@ -368,14 +368,14 @@
     background: linear-gradient(135deg, #b56929, #f16734);
     color: white;
     border: none;
-    padding: 1rem 2rem;
+    padding: 0.5rem 1rem;
     border-radius: 12px;
     font-size: 1.1rem;
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
     box-shadow: 0 4px 12px rgb(61, 45, 31);
-    min-width: 140px;
+    min-width: 11rem;
   }
   
   .nav-button:hover:not(:disabled) {
