@@ -42,6 +42,8 @@
   }
 }
 
+/* REPLACE your current .section-title styles with this: */
+
 .section-title {
   font-family: 'Alibaba Sans', Arial, sans-serif;
   font-size: 2.5rem;
@@ -49,10 +51,22 @@
   margin-bottom: 3rem;
   text-align: center;
   position: relative;
-  /* Solid color as fallback */
+  /* Use direct gradient approach instead of pseudo-element */
+  background: linear-gradient(135deg, #FF6B35, #e05d2e);
+  background-size: 100%;
+  background-repeat: repeat;
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent; 
+  -moz-background-clip: text;
+  -moz-text-fill-color: transparent;
+  background-clip: text;
+  /* Fallback for browsers that don't support background-clip */
   color: #FF6B35;
   animation: titleBounceIn 1.2s cubic-bezier(0.68, -0.55, 0.265, 1.55) 0.5s forwards;
 }
+
+/* Remove the problematic ::before pseudo-element */
+/* Delete or comment out the .section-title::before rule */ 
 
 /* Apply gradient as a pseudo-element overlay for better reliability */
 .section-title::before {
@@ -520,5 +534,436 @@
     animation-duration: 0.01ms !important;
     animation-iteration-count: 1 !important;
     transition-duration: 0.01ms !important;
+  }
+}
+
+/* ADD THESE STYLES TO THE END OF YOUR EXISTING CSS FILE */
+
+/* Locked Module Styles */
+.materi-card.locked {
+  opacity: 0.6;
+  cursor: not-allowed;
+  position: relative;
+}
+
+.materi-card.locked:hover {
+  transform: translateY(-8px) scale(1.01) !important;
+  box-shadow: 0 15px 30px rgba(0, 0, 0, 0.1) !important;
+  border-color: #ccc !important;
+}
+
+.lock-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+  border-radius: 20px;
+  color: white;
+  font-weight: 600;
+}
+
+.lock-icon {
+  font-size: 3rem;
+  margin-bottom: 0.5rem;
+  animation: lockPulse 2s ease-in-out infinite;
+}
+
+@keyframes lockPulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+.lock-text {
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+/* Current Level Badge */
+.current-level-badge {
+  position: absolute;
+  top: 15px;
+  right: 15px;
+  background: linear-gradient(135deg, #FFD700, #FFA500);
+  color: #8B4513;
+  padding: 0.3rem 0.8rem;
+  border-radius: 15px;
+  font-size: 0.8rem;
+  font-weight: 700;
+  z-index: 4;
+  box-shadow: 0 2px 8px rgba(255, 215, 0, 0.4);
+  animation: currentLevelGlow 2s ease-in-out infinite;
+}
+
+@keyframes currentLevelGlow {
+  0%, 100% {
+    box-shadow: 0 2px 8px rgba(255, 215, 0, 0.4);
+  }
+  50% {
+    box-shadow: 0 4px 16px rgba(255, 215, 0, 0.6);
+  }
+}
+
+.materi-card.current-level {
+  border: 2px solid #FFD700;
+  animation: currentLevelPulse 3s ease-in-out infinite;
+}
+
+@keyframes currentLevelPulse {
+  0%, 100% {
+    border-color: #FFD700;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+  }
+  50% {
+    border-color: #FFA500;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08), 0 0 20px rgba(255, 215, 0, 0.3);
+  }
+}
+
+/* Level Requirement Badge */
+.level-requirement {
+  margin-top: auto;
+  padding-top: 1rem;
+}
+
+.level-badge {
+  display: inline-block;
+  padding: 0.4rem 0.8rem;
+  border-radius: 15px;
+  font-size: 0.8rem;
+  font-weight: 600;
+  transition: all 0.3s ease;
+}
+
+.level-badge.unlocked {
+  background: linear-gradient(135deg, #28a745, #20c997);
+  color: white;
+}
+
+.level-badge.locked {
+  background: linear-gradient(135deg, #6c757d, #495057);
+  color: white;
+}
+
+/* Locked Message Overlay */
+.locked-message-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 1000;
+  animation: overlayFadeIn 0.3s ease-out;
+}
+
+@keyframes overlayFadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.locked-message {
+  background: white;
+  padding: 2rem;
+  border-radius: 20px;
+  text-align: center;
+  max-width: 400px;
+  margin: 1rem;
+  box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3);
+  animation: messageSlideIn 0.4s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+}
+
+@keyframes messageSlideIn {
+  from {
+    transform: scale(0.8) translateY(-20px);
+    opacity: 0;
+  }
+  to {
+    transform: scale(1) translateY(0);
+    opacity: 1;
+  }
+}
+
+.locked-message .locked-icon {
+  font-size: 4rem;
+  margin-bottom: 1rem;
+  animation: lockShake 0.5s ease-in-out;
+}
+
+@keyframes lockShake {
+  0%, 100% {
+    transform: rotate(0deg);
+  }
+  25% {
+    transform: rotate(-5deg);
+  }
+  75% {
+    transform: rotate(5deg);
+  }
+}
+
+.locked-message h3 {
+  color: #e74c3c;
+  margin-bottom: 1rem;
+  font-size: 1.5rem;
+}
+
+.locked-message p {
+  color: #666;
+  line-height: 1.6;
+  margin-bottom: 1rem;
+}
+
+.progress-info {
+  background: #f8f9fa;
+  padding: 0.8rem;
+  border-radius: 10px;
+  color: #495057;
+  font-weight: 600;
+}
+
+/* Progress Summary */
+.progress-summary {
+  margin-top: 3rem;
+  padding: 2rem;
+  background: white;
+  border-radius: 20px;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+  text-align: center;
+  animation: progressSlideIn 0.8s ease-out 0.5s both;
+}
+
+@keyframes progressSlideIn {
+  from {
+    opacity: 0;
+    transform: translateY(30px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.progress-summary h3 {
+  color: #2d2d2d;
+  margin-bottom: 1rem;
+  font-size: 1.3rem;
+}
+
+.progress-bar {
+  width: 100%;
+  height: 12px;
+  background: #e9ecef;
+  border-radius: 10px;
+  overflow: hidden;
+  margin: 1rem 0;
+  position: relative;
+}
+
+.progress-fill {
+  height: 100%;
+  background: linear-gradient(135deg, #FF6B35, #e05d2e);
+  border-radius: 10px;
+  transition: width 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+  position: relative;
+}
+
+.progress-fill::after {
+  content: '';
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+  animation: progressShine 2s ease-in-out infinite;
+}
+
+@keyframes progressShine {
+  0% {
+    transform: translateX(-100%);
+  }
+  100% {
+    transform: translateX(100%);
+  }
+}
+
+.progress-summary p {
+  color: #666;
+  margin: 0;
+  font-weight: 500;
+}
+
+/* Update responsive styles for new elements */
+@media (max-width: 768px) {
+  .locked-message {
+    margin: 1rem;
+    padding: 1.5rem;
+  }
+  
+  .current-level-badge {
+    top: 10px;
+    right: 10px;
+    padding: 0.2rem 0.6rem;
+    font-size: 0.7rem;
+  }
+  
+  .progress-summary {
+    margin-top: 2rem;
+    padding: 1.5rem;
+  }
+}
+
+@media (max-width: 480px) {
+  .locked-message {
+    padding: 1rem;
+  }
+  
+  .locked-message h3 {
+    font-size: 1.2rem;
+  }
+  
+  .locked-message .locked-icon {
+    font-size: 3rem;
+  }
+}
+
+/* UPDATE the locked module styles */
+.materi-card.locked {
+  opacity: 0.6;
+  cursor: not-allowed;
+  position: relative;
+}
+
+/* REMOVE all hover effects for locked cards */
+.materi-card.locked:hover {
+  transform: none !important;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08) !important;
+  border-color: transparent !important;
+  transition: none !important;
+}
+
+/* Disable all child element hover effects for locked cards */
+.materi-card.locked:hover .card-icon {
+  transform: none !important;
+  background: linear-gradient(135deg, #f8f9fa 0%, #e9ecef 100%) !important;
+}
+
+.materi-card.locked:hover .series-tag {
+  background: linear-gradient(135deg, #f0f0f0, #e0e0e0) !important;
+  color: #666 !important;
+  transform: none !important;
+  box-shadow: none !important;
+}
+
+.materi-card.locked:hover .card-title {
+  color: #2d2d2d !important;
+  transform: none !important;
+  text-shadow: none !important;
+}
+
+.materi-card.locked:hover .card-description {
+  color: #666 !important;
+  transform: none !important;
+}
+
+/* Disable shine effect for locked cards */
+.materi-card.locked::before {
+  display: none !important;
+}
+
+/* Disable overlay effect for locked cards */
+.materi-card.locked::after {
+  opacity: 0 !important;
+}
+
+/* Disable ripple effect for locked cards */
+.materi-card.locked:active::before {
+  display: none !important;
+}
+
+/* Also disable focus effects for locked cards */
+.materi-card.locked:focus {
+  transform: none !important;
+  box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08) !important;
+  border-color: transparent !important;
+  animation: none !important;
+}
+
+/* Make sure the lock overlay stays visible and doesn't get affected */
+.lock-overlay {
+  position: absolute;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background: rgba(0, 0, 0, 0.7);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 5;
+  border-radius: 20px;
+  color: white;
+  font-weight: 600;
+  pointer-events: none; /* Add this to prevent interference */
+}
+
+.lock-icon {
+  font-size: 3rem;
+  margin-bottom: 0.5rem;
+  animation: lockPulse 2s ease-in-out infinite;
+}
+
+@keyframes lockPulse {
+  0%, 100% {
+    transform: scale(1);
+  }
+  50% {
+    transform: scale(1.1);
+  }
+}
+
+.lock-text {
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+/* Update responsive styles to also disable hover on mobile for locked cards */
+@media (max-width: 768px) {
+  .materi-card.locked:hover {
+    transform: none !important;
+  }
+}
+
+@media (max-width: 480px) {
+  .materi-card.locked:hover {
+    transform: none !important;
+  }
+}
+
+/* Make sure locked cards don't respond to hover even in hover-capable devices */
+@media (hover: hover) {
+  .materi-card.locked:hover {
+    transform: none !important;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08) !important;
+    border-color: transparent !important;
   }
 }
