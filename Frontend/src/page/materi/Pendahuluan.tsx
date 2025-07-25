@@ -39,7 +39,7 @@ const Pendahuluan = () => {
   const [moduleProgress, setModuleProgress] = useState<ModuleProgress | null>(null);
   const [isLoading, setIsLoading] = useState(true);
 
-  const lessons = [
+  const modules = [
     { id: 'pendahuluan1', title: 'Apa itu Ngoding?', location: "Aceh", description: 'Kodi saat ini terdampar di Banda Aceh. Ia terbangun dan tiba tiba menyaksikan para pemuda sedang mencoba memperbaiki alat pemutar video dokumenter budaya Aceh. Tapi alat itu rusak. Mereka bilang, "Ini bukan masalah kabel… ini masalah kode!"', image: '/images/modules/sumatra/1aceh.webp' },
     { id: 'pendahuluan2', title: 'Cara Kerja Komputer', location: "Padang", description: 'Kodi membantu warga dalam Festival Nasi Padang yang sedang pakai sistem antrean otomatis. Warga menjelaskan: "Komputer itu seperti memasak rendang. Ada bahan masuk (masukan), proses masak (CPU), dan hasil keluar (keluaran)."', image: '/images/modules/sumatra/2padang.webp' },
     { id: 'pendahuluan3', title: 'Bahasa Pemrograman', location: "Palembang", description: 'Saat perjalanannya, Kodi melewati Jembatan Ampera di Palembang, Kodi menemukan berbagai pemuda yang sedang berbincang. Mereka berdebat: "Pakai Python atau JavaScript?"\nKodi heran, ternyata komputer bisa diajak bicara… asal pakai bahasa khusus.', image: '/images/modules/sumatra/3palembang.webp' },
@@ -175,7 +175,7 @@ const Pendahuluan = () => {
 
         {/* Expandable Items Section */}
         <ExpandableItems
-          lessons={lessons}
+          modules={modules}
           expandedItem={expandedItem}
           onExpand={handleExpand}
           onNavigate={handleNavigate}
