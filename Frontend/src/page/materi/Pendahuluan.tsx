@@ -45,6 +45,7 @@ const Pendahuluan = () => {
     { id: 'pendahuluan3', title: 'Bahasa Pemrograman', location: "Palembang", description: 'Saat perjalanannya, Kodi melewati Jembatan Ampera di Palembang, Kodi menemukan berbagai pemuda yang sedang berbincang. Mereka berdebat: "Pakai Python atau JavaScript?"\nKodi heran, ternyata komputer bisa diajak bicara… asal pakai bahasa khusus.', image: '/images/modules/sumatra/3palembang.webp' },
     { id: 'pendahuluan4', title: 'Ngoding itu Gimana Sih?', location: "Batak Toba", description: 'Di pinggir Danau Toba, Kodi sempat membantu anak-anak memainkan alat musik tradisional Batak, tapi pakai aplikasi musik digital. Kata anak anak itu, kalau di alat musik ada urutan kode, di dalam komputer namanya syntax.', image: '/images/modules/sumatra/4bataktoba.webp' },
     { id: 'pendahuluan5', title: 'Siap Jadi Programmer!', location: "Lampung", description: 'Di kaki Gunung Krakatau, Kodi bertemu komunitas anak muda yang sedang membuat aplikasi pertanian. Mereka berkata: "Kami bukan jenius. Kami cuma rajin mencoba dan nggak takut gagal."', image: '/images/modules/sumatra/5lampung.webp' },
+    { id: 'ai-quiz-pendahuluan', title: 'AI Quiz Challenge', location: "Jakarta", description: 'Setelah perjalanan panjang di Sumatra, Kodi tiba di Jakarta dan bertemu dengan AI Assistant yang akan menguji pemahaman kamu tentang semua materi Pendahuluan Programming! 10 pertanyaan menantang menantimu!', image: '/images/modules/sumatra/6jakarta.webp', type: 'ai-quiz' },
   ];
 
   useEffect(() => {
@@ -83,36 +84,49 @@ const Pendahuluan = () => {
   };
 
   const handleNavigate = (moduleId: string) => {
-    if (!user) {
-      navigate('/login');
-      return;
-    }
+  if (!user) {
+    navigate('/login');
+    return;
+  }
 
-    const courseProgress = moduleProgress?.courses.find(c => c.course_id === moduleId);
-    
-    if (courseProgress && courseProgress.is_unlocked) {
-      navigate(`/materi/belajar/${moduleId}`);
+  // Check if it's AI Quiz
+  if (moduleId === 'ai-quiz-pendahuluan') {
+    // Check if all previous courses are completed
+    if (moduleProgress && moduleProgress.completed_courses >= 5) {
+      navigate(`/materi/ai-quiz/pendahuluan`);
     } else {
-      // Improved message for locked courses
-      const courseIndex = modules.findIndex(m => m.id === moduleId);
-      if (courseIndex === 0) { 
-        // This should never happen since first course is always unlocked
-        alert('Terjadi kesalahan. Silakan refresh halaman.');
-      } else {
-        alert('Kamu harus menyelesaikan course sebelumnya terlebih dahulu!');
-      }
+      alert('Kamu harus menyelesaikan semua course di modul Pendahuluan terlebih dahulu untuk mengakses AI Quiz!');
     }
-  };
+    return;
+  }
 
-  const isCourseUnlocked = (courseId: string): boolean => {
-    if (!moduleProgress) {
-      // While loading, assume first course is unlocked
-      const courseIndex = modules.findIndex(m => m.id === courseId);
-      return courseIndex === 0;
+  const courseProgress = moduleProgress?.courses.find(c => c.course_id === moduleId);
+  
+  if (courseProgress && courseProgress.is_unlocked) {
+    navigate(`/materi/belajar/${moduleId}`);
+  } else {
+    const courseIndex = modules.findIndex(m => m.id === moduleId);
+    if (courseIndex === 0) { 
+      alert('Terjadi kesalahan. Silakan refresh halaman.');
+    } else {
+      alert('Kamu harus menyelesaikan course sebelumnya terlebih dahulu!');
     }
-    const courseProgress = moduleProgress.courses.find(c => c.course_id === courseId);
-    return courseProgress?.is_unlocked || false;
-  };
+  }
+};
+
+const isCourseUnlocked = (courseId: string): boolean => {
+  if (courseId === 'ai-quiz-pendahuluan') {
+    // AI Quiz unlocks when all 5 regular courses are completed
+    return moduleProgress ? moduleProgress.completed_courses >= 5 : false;
+  }
+  
+  if (!moduleProgress) {
+    const courseIndex = modules.findIndex(m => m.id === courseId);
+    return courseIndex === 0;
+  }
+  const courseProgress = moduleProgress.courses.find(c => c.course_id === courseId);
+  return courseProgress?.is_unlocked || false;
+};
 
   const isCourseCompleted = (courseId: string): boolean => {
     if (!moduleProgress) return false;
