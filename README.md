@@ -1,7 +1,7 @@
 # 🦖 Kodino - Asah Ngoding Lo Bareng Kodino!
 
 <div align="center">
-  <img src="Kodino/Frontend/public/images/kodino-mascot.webp" alt="Kodino Mascot" width="200"/>
+  <img src="Frontend/public/images/kodino-mascot.webp" alt="Kodino Mascot" width="200"/>
   
   [![Made with Love](https://img.shields.io/badge/Made%20with-❤️-ff69b4.svg)](https://github.com/PD-06/Kodino)
   [![For Kids](https://img.shields.io/badge/For-Kids%20👧👦-brightgreen.svg)](https://kodino.id)
