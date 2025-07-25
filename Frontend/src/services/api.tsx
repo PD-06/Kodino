@@ -1,5 +1,12 @@
 const API_BASE_URL = 'http://localhost:8000';
 
+export interface PythonExecutionResult {
+  output: string;
+  feedback: string;
+  status: 'success' | 'error';
+  error?: string;
+}
+
 export interface RegisterData {
   fullName: string;
   username: string;
@@ -82,6 +89,35 @@ class ApiService {
     const response = await this.makeRequest<User>(`/users/${userId}`);
     return response as any; // The user endpoint returns user directly
   }
+
+  /**
+   * Execute Python code and get the result
+   * @param code Python code to execute
+   * @returns Promise with the execution result
+   */
+  async executePythonCode(code: string): Promise<PythonExecutionResult> {
+    try {
+      const response = await fetch(`${API_BASE_URL}/api/execute-python`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ code }),
+      });
+
+      if (!response.ok) {
+        const errorData = await response.json().catch(() => ({}));
+        throw new Error(errorData.error || 'Failed to execute code');
+      }
+
+      return await response.json();
+    } catch (error) {
+      console.error('Error executing Python code:', error);
+      throw error;
+    }
+  }
 }
 
 export const apiService = new ApiService();
+
+export { API_BASE_URL };

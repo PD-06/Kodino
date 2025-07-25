@@ -86,7 +86,7 @@ const MateriPage = () => {
       series: 'Pulau Komodo Series',
       description: 'Kreasikan ide kamu! Tulis kode sesukamu dan bikin proyek unikmu sendiri.',
       image: '/images/pemrograman-bebas.webp',
-      route: '/materi/pemrograman-bebas',
+      route: '/editor',
       requiredLevel: 1
     }
   ];
