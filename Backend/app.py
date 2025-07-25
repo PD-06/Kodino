@@ -3,7 +3,7 @@ from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from config import ApplicationConfig
-from models import db, User, Lencana, UserLencana, Progress, Artefak, UserArtefak, ClothesSet, UserClothesSet
+from models import User, Progress, Lencana, UserLencana, Artefak, UserArtefak, ClothesSet, UserClothesSet, CourseCompletion, db
 import hashlib
 import uuid
 
@@ -688,17 +688,22 @@ def get_available_modules(user_id):
         user_level = progress.level
         
         for module in all_modules:
+            # UPDATED LOGIC: Modules are unlocked based on level, but first course of each is always accessible
             if module['required_level'] <= user_level:
                 module['is_unlocked'] = True
                 module['is_current'] = module['required_level'] == user_level
                 available_modules.append(module)
             elif module['required_level'] == user_level + 1:
-                # Show next module as locked
-                module['is_unlocked'] = False
+                # Show next module as available but with limited access
+                module['is_unlocked'] = True  # Module is accessible
                 module['is_current'] = False
                 module['is_next'] = True
                 available_modules.append(module)
-                break  # Only show one locked module
+            else:
+                # Completely locked modules
+                module['is_unlocked'] = False
+                module['is_current'] = False
+                available_modules.append(module)
         
         return jsonify({
             "user_level": user_level,
@@ -707,6 +712,167 @@ def get_available_modules(user_id):
         
     except Exception as e:
         return jsonify({"error": f"Terjadi kesalahan: {str(e)}"}), 500
+
+@app.route('/course-completion/<string:user_id>', methods=['GET'])
+def get_user_course_completions(user_id):
+    """Get user's completed courses."""
+    try:
+        completions = CourseCompletion.query.filter_by(user_id=user_id).all()
+        return jsonify([completion.serialize() for completion in completions])
+    except Exception as e:
+        return jsonify({"error": f"Terjadi kesalahan: {str(e)}"}), 500
+
+@app.route('/course-completion', methods=['POST'])
+def complete_course():
+    """Mark a course as completed."""
+    try:
+        data = request.get_json()
+        
+        if not data.get('user_id') or not data.get('course_id') or not data.get('module_id'):
+            return jsonify({"error": "User ID, Course ID, dan Module ID wajib diisi"}), 400
+        
+        # Check if course already completed
+        existing = CourseCompletion.query.filter_by(
+            user_id=data['user_id'],
+            course_id=data['course_id']
+        ).first()
+        
+        if existing:
+            return jsonify({"error": "Course sudah diselesaikan"}), 400
+        
+        # Create course completion record
+        completion = CourseCompletion(
+            user_id=data['user_id'],
+            course_id=data['course_id'],
+            module_id=data['module_id']
+        )
+        
+        db.session.add(completion)
+        
+        # Update user progress if completing a module
+        user = User.query.get(data['user_id'])
+        if user and user.progress:
+            # Check if all courses in current module are completed
+            module_courses = get_module_courses(data['module_id'])
+            completed_courses = CourseCompletion.query.filter_by(
+                user_id=data['user_id'],
+                module_id=data['module_id']
+            ).count()
+            
+            # If all courses in module completed, advance to next level
+            if completed_courses + 1 >= len(module_courses):  # +1 for current completion
+                user.progress.level = min(user.progress.level + 1, 6)
+        
+        db.session.commit()
+        
+        return jsonify(completion.serialize()), 201
+        
+    except Exception as e:
+        db.session.rollback()
+        return jsonify({"error": f"Terjadi kesalahan: {str(e)}"}), 500
+
+@app.route('/course-completion/check/<string:user_id>/<string:course_id>', methods=['GET'])
+def check_course_completion(user_id, course_id):
+    """Check if a specific course is completed."""
+    try:
+        completion = CourseCompletion.query.filter_by(
+            user_id=user_id,
+            course_id=course_id
+        ).first()
+        
+        return jsonify({
+            'completed': completion is not None,
+            'completion_data': completion.serialize() if completion else None
+        })
+        
+    except Exception as e:
+        return jsonify({"error": f"Terjadi kesalahan: {str(e)}"}), 500
+
+@app.route('/course-completion/module/<string:user_id>/<string:module_id>', methods=['GET'])
+def get_module_progress(user_id, module_id):
+    """Get user's progress in a specific module."""
+    try:
+        completions = CourseCompletion.query.filter_by(
+            user_id=user_id,
+            module_id=module_id
+        ).all()
+        
+        module_courses = get_module_courses(module_id)
+        completed_course_ids = [c.course_id for c in completions]
+        
+        progress_data = []
+        for i, course in enumerate(module_courses):
+            is_completed = course['id'] in completed_course_ids
+            # UPDATED LOGIC: First course is always unlocked, others require previous completion
+            is_unlocked = i == 0 or (i > 0 and module_courses[i-1]['id'] in completed_course_ids)
+            
+            progress_data.append({
+                'course_id': course['id'],
+                'course_title': course['title'],
+                'is_completed': is_completed,
+                'is_unlocked': is_unlocked,
+                'order': i
+            })
+        
+        return jsonify({
+            'module_id': module_id,
+            'total_courses': len(module_courses),
+            'completed_courses': len(completions),
+            'progress_percentage': (len(completions) / len(module_courses)) * 100 if module_courses else 0,
+            'courses': progress_data
+        })
+        
+    except Exception as e:
+        return jsonify({"error": f"Terjadi kesalahan: {str(e)}"}), 500
+
+def get_module_courses(module_id):
+    """Helper function to get all courses in a module."""
+    module_courses = {
+        'pendahuluan': [
+            {'id': 'pendahuluan1', 'title': 'Apa itu Ngoding?'},
+            {'id': 'pendahuluan2', 'title': 'Cara Kerja Komputer'},
+            {'id': 'pendahuluan3', 'title': 'Bahasa Pemrograman'},
+            {'id': 'pendahuluan4', 'title': 'Ngoding itu Gimana Sih?'},
+            {'id': 'pendahuluan5', 'title': 'Siap Jadi Programmer!'}
+        ],
+        'logika-dan-variabel': [
+            {'id': 'logika1', 'title': 'Pengenalan Variabel'},
+            {'id': 'logika2', 'title': 'Tipe Data'},
+            {'id': 'logika3', 'title': 'Operator Matematika'},
+            {'id': 'logika4', 'title': 'Operator Logika'},
+            {'id': 'logika5', 'title': 'Kondisi dan Percabangan'}
+        ],
+        'perulangan': [
+            {'id': 'perulangan1', 'title': 'Pengenalan Perulangan'},
+            {'id': 'perulangan2', 'title': 'For Loop'},
+            {'id': 'perulangan3', 'title': 'While Loop'},
+            {'id': 'perulangan4', 'title': 'Nested Loop'},
+            {'id': 'perulangan5', 'title': 'Break dan Continue'}
+        ],
+        'struktur-data-dan-interaksi': [
+            {'id': 'struktur1', 'title': 'Array dan List'},
+            {'id': 'struktur2', 'title': 'Object dan Dictionary'},
+            {'id': 'struktur3', 'title': 'Event Handling'},
+            {'id': 'struktur4', 'title': 'Game Development Basics'},
+            {'id': 'struktur5', 'title': 'User Interaction'}
+        ],
+        'pengembangan-program': [
+            {'id': 'pengembangan1', 'title': 'Functions dan Methods'},
+            {'id': 'pengembangan2', 'title': 'Modular Programming'},
+            {'id': 'pengembangan3', 'title': 'Error Handling'},
+            {'id': 'pengembangan4', 'title': 'Code Organization'},
+            {'id': 'pengembangan5', 'title': 'Best Practices'}
+        ],
+        'pemrograman-bebas': [
+            {'id': 'bebas1', 'title': 'Project Planning'},
+            {'id': 'bebas2', 'title': 'Creative Coding'},
+            {'id': 'bebas3', 'title': 'Personal Projects'},
+            {'id': 'bebas4', 'title': 'Portfolio Building'},
+            {'id': 'bebas5', 'title': 'Final Showcase'}
+        ]
+    }
+    
+    return module_courses.get(module_id, [])
 
 
 if __name__ == '__main__':

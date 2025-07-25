@@ -8,30 +8,25 @@ def generate_uuid():
     """Generate a new UUID."""
     return str(uuid4())
 
+
 class User(db.Model):
-    """User model."""
-    __tablename__ = 'user'
-    
     id = db.Column(db.String(36), primary_key=True, default=generate_uuid)
     nama_panjang = db.Column(db.String(100), nullable=False)
-    username = db.Column(db.String(80), unique=True, nullable=False)
-    email = db.Column(db.String(120), unique=True, nullable=True)
-    password = db.Column(db.String(200), nullable=False)
+    username = db.Column(db.String(50), unique=True, nullable=False)
+    email = db.Column(db.String(100), unique=True, nullable=True)
+    password = db.Column(db.String(255), nullable=False)
     dikoin = db.Column(db.Integer, default=0)
-    # Foreign key to ClothesSet - made nullable to avoid circular dependency
-    clothe_sekarang = db.Column(
-        db.String(36), 
-        db.ForeignKey('clothes_set.id', name='fk_user_clothes_set'), 
-        nullable=True,
-        default='18eadad5-8a46-8e99-21a5-b9bc02532856'
-    )
-    created_at = db.Column(db.DateTime, server_default=db.func.now())
+    clothe_sekarang = db.Column(db.String(36), db.ForeignKey('clothes_set.id'), nullable=True)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
-    def __repr__(self):
-        return f'<User {self.username}>'
-    
+    # Relationships
+    progress = db.relationship('Progress', backref='user', uselist=False)
+    user_lencana = db.relationship('UserLencana', backref='user')
+    user_artefak = db.relationship('UserArtefak', backref='user')
+    user_clothes_set = db.relationship('UserClothesSet', backref='user')
+    course_completions = db.relationship('CourseCompletion', backref='user')
+
     def serialize(self):
-        """Serialize the User object to a dictionary."""
         return {
             'id': self.id,
             'nama_panjang': self.nama_panjang,
@@ -41,6 +36,25 @@ class User(db.Model):
             'clothe_sekarang': self.clothe_sekarang,
             'created_at': self.created_at.isoformat() if self.created_at else None
         }
+
+class CourseCompletion(db.Model):
+    id = db.Column(db.String(36), primary_key=True, default=generate_uuid)
+    user_id = db.Column(db.String(36), db.ForeignKey('user.id'), nullable=False)
+    course_id = db.Column(db.String(100), nullable=False)  # e.g., 'pendahuluan1', 'pendahuluan2'
+    module_id = db.Column(db.String(100), nullable=False)  # e.g., 'pendahuluan', 'logika-dan-variabel'
+    completed_at = db.Column(db.DateTime, default=datetime.utcnow)
+    created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    def serialize(self):
+        return {
+            'id': self.id,
+            'user_id': self.user_id,
+            'course_id': self.course_id,
+            'module_id': self.module_id,
+            'completed_at': self.completed_at.isoformat() if self.completed_at else None,
+            'created_at': self.created_at.isoformat() if self.created_at else None
+        }
+
 
 class ClothesSet(db.Model):
     """ClothesSet model for character costumes."""
