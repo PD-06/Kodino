@@ -15,8 +15,6 @@ import NgodingItuGimana from './page/materi/NgodingItuGimanaSih.tsx';
 import SiapJadiProgrammer from './page/materi/SiapJadiProgrammer.tsx';
 import AIQuizPendahuluan from './page/materi/AIQuizPendahuluan.tsx';
 
-
-
 function App() {
   return (
     <Router>

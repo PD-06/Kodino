@@ -233,32 +233,52 @@ const ApaItuNgoding = () => {
 
   const quizQuestions = [
     {
-      question: "Apa itu programming?",
+      question: "Sekarang, Kodi, Ngoding itu mirip seperti apa?",
       options: [
-        "Bermain game di komputer",
-        "Memberikan instruksi kepada komputer",
-        "Mengetik di keyboard",
-        "Memperbaiki komputer"
+        "A. Menulis lagu untuk komputer",
+        "B. Memberi perintah jelas ke komputer",
+        "C. Membaca pikiran komputer",
+        "D. Menghancurkan Komputer"
       ],
       correct: 1
     },
     {
-      question: "Contoh aplikasi yang dibuat dengan programming adalah...",
+      question: "Nah, karena kamu sudah mengerti, Ibu Dina akan memberikan kamu sebuah kuis. Dalam memasak rendang, yang menjadi keluaran adalah…",
       options: [
-        "WhatsApp",
-        "Buku tulis",
-        "Pensil",
-        "Kertas"
+        "A. Daging Mentah",
+        "B. Panci",
+        "C. Rendang Matang",
+        "D. Api"
+      ],
+      correct: 2
+    },
+    {
+      question: "Sekarang, kita pengen nanya ke kamu, Kodi!! Dari bahasa-bahasa dibawah ini yang bukan merupakan bahasa pemrograman yang mana?",
+      options: [
+        "A. Python",
+        "B. Javascript",
+        "C. Bahasa Jawa",
+        "D. C++"
+      ],
+      correct: 2
+    },
+    {
+      question: "Suku Batak memiliki sebuah kata ajaib yang bisa diucapkan menggunakan syntax pemrograman yang sudah disebutkan. Jika program yang ditulis adalah cetak(\"Horas!\"), maka akan mengeluarkan ",
+      options: [
+        "A. Horas!",
+        "B. Error",
+        "C. cetak(\"Horas!\")",
+        "D. Komputer akan rusak"
       ],
       correct: 0
     },
     {
-      question: "Bahasa pemrograman yang mudah dipelajari untuk pemula adalah...",
+      question: "Sebelum kita melanjutkan ke bab selanjutnya, Kodi ingin tahu kunci kesuksesan kamu sebagai programmer. Menurut kamu, programmer yang baik adalah programmer yang",
       options: [
-        "Assembly",
-        "Machine Code",
-        "Python",
-        "Binary"
+        "A. Ga pernah salah",
+        "B. Hapal semua kode",
+        "C. Mau belajar dan coba terus",
+        "D. Bisa meretas NASA"
       ],
       correct: 2
     }
@@ -413,11 +433,11 @@ const completeModule = async () => {
             )}
             
             <div className="navigation-buttons">
-              <button onClick={() => navigate('/dashboard')}>
+            <button onClick={() => { completeModule();  navigate('/dashboard')}}>
                 Kembali ke Dashboard
               </button>
               {quizScore >= 2 && (
-                <button onClick={() => navigate('/materi/pendahuluan')}>
+                <button onClick={() => { completeModule(); navigate('/materi/pendahuluan')}}>
                   Lanjut ke Modul Berikutnya
                 </button>
               )}
