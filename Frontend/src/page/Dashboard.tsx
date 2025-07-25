@@ -32,7 +32,7 @@ interface Module {
   series: string;
   is_unlocked: boolean;
   is_current: boolean;
-  is_next?: boolean;
+  // Removed is_next property
 }
 
 interface ClothesSet {
@@ -402,7 +402,7 @@ const Dashboard = () => {
                     availableModules.map((module) => (
                       <div 
                         key={module.id}
-                        className={`module-card ${module.is_current ? 'current-module' : ''} ${module.is_next ? 'next-module' : ''} ${!module.is_unlocked ? 'locked-module' : ''}`}
+                        className={`module-card ${module.is_current ? 'current-module' : ''} ${!module.is_unlocked ? 'locked-module' : ''}`}
                         onClick={() => handleModuleClick(module.id, module.is_unlocked)}
                         style={{ cursor: module.is_unlocked ? 'pointer' : 'not-allowed' }}
                       >
@@ -412,7 +412,7 @@ const Dashboard = () => {
                           <p>{module.subtitle}</p>
                           <span className="module-series">{module.series}</span>
                           {module.is_current && <span className="current-badge">📍 Sedang Belajar</span>}
-                          {module.is_next && <span className="next-badge">🔒 Selanjutnya</span>}
+                          {/* Removed next-badge span */}
                         </div>
                         <div className="module-status">
                           {module.is_unlocked ? '✅' : '🔒'}

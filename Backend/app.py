@@ -693,12 +693,6 @@ def get_available_modules(user_id):
                 module['is_unlocked'] = True
                 module['is_current'] = module['required_level'] == user_level
                 available_modules.append(module)
-            elif module['required_level'] == user_level + 1:
-                # Show next module as available but with limited access
-                module['is_unlocked'] = True  # Module is accessible
-                module['is_current'] = False
-                module['is_next'] = True
-                available_modules.append(module)
             else:
                 # Completely locked modules
                 module['is_unlocked'] = False

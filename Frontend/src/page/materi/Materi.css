@@ -845,3 +845,21 @@
   hyphens: auto;
   word-break: break-word;
 }
+
+/* Make ALL text in expandable items bold */
+.expandable-item * {
+  font-weight: 600 !important;
+}
+
+/* Override for specific elements if needed */
+.expandable-item .title-text {
+  font-weight: 800 !important; /* Extra bold for main title */
+}
+
+.expandable-item .location-text {
+  font-weight: 700 !important; /* Bold for location */
+}
+
+.expandable-item .content-button {
+  font-weight: 700 !important; /* Bold for button */
+}

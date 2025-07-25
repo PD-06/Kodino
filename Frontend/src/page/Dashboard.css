@@ -1187,3 +1187,961 @@ p {
       opacity: 1;
     }
   }
+
+/* Fix the toko content and items grid to prevent overflow */
+.toko-content {
+    padding: 1rem 0;
+    width: 100%;
+    overflow: hidden; /* Prevent horizontal overflow */
+  }
+  
+  .toko-content h2 {
+    text-align: center;
+    color: #2d2d2d;
+    margin-bottom: 2rem;
+    font-size: 1.8rem;
+  }
+  
+  /* Enhanced items grid with proper bounds */
+  .items-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr)); /* Responsive columns */
+    gap: 1.5rem;
+    width: 100%;
+    max-width: 1200px; /* Limit maximum width */
+    margin: 0 auto;
+    padding: 0 1rem; /* Add padding to prevent edge touching */
+    box-sizing: border-box;
+  }
+  
+  /* Enhanced item cards with proper sizing */
+  .item-card {
+    background: white;
+    border-radius: 20px;
+    border: 2px solid #ddd;
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+    text-align: center;
+    min-height: 400px;
+    max-height: 500px; /* Limit maximum height */
+    width: 100%; /* Ensure full width within grid cell */
+    box-sizing: border-box;
+    overflow: hidden; /* Prevent content overflow */
+  }
+  
+  .item-card:hover {
+    border-color: #FF6B35;
+    transform: translateY(-5px);
+    box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Image container with proper sizing */
+  .item-image {
+    flex: 0 0 150px; /* Fixed height for image area */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+    overflow: hidden;
+    border-radius: 10px;
+  }
+  
+  .item-image img {
+    max-width: 100%;
+    max-height: 150px;
+    width: auto;
+    height: auto;
+    object-fit: contain; /* Changed from cover to contain */
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .item-image span {
+    font-size: 4rem;
+  }
+  
+  /* Info section with proper text handling */
+  .item-info {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    min-height: 0; /* Allow flex item to shrink */
+  }
+  
+  .item-info h4 {
+    margin: 0 0 0.5rem 0;
+    color: #2d2d2d;
+    font-size: 1.1rem;
+    font-weight: 600;
+    line-height: 1.3;
+  }
+  
+  .item-description {
+    font-size: 0.85rem;
+    color: #666;
+    margin: 0.5rem 0;
+    line-height: 1.4;
+    flex: 1;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 3; /* Limit to 3 lines */
+    -webkit-box-orient: vertical;
+    text-overflow: ellipsis;
+  }
+  
+  .item-region {
+    font-size: 0.8rem;
+    color: #FF6B35;
+    font-weight: 600;
+    margin: 0.3rem 0;
+  }
+  
+  .item-actions {
+    margin-top: 1rem;
+    flex-shrink: 0; /* Prevent button area from shrinking */
+  }
+  
+  .item-buy-btn {
+    background: linear-gradient(135deg, #28a745, #20c997);
+    color: white;
+    border: none;
+    padding: 0.8rem 1.5rem;
+    border-radius: 25px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    width: 100%;
+    box-shadow: 0 2px 8px rgba(40, 167, 69, 0.3);
+  }
+  
+  .item-buy-btn:hover {
+    background: linear-gradient(135deg, #20c997, #17a2b8);
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(40, 167, 69, 0.4);
+  }
+  
+  .item-insufficient {
+    background: #dc3545;
+    color: white;
+    padding: 0.8rem 1rem;
+    border-radius: 25px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-align: center;
+    opacity: 0.8;
+  }
+  
+  .item-owned {
+    background: #6c757d;
+    color: white;
+    padding: 0.8rem 1rem;
+    border-radius: 25px;
+    font-weight: 600;
+    font-size: 0.85rem;
+    text-align: center;
+  }
+  
+  /* User DiKoin Display - ensure it doesn't overflow */
+  .user-dikoin {
+    text-align: center;
+    margin-bottom: 2rem;
+    padding: 1rem;
+    background: linear-gradient(135deg, #FFD700, #FFA500);
+    border-radius: 15px;
+    color: white;
+    box-shadow: 0 4px 15px rgba(255, 215, 0, 0.3);
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .user-dikoin h3 {
+    margin: 0;
+    font-size: 1.3rem;
+    font-weight: 600;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
+    word-wrap: break-word;
+  }
+  
+  /* Enhanced responsive design */
+  @media (max-width: 1400px) {
+    .items-grid {
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      max-width: 1100px;
+    }
+  }
+  
+  @media (max-width: 1200px) {
+    .items-grid {
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      max-width: 1000px;
+    }
+    
+    .item-card {
+      min-height: 380px;
+      max-height: 450px;
+    }
+  }
+  
+  @media (max-width: 900px) {
+    .items-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      padding: 0 0.5rem;
+    }
+    
+    .item-card {
+      min-height: 350px;
+      max-height: 420px;
+      padding: 1rem;
+    }
+    
+    .item-image {
+      flex: 0 0 120px;
+    }
+    
+    .item-image img {
+      max-height: 120px;
+    }
+    
+    .user-dikoin h3 {
+      font-size: 1.1rem;
+    }
+  }
+  
+  @media (max-width: 600px) {
+    .items-grid {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+      padding: 0;
+    }
+    
+    .item-card {
+      min-height: 320px;
+      max-height: 400px;
+      margin: 0;
+    }
+    
+    .item-image {
+      flex: 0 0 100px;
+    }
+    
+    .item-image img {
+      max-height: 100px;
+    }
+    
+    .user-dikoin {
+      margin-bottom: 1rem;
+      padding: 0.8rem;
+    }
+    
+    .user-dikoin h3 {
+      font-size: 1rem;
+    }
+    
+    .item-description {
+      -webkit-line-clamp: 2; /* Reduce to 2 lines on mobile */
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .toko-content {
+      padding: 0.5rem 0;
+    }
+    
+    .item-card {
+      min-height: 300px;
+      max-height: 380px;
+      padding: 0.8rem;
+    }
+    
+    .item-image {
+      flex: 0 0 80px;
+    }
+    
+    .item-image img {
+      max-height: 80px;
+    }
+    
+    .item-info h4 {
+      font-size: 1rem;
+    }
+    
+    .item-description {
+      font-size: 0.8rem;
+      -webkit-line-clamp: 2;
+    }
+    
+    .item-buy-btn {
+      padding: 0.7rem 1rem;
+      font-size: 0.85rem;
+    }
+  }
+  
+  /* Ensure main content doesn't overflow */
+  .main-content {
+    flex: 1;
+    background: white;
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+    overflow: hidden; /* Prevent overflow */
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+  
+  /* Dashboard container adjustments */
+  .dashboard-container {
+    display: flex;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+    gap: 2rem;
+    min-height: calc(100vh - 80px);
+    box-sizing: border-box;
+    overflow: hidden; /* Prevent horizontal scroll */
+  }
+  
+  /* No modules message styling */
+  .no-modules {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 3rem;
+    color: #999;
+    font-style: italic;
+    background: #f8f9fa;
+    border-radius: 15px;
+    border: 2px dashed #ddd;
+    margin: 1rem 0;
+  }
+  
+  .no-modules p {
+    font-size: 1.2rem;
+    margin: 0;
+  }
+
+  /* Fix Koleksi Budaya Content */
+.koleksi-content {
+    padding: 1rem 0;
+    width: 100%;
+    overflow: hidden; /* Prevent horizontal overflow */
+  }
+  
+  .koleksi-content h2 {
+    text-align: center;
+    color: #2d2d2d;
+    margin-bottom: 2rem;
+    font-size: 1.8rem;
+  }
+  
+  /* Enhanced collection grid with proper bounds */
+  .collection-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* More responsive columns */
+    gap: 1.5rem;
+    width: 100%;
+    max-width: 1200px; /* Limit maximum width */
+    margin: 0 auto;
+    padding: 0 1rem; /* Add padding to prevent edge touching */
+    box-sizing: border-box;
+  }
+  
+  /* Enhanced collection cards with proper sizing */
+  .collection-card {
+    background: #f8f9fa;
+    border-radius: 20px;
+    border: 2px dashed #ddd;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+    text-align: center;
+    min-height: 250px;
+    max-height: 300px; /* Limit maximum height */
+    width: 100%; /* Ensure full width within grid cell */
+    box-sizing: border-box;
+    overflow: hidden; /* Prevent content overflow */
+  }
+  
+  .collection-card:hover {
+    border-color: #FF6B35;
+    background: #fff5f0;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  }
+  
+  .collection-card.filled {
+    background: white;
+    border: 2px solid #28a745;
+  }
+  
+  .collection-card.filled:hover {
+    border-color: #20c997;
+    background: #f8fff9;
+  }
+  
+  .collection-card.empty {
+    opacity: 0.7;
+  }
+  
+  /* Image container with proper sizing */
+  .collection-image {
+    flex: 0 0 100px; /* Fixed height for image area */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1rem;
+    overflow: hidden;
+    border-radius: 10px;
+    width: 100%;
+  }
+  
+  .collection-image img {
+    max-width: 100%;
+    max-height: 100px;
+    width: auto;
+    height: auto;
+    object-fit: contain; /* Ensure image fits properly */
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Collection placeholder for empty slots */
+  .collection-placeholder {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 100px;
+  }
+  
+  /* Collection info with proper text handling */
+  .collection-card h4 {
+    margin: 0.5rem 0;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #2d2d2d;
+    line-height: 1.3;
+    text-align: center;
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-line-clamp: 2; /* Limit to 2 lines */
+    -webkit-box-orient: vertical;
+    text-overflow: ellipsis;
+  }
+  
+  .collection-region {
+    font-size: 0.85rem;
+    color: #FF6B35;
+    font-weight: 600;
+    margin: 0.3rem 0;
+    text-align: center;
+  }
+  
+  .collection-card small {
+    font-size: 0.75rem;
+    color: #888;
+    font-style: italic;
+    margin-top: auto; /* Push to bottom */
+    text-align: center;
+  }
+  
+  .collection-card p {
+    font-size: 0.9rem;
+    color: #666;
+    margin: 0.5rem 0;
+    text-align: center;
+  }
+  
+  /* Enhanced responsive design for collection */
+  @media (max-width: 1400px) {
+    .collection-grid {
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      max-width: 1100px;
+    }
+  }
+  
+  @media (max-width: 1200px) {
+    .collection-grid {
+      grid-template-columns: repeat(auto-fit, minmax(160px, 1fr));
+      max-width: 1000px;
+    }
+    
+    .collection-card {
+      min-height: 230px;
+      max-height: 280px;
+      padding: 1.2rem;
+    }
+    
+    .collection-image,
+    .collection-placeholder {
+      height: 80px;
+    }
+    
+    .collection-image img {
+      max-height: 80px;
+    }
+  }
+  
+  @media (max-width: 900px) {
+    .collection-grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      padding: 0 0.5rem;
+    }
+    
+    .collection-card {
+      min-height: 200px;
+      max-height: 250px;
+      padding: 1rem;
+    }
+    
+    .collection-image,
+    .collection-placeholder {
+      height: 70px;
+    }
+    
+    .collection-image img {
+      max-height: 70px;
+    }
+    
+    .collection-card h4 {
+      font-size: 0.9rem;
+    }
+  }
+  
+  @media (max-width: 600px) {
+    .collection-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      padding: 0;
+    }
+    
+    .collection-card {
+      min-height: 180px;
+      max-height: 220px;
+      padding: 0.8rem;
+    }
+    
+    .collection-image,
+    .collection-placeholder {
+      height: 60px;
+    }
+    
+    .collection-image img {
+      max-height: 60px;
+    }
+    
+    .collection-card h4 {
+      font-size: 0.85rem;
+      -webkit-line-clamp: 1; /* Reduce to 1 line on mobile */
+    }
+    
+    .collection-region {
+      font-size: 0.8rem;
+    }
+    
+    .collection-card small {
+      font-size: 0.7rem;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .koleksi-content {
+      padding: 0.5rem 0;
+    }
+    
+    .collection-grid {
+      grid-template-columns: 1fr;
+      gap: 0.8rem;
+    }
+    
+    .collection-card {
+      min-height: 160px;
+      max-height: 200px;
+      padding: 0.8rem;
+    }
+    
+    .collection-image,
+    .collection-placeholder {
+      height: 50px;
+    }
+    
+    .collection-image img {
+      max-height: 50px;
+    }
+    
+    .collection-placeholder {
+      font-size: 2rem;
+    }
+    
+    .collection-card h4 {
+      font-size: 0.8rem;
+    }
+    
+    .collection-region {
+      font-size: 0.75rem;
+    }
+    
+    .collection-card small {
+      font-size: 0.65rem;
+    }
+  }
+  
+  /* Override for no collection items message */
+  .koleksi-content .no-modules {
+    grid-column: 1 / -1;
+    text-align: center;
+    padding: 3rem;
+    color: #999;
+    font-style: italic;
+    background: #f8f9fa;
+    border-radius: 15px;
+    border: 2px dashed #ddd;
+    margin: 1rem 0;
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+  
+  .koleksi-content .no-modules p {
+    font-size: 1.2rem;
+    margin: 0;
+  }
+  
+  /* Ensure main content container doesn't overflow */
+  .main-content {
+    flex: 1;
+    background: white;
+    border-radius: 20px;
+    padding: 2rem;
+    box-shadow: 0 8px 25px rgba(0, 0, 0, 0.08);
+    overflow: hidden; /* Prevent overflow */
+    max-width: 100%;
+    box-sizing: border-box;
+  }
+  
+  /* Fix dashboard container */
+  .dashboard-container {
+    display: flex;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 2rem;
+    gap: 2rem;
+    min-height: calc(100vh - 80px);
+    box-sizing: border-box;
+    overflow: hidden; /* Prevent horizontal scroll */
+  }
+
+
+/* Fix text cropping in collection cards */
+.collection-card {
+    background: #f8f9fa;
+    border-radius: 20px;
+    border: 2px dashed #ddd;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: flex-start; /* Changed from center to flex-start */
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+    text-align: center;
+    min-height: 300px; /* Increased minimum height */
+    max-height: none; /* Remove max-height restriction */
+    width: 100%;
+    box-sizing: border-box;
+    overflow: visible; /* Changed from hidden to visible */
+    gap: 0.5rem; /* Add gap between elements */
+  }
+  
+  .collection-card:hover {
+    border-color: #FF6B35;
+    background: #fff5f0;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(0, 0, 0, 0.1);
+  }
+  
+  .collection-card.filled {
+    background: white;
+    border: 2px solid #28a745;
+  }
+  
+  .collection-card.filled:hover {
+    border-color: #20c997;
+    background: #f8fff9;
+  }
+  
+  /* Fix image container sizing */
+  .collection-image {
+    flex: 0 0 80px; /* Reduced image area to give more space for text */
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 0.8rem;
+    overflow: hidden;
+    border-radius: 10px;
+    width: 100%;
+  }
+  
+  .collection-image img {
+    max-width: 100%;
+    max-height: 80px; /* Reduced max height */
+    width: auto;
+    height: auto;
+    object-fit: contain;
+    border-radius: 10px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  /* Fix placeholder sizing */
+  .collection-placeholder {
+    font-size: 2.5rem; /* Reduced size */
+    margin-bottom: 0.8rem;
+    opacity: 0.5;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 100%;
+    height: 80px; /* Reduced height */
+  }
+  
+  /* Fix text elements - Remove all text clipping */
+  .collection-card h4 {
+    margin: 0.5rem 0;
+    font-size: 1rem;
+    font-weight: 600;
+    color: #2d2d2d;
+    line-height: 1.4; /* Better line height */
+    text-align: center;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    /* Remove all text clipping properties */
+    overflow: visible;
+    display: block;
+    -webkit-line-clamp: none;
+    -webkit-box-orient: initial;
+    text-overflow: initial;
+    white-space: normal;
+  }
+  
+  .collection-region {
+    font-size: 0.85rem;
+    color: #FF6B35;
+    font-weight: 600;
+    margin: 0.3rem 0;
+    text-align: center;
+    word-wrap: break-word;
+    line-height: 1.3;
+  }
+  
+  .collection-card small {
+    font-size: 0.75rem;
+    color: #888;
+    font-style: italic;
+    margin-top: auto;
+    text-align: center;
+    word-wrap: break-word;
+    line-height: 1.3;
+    padding-top: 0.5rem; /* Add padding above */
+  }
+  
+  .collection-card p {
+    font-size: 0.9rem;
+    color: #666;
+    margin: 0.5rem 0;
+    text-align: center;
+    word-wrap: break-word;
+    line-height: 1.4;
+  }
+  
+  /* Enhanced responsive design with better text handling */
+  @media (max-width: 1400px) {
+    .collection-grid {
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); /* Increased minimum width */
+      max-width: 1100px;
+    }
+  }
+  
+  @media (max-width: 1200px) {
+    .collection-grid {
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      max-width: 1000px;
+    }
+    
+    .collection-card {
+      min-height: 280px; /* Increased */
+      padding: 1.2rem;
+    }
+  }
+  
+  @media (max-width: 900px) {
+    .collection-grid {
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      padding: 0 0.5rem;
+    }
+    
+    .collection-card {
+      min-height: 260px; /* Increased */
+      padding: 1rem;
+    }
+    
+    .collection-image,
+    .collection-placeholder {
+      height: 70px;
+    }
+    
+    .collection-image img {
+      max-height: 70px;
+    }
+  }
+  
+  @media (max-width: 600px) {
+    .collection-grid {
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      padding: 0;
+    }
+    
+    .collection-card {
+      min-height: 240px; /* Increased */
+      padding: 1rem;
+    }
+    
+    .collection-image,
+    .collection-placeholder {
+      height: 60px;
+    }
+    
+    .collection-image img {
+      max-height: 60px;
+    }
+    
+    .collection-card h4 {
+      font-size: 0.9rem;
+    }
+    
+    .collection-region {
+      font-size: 0.8rem;
+    }
+  }
+  
+  @media (max-width: 480px) {
+    .koleksi-content {
+      padding: 0.5rem 0;
+    }
+    
+    .collection-grid {
+      grid-template-columns: 1fr;
+      gap: 1rem;
+    }
+    
+    .collection-card {
+      min-height: 220px; /* Increased */
+      padding: 1rem;
+    }
+    
+    .collection-image,
+    .collection-placeholder {
+      height: 50px;
+    }
+    
+    .collection-image img {
+      max-height: 50px;
+    }
+    
+    .collection-placeholder {
+      font-size: 2rem;
+    }
+    
+    .collection-card h4 {
+      font-size: 0.85rem;
+    }
+    
+    .collection-region {
+      font-size: 0.75rem;
+    }
+    
+    .collection-card small {
+      font-size: 0.7rem;
+    }
+  }
+  
+  /* Also fix item cards in toko sections */
+  .item-card {
+    background: white;
+    border-radius: 20px;
+    border: 2px solid #ddd;
+    display: flex;
+    flex-direction: column;
+    padding: 1.5rem;
+    transition: all 0.3s ease;
+    text-align: center;
+    min-height: 450px; /* Increased minimum height */
+    max-height: none; /* Remove max-height restriction */
+    width: 100%;
+    box-sizing: border-box;
+    overflow: visible; /* Changed from hidden */
+  }
+  
+  .item-info h4 {
+    margin: 0 0 0.5rem 0;
+    color: #2d2d2d;
+    font-size: 1.1rem;
+    font-weight: 600;
+    line-height: 1.4;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    /* Remove text clipping */
+    overflow: visible;
+    display: block;
+    -webkit-line-clamp: none;
+    -webkit-box-orient: initial;
+    text-overflow: initial;
+  }
+  
+  .item-description {
+    font-size: 0.9rem;
+    color: #666;
+    margin: 0.5rem 0;
+    line-height: 1.5;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
+    /* Remove text clipping for better readability */
+    overflow: visible;
+    display: block;
+    -webkit-line-clamp: none;
+    -webkit-box-orient: initial;
+    text-overflow: initial;
+    white-space: normal;
+  }
+  
+  /* Enhanced grid spacing */
+  .collection-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); /* Increased minimum width */
+    gap: 2rem; /* Increased gap */
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+    box-sizing: border-box;
+  }
+  
+  .items-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); /* Increased minimum width */
+    gap: 2rem; /* Increased gap */
+    width: 100%;
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+    box-sizing: border-box;
+  }

@@ -19,12 +19,8 @@ class User(db.Model):
     clothe_sekarang = db.Column(db.String(36), db.ForeignKey('clothes_set.id'), nullable=True)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
 
-    # Relationships
-    progress = db.relationship('Progress', backref='user', uselist=False)
-    user_lencana = db.relationship('UserLencana', backref='user')
-    user_artefak = db.relationship('UserArtefak', backref='user')
-    user_clothes_set = db.relationship('UserClothesSet', backref='user')
-    course_completions = db.relationship('CourseCompletion', backref='user')
+    # FIXED: Removed conflicting relationships - they are defined in other models
+    # The backref relationships are created automatically from the other models
 
     def serialize(self):
         return {
@@ -44,6 +40,9 @@ class CourseCompletion(db.Model):
     module_id = db.Column(db.String(100), nullable=False)  # e.g., 'pendahuluan', 'logika-dan-variabel'
     completed_at = db.Column(db.DateTime, default=datetime.utcnow)
     created_at = db.Column(db.DateTime, default=datetime.utcnow)
+
+    # Relationship
+    user = db.relationship('User', backref=db.backref('course_completions', lazy=True))
 
     def serialize(self):
         return {
@@ -115,8 +114,8 @@ class UserLencana(db.Model):
     created_at = db.Column(db.DateTime, server_default=db.func.now())
 
     # Relationships
-    user = db.relationship('User', backref=db.backref('user_lencanas', lazy=True))
-    lencana = db.relationship('Lencana', backref=db.backref('user_lencanas', lazy=True))
+    user = db.relationship('User', backref=db.backref('user_lencana', lazy=True))
+    lencana = db.relationship('Lencana', backref=db.backref('user_lencana_items', lazy=True))
 
     def __repr__(self):
         return f'<UserLencana {self.user_id}-{self.lencana_id}>'
@@ -127,6 +126,7 @@ class UserLencana(db.Model):
             'id': self.id,
             'user_id': self.user_id,
             'lencana_id': self.lencana_id,
+            'lencana': self.lencana.serialize() if self.lencana else None,
             'obtained_at': self.obtained_at.isoformat() if self.obtained_at else None,
             'created_at': self.created_at.isoformat() if self.created_at else None
         }
@@ -169,8 +169,8 @@ class UserArtefak(db.Model):
     created_at = db.Column(db.DateTime, server_default=db.func.now())
 
     # Relationships
-    user = db.relationship('User', backref=db.backref('user_artefaks', lazy=True))
-    artefak = db.relationship('Artefak', backref=db.backref('user_artefaks', lazy=True))
+    user = db.relationship('User', backref=db.backref('user_artefak', lazy=True))
+    artefak = db.relationship('Artefak', backref=db.backref('user_artefak_items', lazy=True))
 
     def __repr__(self):
         return f'<UserArtefak {self.user_id}-{self.artefak_id}>'
@@ -181,6 +181,7 @@ class UserArtefak(db.Model):
             'id': self.id,
             'user_id': self.user_id,
             'artefak_id': self.artefak_id,
+            'artefak': self.artefak.serialize() if self.artefak else None,
             'obtained_at': self.obtained_at.isoformat() if self.obtained_at else None,
             'created_at': self.created_at.isoformat() if self.created_at else None
         }
@@ -200,7 +201,7 @@ class Progress(db.Model):
     updated_at = db.Column(db.DateTime, server_default=db.func.now(), onupdate=db.func.now())
 
     # Relationships
-    user = db.relationship('User', backref=db.backref('progresses', lazy=True))
+    user = db.relationship('User', backref=db.backref('progress', lazy=True, uselist=False))
 
     def __repr__(self):
         return f'<Progress {self.user_id} - Level {self.level}>'
@@ -230,8 +231,8 @@ class UserClothesSet(db.Model):
     created_at = db.Column(db.DateTime, server_default=db.func.now())
 
     # Relationships
-    user = db.relationship('User', backref=db.backref('user_clothes_sets', lazy=True))
-    clothes_set = db.relationship('ClothesSet', backref=db.backref('user_clothes_sets', lazy=True))
+    user = db.relationship('User', backref=db.backref('user_clothes_set', lazy=True))
+    clothes_set = db.relationship('ClothesSet', backref=db.backref('user_clothes_set_items', lazy=True))
 
     def __repr__(self):
         return f'<UserClothesSet {self.user_id}-{self.clothes_set_id}>'
@@ -242,6 +243,7 @@ class UserClothesSet(db.Model):
             'id': self.id,
             'user_id': self.user_id,
             'clothes_set_id': self.clothes_set_id,
+            'clothes_set': self.clothes_set.serialize() if self.clothes_set else None,
             'obtained_at': self.obtained_at.isoformat() if self.obtained_at else None,
             'created_at': self.created_at.isoformat() if self.created_at else None
         }
