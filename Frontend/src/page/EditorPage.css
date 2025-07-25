@@ -141,6 +141,9 @@
   color: #2d2d2d;
   border-radius: 0 0 12px 12px;
 }
+.output-content.hidden {
+  display: none;
+}
 
 .output-content pre {
   margin: 0;
@@ -174,6 +177,9 @@
   color: #2d2d2d;
   background-color: #ffffff;
   border-radius: 0 0 12px 12px;
+}
+.feedback-content.hidden {
+  display: none;
 }
 
 .feedback-content h3,
