@@ -1,7 +1,7 @@
 /* Main container */
 .materi-page {
     min-height: 100vh;
-    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    /*background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);*/
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
   }
   
@@ -36,14 +36,14 @@
   
   .progress-fill {
     height: 100%;
-    background: linear-gradient(90deg, #4f46e5, #7c3aed);
+    background: linear-gradient(90deg, #b56929, #f16734);
     border-radius: 10px;
     transition: width 0.5s ease;
   }
   
   .slide-counter {
     font-weight: 600;
-    color: #4f46e5;
+    color: #f16734;
     font-size: 1rem;
     min-width: 60px;
     text-align: right;
@@ -98,7 +98,7 @@
   }
   
   .speech-bubble {
-    background: linear-gradient(135deg, #3b82f6, #1d4ed8);
+    background: linear-gradient(135deg, #b56929, #925019);
     color: white;
     padding: 1.5rem;
     border-radius: 20px;
@@ -107,7 +107,7 @@
     line-height: 1.6;
     text-align: center;
     font-weight: 500;
-    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+    box-shadow: 0 4px 15px rgb(61, 45, 31);
     max-width: 300px;
   }
   
@@ -121,7 +121,7 @@
     height: 0;
     border-left: 15px solid transparent;
     border-right: 15px solid transparent;
-    border-bottom: 15px solid #3b82f6;
+    border-bottom: 15px solid #a15d25;
   }
   
   /* Content text section */
@@ -134,7 +134,7 @@
     font-size: 1.8rem;
     font-weight: 700;
     margin-bottom: 1.5rem;
-    border-bottom: 3px solid #4f46e5;
+    border-bottom: 3px solid #a15d25;
     padding-bottom: 0.5rem;
   }
   
@@ -162,7 +162,7 @@
     padding: 1rem 1.5rem;
     margin-bottom: 0.8rem;
     border-radius: 12px;
-    border-left: 4px solid #4f46e5;
+    border-left: 4px solid #a15d25;
     font-size: 1.1rem;
     color: #374151;
     transition: all 0.3s ease;
@@ -245,9 +245,9 @@
   }
   
   .example-card:hover {
-    border-color: #4f46e5;
+    border-color: #f16734;
     transform: translateY(-5px);
-    box-shadow: 0 8px 25px rgba(79, 70, 229, 0.15);
+    box-shadow: 0 8px 25px rgb(61, 45, 31);
   }
   
   .example-icon {
@@ -287,7 +287,7 @@
   }
   
   .language-card:hover {
-    border-color: #6366f1;
+    border-color: #f16734;
     background: linear-gradient(135deg, #eef2ff, #e0e7ff);
     transform: translateY(-3px);
   }
@@ -326,7 +326,7 @@
     background: #f9fafb;
     padding: 1.5rem;
     border-radius: 12px;
-    border-left: 4px solid #8b5cf6;
+    border-left: 4px solid #f16734;
     transition: all 0.3s ease;
   }
   
@@ -362,7 +362,7 @@
   }
   
   .nav-button {
-    background: linear-gradient(135deg, #4f46e5, #7c3aed);
+    background: linear-gradient(135deg, #b56929, #f16734);
     color: white;
     border: none;
     padding: 1rem 2rem;
@@ -371,13 +371,13 @@
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+    box-shadow: 0 4px 12px rgb(61, 45, 31);
     min-width: 140px;
   }
   
   .nav-button:hover:not(:disabled) {
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(79, 70, 229, 0.4);
+    box-shadow: 0 6px 20px rgb(61, 45, 31);
   }
   
   .nav-button:disabled {
@@ -440,11 +440,11 @@
   }
   
   .question-card:hover {
-    border-color: #4f46e5;
+    border-color: #f16734;
   }
   
   .question-card h3 {
-    color: #4f46e5;
+    color: #f16734;
     font-size: 1.3rem;
     font-weight: 600;
     margin-bottom: 1rem;
@@ -477,11 +477,11 @@
   
   .option-label:hover {
     background: #f3f4f6;
-    border-color: #4f46e5;
+    border-color: #f16734;
   }
   
   .option-label input[type="radio"] {
-    accent-color: #4f46e5;
+    accent-color: #f16734;
     transform: scale(1.2);
   }
   
@@ -561,7 +561,7 @@
     width: 120px;
     height: 120px;
     border-radius: 50%;
-    background: linear-gradient(135deg, #4f46e5, #7c3aed);
+    background: linear-gradient(135deg, #b56929, #f16734);
     display: flex;
     align-items: center;
     justify-content: center;
@@ -651,7 +651,7 @@
   }
   
   .navigation-buttons button {
-    background: linear-gradient(135deg, #4f46e5, #7c3aed);
+    background: linear-gradient(135deg, #b56929, #f16734);
     color: white;
     border: none;
     padding: 1rem 2rem;
@@ -660,12 +660,12 @@
     font-weight: 600;
     cursor: pointer;
     transition: all 0.3s ease;
-    box-shadow: 0 4px 12px rgba(79, 70, 229, 0.3);
+    box-shadow: 0 4px 12px rgb(61, 45, 31);
   }
   
   .navigation-buttons button:hover {
     transform: translateY(-2px);
-    box-shadow: 0 6px 20px rgba(79, 70, 229, 0.4);
+    box-shadow: 0 6px 20px rgb(61, 45, 31);
   }
   
   /* Responsive design */
@@ -881,7 +881,7 @@
   .nav-button:focus,
   .submit-quiz-btn:focus,
   .option-label:focus-within {
-    outline: 2px solid #4f46e5;
+    outline: 2px solid #f16734;
     outline-offset: 2px;
   }
   

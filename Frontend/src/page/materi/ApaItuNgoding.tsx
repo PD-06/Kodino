@@ -34,7 +34,7 @@ const ApaItuNgoding = () => {
       content: (
         <div className="slide-content">
           <div className="character-section">
-            <img src="/images/kodi-excited.webp" alt="Kodi excited" className="kodi-character" />
+            <img src="/images/kodi-character.webp" alt="Kodi excited" className="kodi-character" />
             <div className="speech-bubble">
               Halo! Aku Kodi! Hari ini kita akan belajar tentang "ngoding" atau programming!
             </div>
@@ -57,7 +57,7 @@ const ApaItuNgoding = () => {
       content: (
         <div className="slide-content">
           <div className="character-section">
-            <img src="/images/kodi-thinking.webp" alt="Kodi thinking" className="kodi-character" />
+            <img src="/images/kodi-character.webp" alt="Kodi thinking" className="kodi-character" />
             <div className="speech-bubble">
               Programming itu seperti memberikan instruksi kepada komputer!
             </div>
@@ -88,7 +88,7 @@ const ApaItuNgoding = () => {
       content: (
         <div className="slide-content">
           <div className="character-section">
-            <img src="/images/kodi-happy.webp" alt="Kodi happy" className="kodi-character" />
+            <img src="/images/kodi-character.webp" alt="Kodi happy" className="kodi-character" />
             <div className="speech-bubble">
               Programming ada di mana-mana! Mari kita lihat contohnya!
             </div>
@@ -127,7 +127,7 @@ const ApaItuNgoding = () => {
       content: (
         <div className="slide-content">
           <div className="character-section">
-            <img src="/images/kodi-teaching.webp" alt="Kodi teaching" className="kodi-character" />
+            <img src="/images/kodi-character.webp" alt="Kodi teaching" className="kodi-character" />
             <div className="speech-bubble">
               Ada banyak bahasa pemrograman, seperti bahasa manusia!
             </div>
@@ -170,7 +170,7 @@ const ApaItuNgoding = () => {
       content: (
         <div className="slide-content">
           <div className="character-section">
-            <img src="/images/kodi-proud.webp" alt="Kodi proud" className="kodi-character" />
+            <img src="/images/kodi-character.webp" alt="Kodi proud" className="kodi-character" />
             <div className="speech-bubble">
               Programmer itu seperti problem solver dan creator!
             </div>
