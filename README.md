@@ -244,9 +244,9 @@ Project ini dibuat dengan ❤️ untuk anak-anak Indonesia.
 
 - **Anak-anak Indonesia** yang jadi inspirasi project ini 👦👧
 - **Komunitas Open Source** yang mendukung edukasi gratis 🌍
-- **Para Guru** yang berdedikasi mengajar teknologi 👩‍🏫👨‍🏫
-- **Keluarga** yang support journey ini 👨‍👩‍👧‍👦
-- **AI** yang bantu banyak! Kami mengintegrasikan AI ke dalam proyek kami, dan semua aset visual dihasilkan menggunakan ChatGPT-4o, sementara Copilot digunakan untuk membantu iterasi kode. Tipografi, tata letak desain, ide, pemograman, solusi dan alur edukasi dikembangkan sepenuhnya oleh tim kami.
+- **Para Guru** yang berdedikasi mengajar teknologi (special thanks to Pak Yo) 👩‍🏫👨‍🏫
+- **Keluarga** yang support perjalanan ini 👨‍👩‍👧‍👦
+- **AI** yang bantu banyak! Kami mengintegrasikan AI ke dalam proyek kami, dan semua aset visual dihasilkan menggunakan ChatGPT-4o, sementara Copilot digunakan untuk membantu iterasi kode. Tipografi, tata letak desain, ide, pemograman, solusi dan alur edukasi dikembangkan sepenuhnya oleh tim kami. 🤖
 ---
 
 ## 📞 Contact & Support
