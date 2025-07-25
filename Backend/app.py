@@ -1,11 +1,16 @@
+# Replace the OpenAI imports with Gemini imports:
+
 from flask import Flask, request, jsonify
 from flask_cors import CORS
 from flask_sqlalchemy import SQLAlchemy
 from flask_migrate import Migrate
 from config import ApplicationConfig
-from models import User, Progress, Lencana, UserLencana, Artefak, UserArtefak, ClothesSet, UserClothesSet, CourseCompletion, db
+from models import User, Progress, Lencana, UserLencana, Artefak, UserArtefak, ClothesSet, UserClothesSet, CourseCompletion, db, AIQuizCompletion
 import hashlib
 import uuid
+import google.generativeai as genai  # Replace openai import
+import os
+import json
 
 app = Flask(__name__)
 app.config.from_object(ApplicationConfig)
@@ -13,6 +18,9 @@ CORS(app)
 
 db.init_app(app)
 migrate = Migrate(app, db)
+
+# Configure Gemini API
+genai.configure(api_key='AIzaSyAyL1Gw3JQtMkA3eN5V-QgrAh9QTYmdYYY')  # Set your Gemini API key
 
 @app.before_request
 def create_tables():
@@ -962,6 +970,251 @@ def level_up_user(user_id):
     except Exception as e:
         db.session.rollback()
         return jsonify({'error': str(e)}), 500
+    
+# Replace the generate_ai_quiz function:
+
+@app.route('/ai/generate-quiz', methods=['POST'])
+def generate_ai_quiz():
+    """Generate AI-powered quiz questions using Gemini."""
+    try:
+        data = request.get_json()
+        module = data.get('module', 'pendahuluan')
+        topic = data.get('topic', 'Programming Basics')
+        num_mc = data.get('num_multiple_choice', 8)
+        num_fill = data.get('num_fill_in_blank', 2)
+        difficulty = data.get('difficulty', 'beginner')
+        language = data.get('language', 'indonesian')
+        
+        # Create the prompt for Gemini
+        prompt = f"""
+        Buatlah {num_mc + num_fill} soal kuis tentang {topic} untuk siswa level {difficulty} dalam bahasa {language}.
+        
+        Modul: {module}
+        Topik: {topic}
+        
+        Persyaratan:
+        - {num_mc} soal pilihan ganda dengan 4 pilihan jawaban
+        - {num_fill} soal isian (fill-in-the-blank)
+        - Semua soal dalam bahasa Indonesia
+        - Sertakan penjelasan untuk setiap jawaban
+        - Fokus pada pemahaman praktis, bukan hanya hafalan
+        - Buat soal yang relevan dengan konteks Indonesia
+        
+        Area konten yang harus dicakup:
+        1. Apa itu programming/coding
+        2. Cara kerja komputer (Input-Process-Output)
+        3. Bahasa pemrograman
+        4. Komponen komputer (CPU, RAM, Storage)
+        5. Mindset dan skill programmer
+        6. Konsep dasar programming
+        7. Problem-solving dalam programming
+        8. Tools dan resources programming
+        
+        Berikan respon dalam format JSON yang TEPAT seperti ini:
+        {{
+            "questions": [
+                {{
+                    "id": 1,
+                    "type": "multiple-choice",
+                    "question": "Teks soal dalam bahasa Indonesia",
+                    "options": ["Pilihan A", "Pilihan B", "Pilihan C", "Pilihan D"],
+                    "correct_answer": "Teks pilihan yang benar",
+                    "explanation": "Penjelasan dalam bahasa Indonesia"
+                }},
+                {{
+                    "id": 2,
+                    "type": "fill-in-the-blank",
+                    "question": "Soal dengan _____ kosong dalam bahasa Indonesia",
+                    "correct_answer": "kata atau frasa yang benar",
+                    "explanation": "Penjelasan dalam bahasa Indonesia"
+                }}
+            ]
+        }}
+        
+        PENTING: Pastikan response adalah JSON yang valid dan dapat di-parse!
+        """
+        
+        # Initialize Gemini model
+        model = genai.GenerativeModel('gemini-1.5-flash')
+        
+        # Generate content with Gemini
+        response = model.generate_content(
+            prompt,
+            generation_config=genai.types.GenerationConfig(
+                temperature=0.7,
+                max_output_tokens=2000,
+            )
+        )
+        
+        # Parse the response
+        ai_response = response.text
+        
+        # Clean the response text (remove markdown code blocks if present)
+        if ai_response.startswith('```json'):
+            ai_response = ai_response.replace('```json', '').replace('```', '').strip()
+        elif ai_response.startswith('```'):
+            ai_response = ai_response.replace('```', '').strip()
+        
+        # Parse JSON
+        quiz_data = json.loads(ai_response)
+        
+        # Validate the structure
+        if 'questions' not in quiz_data:
+            raise ValueError("Invalid response structure: missing 'questions' key")
+        
+        # Ensure we have the right number of questions
+        questions = quiz_data['questions']
+        if len(questions) != (num_mc + num_fill):
+            print(f"Warning: Expected {num_mc + num_fill} questions, got {len(questions)}")
+        
+        return jsonify(quiz_data), 200
+        
+    except json.JSONDecodeError as e:
+        print(f"JSON Parse Error: {e}")
+        print(f"Raw response: {ai_response}")
+        # Return fallback questions if JSON parsing fails
+        return jsonify(get_fallback_quiz_data(num_mc, num_fill)), 200
+        
+    except Exception as e:
+        print(f"Gemini API Error: {e}")
+        # Return fallback questions if Gemini fails
+        return jsonify(get_fallback_quiz_data(num_mc, num_fill)), 200
+
+def get_fallback_quiz_data(num_mc=8, num_fill=2):
+    """Fallback quiz data when AI generation fails."""
+    questions = []
+    
+    # Multiple choice questions
+    mc_questions = [
+        {
+            "id": 1,
+            "type": "multiple-choice",
+            "question": "Apa yang dimaksud dengan programming?",
+            "options": [
+                "Bermain game di komputer",
+                "Memberikan instruksi kepada komputer untuk menyelesaikan tugas",
+                "Memperbaiki hardware komputer",
+                "Mendesain tampilan website"
+            ],
+            "correct_answer": "Memberikan instruksi kepada komputer untuk menyelesaikan tugas",
+            "explanation": "Programming adalah proses memberikan instruksi step-by-step kepada komputer untuk menyelesaikan tugas tertentu."
+        },
+        {
+            "id": 2,
+            "type": "multiple-choice",
+            "question": "Dalam analogi memasak rendang, apa yang dimaksud dengan 'Input'?",
+            "options": [
+                "Rendang yang sudah jadi",
+                "Proses memasak",
+                "Bahan-bahan seperti daging dan bumbu",
+                "Kompor dan wajan"
+            ],
+            "correct_answer": "Bahan-bahan seperti daging dan bumbu",
+            "explanation": "Input adalah data atau bahan mentah yang dimasukkan ke dalam sistem, seperti bahan-bahan masakan."
+        },
+        {
+            "id": 3,
+            "type": "multiple-choice",
+            "question": "Bahasa pemrograman mana yang direkomendasikan untuk pemula?",
+            "options": [
+                "Assembly",
+                "Python",
+                "Machine Code",
+                "Binary"
+            ],
+            "correct_answer": "Python",
+            "explanation": "Python memiliki syntax yang mudah dipahami dan cocok untuk pemula belajar programming."
+        },
+        {
+            "id": 4,
+            "type": "multiple-choice",
+            "question": "Apa fungsi utama CPU dalam komputer?",
+            "options": [
+                "Menyimpan data permanent",
+                "Menampilkan gambar di layar",
+                "Memproses instruksi dan data",
+                "Menghubungkan ke internet"
+            ],
+            "correct_answer": "Memproses instruksi dan data",
+            "explanation": "CPU (Central Processing Unit) berfungsi sebagai 'otak' komputer yang memproses semua instruksi dan perhitungan."
+        },
+        {
+            "id": 5,
+            "type": "multiple-choice",
+            "question": "Apa perbedaan antara RAM dan Storage?",
+            "options": [
+                "RAM lebih cepat tapi sementara, Storage lebih lambat tapi permanent",
+                "RAM dan Storage sama saja",
+                "RAM untuk internet, Storage untuk aplikasi",
+                "RAM lebih mahal, Storage lebih murah"
+            ],
+            "correct_answer": "RAM lebih cepat tapi sementara, Storage lebih lambat tapi permanent",
+            "explanation": "RAM menyimpan data sementara dengan akses cepat, sedangkan Storage menyimpan data secara permanent."
+        },
+        {
+            "id": 6,
+            "type": "multiple-choice",
+            "question": "Mindset apa yang paling penting untuk programmer?",
+            "options": [
+                "Menghafal semua syntax",
+                "Bekerja sendirian",
+                "Continuous learning dan problem solving",
+                "Hanya fokus satu bahasa"
+            ],
+            "correct_answer": "Continuous learning dan problem solving",
+            "explanation": "Programmer harus selalu belajar teknologi baru dan terampil memecahkan masalah dengan kreatif."
+        },
+        {
+            "id": 7,
+            "type": "multiple-choice",
+            "question": "Apa yang sebaiknya dilakukan ketika menemui error dalam coding?",
+            "options": [
+                "Langsung menyerah",
+                "Menghapus semua kode",
+                "Belajar dari error dan mencari solusinya",
+                "Menyalahkan komputer"
+            ],
+            "correct_answer": "Belajar dari error dan mencari solusinya",
+            "explanation": "Error adalah bagian normal dari programming dan merupakan kesempatan belajar yang berharga."
+        },
+        {
+            "id": 8,
+            "type": "multiple-choice",
+            "question": "Platform mana yang TIDAK cocok untuk belajar programming mendalam?",
+            "options": [
+                "GitHub",
+                "Stack Overflow",
+                "TikTok",
+                "Codecademy"
+            ],
+            "correct_answer": "TikTok",
+            "explanation": "Meskipun TikTok bisa memberikan tips cepat, platform lain lebih cocok untuk pembelajaran mendalam dan praktik."
+        }
+    ]
+    
+    # Fill-in-the-blank questions
+    fill_questions = [
+        {
+            "id": 9,
+            "type": "fill-in-the-blank",
+            "question": "Siklus kerja komputer mengikuti pola: _____ → PROCESS → OUTPUT",
+            "correct_answer": "INPUT",
+            "explanation": "Komputer bekerja dengan menerima input, memprosesnya, lalu menghasilkan output."
+        },
+        {
+            "id": 10,
+            "type": "fill-in-the-blank",
+            "question": "Filosofi gotong royong dalam programming berarti saling _____ dan berbagi ilmu sesama programmer.",
+            "correct_answer": "membantu",
+            "explanation": "Komunitas programming Indonesia menerapkan nilai gotong royong dengan saling membantu dan berbagi pengetahuan."
+        }
+    ]
+    
+    # Select the requested number of questions
+    questions.extend(mc_questions[:num_mc])
+    questions.extend(fill_questions[:num_fill])
+    
+    return {"questions": questions}
 
 if __name__ == '__main__':
     app.run(debug=True, port=8000)

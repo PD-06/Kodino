@@ -15,6 +15,7 @@ import CaraKerjaKomputer from './page/materi/CaraKerjaKomputer.tsx';
 import BahasaPemrograman from './page/materi/BahasaPemrograman.tsx';
 import NgodingItuGimana from './page/materi/NgodingItuGimanaSih.tsx';
 import SiapJadiProgrammer from './page/materi/SiapJadiProgrammer.tsx';
+import AIQuizPendahuluan from './page/materi/AIQuizPendahuluan.tsx';
 
 
 
@@ -38,6 +39,7 @@ function App() {
         <Route path='/materi/belajar/pendahuluan3' element={<BahasaPemrograman />} /> {/* Placeholder for BahasaPemrograman */}
         <Route path='/materi/belajar/pendahuluan4' element={<NgodingItuGimana />} /> {/* Placeholder for NgodingItuGimana */}
         <Route path='/materi/belajar/pendahuluan5' element={<SiapJadiProgrammer />} /> {/* Placeholder for SiapJadiProgrammer */}
+        <Route path="/materi/ai-quiz/pendahuluan" element={<AIQuizPendahuluan />} /> {/* Placeholder for AIQuizPendahuluan */}
         {/* Add more routes as needed */}
         <Route path="*" element={<LandingPage />} /> {/* Fallback route */}
         <Route path="/404" element={<h1>Page Not Found</h1>} />
