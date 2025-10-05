@@ -1,20 +1,9 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../../components/Header';
+import type { User } from '../../services/api';
 import './Materi.css';
 import ExpandableItems from './ExpandableItems';
-
-interface User {
-  id: string;
-  nama_panjang: string;
-  username: string;
-  email?: string;
-  dikoin: number;
-  progress?: {
-    section: number;
-    level: number;
-  };
-}
 
 interface CourseProgress {
   course_id: string;

@@ -1,27 +1,8 @@
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import Header from '../components/Header';
+import type { User } from '../services/api';
 import './Dashboard.css';
-
-interface User {
-  id: string;
-  nama_panjang: string;
-  username: string;
-  email?: string;
-  dikoin: number;
-  clothe_sekarang?: string;
-  current_clothes?: {
-    id: string;
-    nama_set: string;
-    deskripsi: string;
-    gambar: string;
-    harga: number;
-  };
-  progress?: {
-    section: number;
-    level: number;
-  };
-}
 
 interface Module {
   id: string;
@@ -94,7 +75,6 @@ const Dashboard = () => {
   const [userClothes, setUserClothes] = useState<UserClothesSet[]>([]);
   const [allClothes, setAllClothes] = useState<ClothesSet[]>([]);
   const [userLencana, setUserLencana] = useState<UserLencana[]>([]);
-  const [allLencana, setAllLencana] = useState<Lencana[]>([]);
   const [userArtefak, setUserArtefak] = useState<UserArtefak[]>([]);
   const [allArtefak, setAllArtefak] = useState<Artefak[]>([]);
   const [isLoading, setIsLoading] = useState(true);
@@ -308,8 +288,8 @@ const Dashboard = () => {
       }
 
       if (allLencanaRes.ok) {
-        const allLencanaData: Lencana[] = await allLencanaRes.json();
-        setAllLencana(allLencanaData);
+        // Data fetched but not used in current implementation
+        await allLencanaRes.json();
       }
 
       if (userArtefakRes.ok) {
@@ -344,7 +324,7 @@ const Dashboard = () => {
       });
 
       if (response.ok) {
-        const result = await response.json();
+        await response.json();
         // Update user data in localStorage and state
         const updatedUser = { ...user, clothe_sekarang: clothesSetId };
         

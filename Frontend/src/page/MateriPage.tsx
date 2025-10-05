@@ -1,19 +1,8 @@
 import { useNavigate } from 'react-router-dom';
 import { useEffect, useState } from 'react';
 import Header from '../components/Header';
+import type { User } from '../services/api';
 import './MateriPage.css';
-
-interface User {
-  id: string;
-  nama_panjang: string;
-  username: string;
-  email?: string;
-  dikoin: number;
-  progress?: {
-    section: number;
-    level: number;
-  };
-}
 
 const MateriPage = () => {
   const navigate = useNavigate();

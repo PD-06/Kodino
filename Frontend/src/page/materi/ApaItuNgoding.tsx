@@ -1,20 +1,13 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../../components/Header';
+import type { User } from '../../services/api';
 import './ApaItuNgoding.css';
-
-interface User {
-  id: string;
-  nama_panjang: string;
-  username: string;
-  dikoin: number;
-}
 
 const ApaItuNgoding = () => {
   const navigate = useNavigate();
   const [user, setUser] = useState<User | null>(null);
   const [currentSlide, setCurrentSlide] = useState(0);
-  const [isCompleted, setIsCompleted] = useState(false);
   const [showQuiz, setShowQuiz] = useState(false);
   const [quizAnswers, setQuizAnswers] = useState<{ [key: number]: string }>({});
   const [quizScore, setQuizScore] = useState(0);
@@ -356,8 +349,6 @@ const completeModule = async () => {
   
         // Award First Steps badge for completing first course
         await awardFirstStepsBadge(user.id);
-  
-        setIsCompleted(true);
       }
     } catch (error) {
       console.error('Error completing module:', error);
