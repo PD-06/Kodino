@@ -1,14 +1,8 @@
 import { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
 import Header from '../../components/Header';
+import type { User } from '../../services/api';
 import './ApaItuNgoding.css';
-
-interface User {
-  id: string;
-  nama_panjang: string;
-  username: string;
-  dikoin: number;
-}
 
 const NgodingItuGimana = () => {
   const navigate = useNavigate();

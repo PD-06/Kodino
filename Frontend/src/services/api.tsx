@@ -26,10 +26,20 @@ export interface User {
   nama_panjang: string;
   username: string;
   email?: string;
+  dikoin: number;
+  clothe_sekarang?: string;
+  current_clothes?: {
+    id: string;
+    nama_set: string;
+    deskripsi: string;
+    gambar?: string;
+    image_url?: string;
+  };
   progress?: {
+    section: number;
     level: number;
-    pengalaman: number;
-    total_koin: number;
+    pengalaman?: number;
+    total_koin?: number;
   };
 }
 

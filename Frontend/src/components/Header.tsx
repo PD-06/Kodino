@@ -1,18 +1,7 @@
 import { useEffect, useRef, useState } from "react";
 import { Link, useLocation, useNavigate } from 'react-router-dom';
+import type { User } from '../services/api';
 import './Header.css';
-
-interface User {
-  id: string;
-  nama_panjang: string;
-  username: string;
-  email?: string;
-  dikoin: number;
-  progress?: {
-    section: number;
-    level: number;
-  };
-}
 
 const Header = () => {
   const location = useLocation();

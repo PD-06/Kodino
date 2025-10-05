@@ -22,6 +22,11 @@ const PerulanganDasarDanLanjutan = () => {
     navigate(`/materi/belajar?id=${moduleId}`);
   };
 
+  // Simple stubs for missing props - all courses are unlocked and none completed
+  const isCourseUnlocked = () => true;
+  const isCourseCompleted = () => false;
+  const isLoading = false;
+
   return (
     <div className="pendahuluan-page">
       <Header />
@@ -50,6 +55,9 @@ const PerulanganDasarDanLanjutan = () => {
           expandedItem={expandedItem}
           onExpand={handleExpand}
           onNavigate={handleNavigate}
+          isCourseUnlocked={isCourseUnlocked}
+          isCourseCompleted={isCourseCompleted}
+          isLoading={isLoading}
         />
       </div>
     </div>

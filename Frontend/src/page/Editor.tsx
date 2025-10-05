@@ -66,7 +66,7 @@ const EditorPage: React.FC = () => {
     // Add line numbers to Python traceback
     return errorMsg
       .split('\n')
-      .map((line, i) => {
+      .map((line) => {
         if (line.includes('File "<string>", line')) {
           return `<div class="error-line">${line}</div>`;
         }
